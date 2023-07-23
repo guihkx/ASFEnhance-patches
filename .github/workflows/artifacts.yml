@@ -1,0 +1,86 @@
+name: Build artifacts
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SDK_VERSION: 7.0.x
+  DOTNET_TARGET_FRAMEWORK: net7.0
+
+jobs:
+  pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+    - id: skip_check
+      uses: fkirc/skip-duplicate-actions@v5
+      with:
+        concurrent_skipping: 'same_content'
+        skip_after_successful_duplicate: 'true'
+        paths_ignore: '["**/*.md"]'
+        do_not_skip: '["workflow_dispatch", "schedule"]'
+
+  build:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    name: ASFEnhance
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ASFEnhance
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Fetch tags from ASFEnhance
+        run: |
+          git fetch --recurse-submodules=no --tags
+
+      - name: Setup variables
+        id: vars
+        run: echo "version=$(git describe --long)" >> ${GITHUB_OUTPUT}
+
+      - name: Show ASFEnhance version
+        run: echo '${{ steps.vars.outputs.version }}'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Show .NET information
+        run: dotnet --info
+
+      - name: Setup git
+        run: |
+          git config --global user.email 626206+guihkx@users.noreply.github.com
+          git config --global user.name guihkx
+
+      - name: Apply patches
+        run: |
+          for patch_file in $(realpath ../patches/*.patch)
+          do
+              git am --reject "$patch_file"
+          done
+
+      - name: Publish ASFEnhance
+        run: |
+          mv -v ASFEnhance/Localization/Langs.en-US.resx ASFEnhance/Localization/Langs.resx
+          dotnet publish ASFEnhance -o ../builds/ASFEnhance
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ASFEnhance_v${{ steps.vars.outputs.version }}
+          path: builds/ASFEnhance/ASFEnhance.dll

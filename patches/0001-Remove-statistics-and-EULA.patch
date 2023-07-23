@@ -1,0 +1,607 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: guihkx <626206+guihkx@users.noreply.github.com>
+Date: Sun, 23 Jul 2023 01:05:24 -0300
+Subject: Remove statistics and EULA
+
+---
+ ASFEnhance/ASFEnhance.cs                      | 123 ++++++------------
+ ASFEnhance/Data/PluginConfig.cs               |  12 --
+ .../IPC/Controllers/CuratorController.cs      |  15 ---
+ .../IPC/Controllers/PurchaseController.cs     |  10 --
+ .../IPC/Controllers/RecommendController.cs    |  10 --
+ .../IPC/Controllers/WishlistController.cs     |  25 ----
+ ASFEnhance/Localization/Langs.Designer.cs     |  27 ----
+ ASFEnhance/Localization/Langs.en-US.resx      |   9 --
+ ASFEnhance/Localization/Langs.resx            |   9 --
+ ASFEnhance/Localization/Langs.ru-RU.resx      |   9 --
+ ASFEnhance/Localization/Langs.zh-Hans.resx    |   9 --
+ ASFEnhance/Other/Command.cs                   |   9 --
+ 12 files changed, 38 insertions(+), 229 deletions(-)
+
+diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
+index 1bcce2a..0cf1fcc 100644
+--- a/ASFEnhance/ASFEnhance.cs
++++ b/ASFEnhance/ASFEnhance.cs
+@@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+     [JsonProperty]
+     public static PluginConfig Config => Utils.Config;
+ 
+-    private Timer? StatisticTimer { get; set; }
+-
+     public string PhysicalPath => "www";
+ 
+     public string WebPath => "/";
+@@ -68,14 +66,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+             sb.AppendLine(Langs.DevFeatureEnabledWarning);
+             sb.AppendLine(Static.Line);
+         }
+-        //使用协议
+-        if (!Config.EULA)
+-        {
+-            sb.AppendLine();
+-            sb.AppendLine(Static.Line);
+-            sb.AppendLine(Langs.EulaWarning);
+-            sb.AppendLine(Static.Line);
+-        }
+         //地址信息
+         if (Config.Addresses == null)
+         {
+@@ -91,17 +81,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+         {
+             ASFLogger.LogGenericWarning(sb.ToString());
+         }
+-        //统计
+-        if (Config.Statistic)
+-        {
+-            var request = new Uri("https://asfe.chrxw.com/asfenhace");
+-            StatisticTimer = new Timer(
+-                async (_) => await ASF.WebBrowser!.UrlGetToHtmlDocument(request).ConfigureAwait(false),
+-                null,
+-                TimeSpan.FromSeconds(30),
+-                TimeSpan.FromHours(24)
+-            );
+-        }
+         //禁用命令
+         if (Config.DisabledCmds == null)
+         {
+@@ -302,13 +281,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return await Community.Command.ResponseClearNotification(bot).ConfigureAwait(false);
+ 
+                     //Curasor
+-                    case "CURATORLIST" when Config.EULA && access >= EAccess.Master:
+-                    case "CL" when Config.EULA && access >= EAccess.Master:
++                    case "CURATORLIST" when access >= EAccess.Master:
++                    case "CL" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseGetFollowingCurators(bot).ConfigureAwait(false);
+ 
+-                    case "UNFOLLOWALLCURASOR" when Config.EULA && access >= EAccess.Master:
+-                    case "UNFOLLOWALLCURASORS" when Config.EULA && access >= EAccess.Master:
+-                    case "UFACU" when Config.EULA && access >= EAccess.Master:
++                    case "UNFOLLOWALLCURASOR" when access >= EAccess.Master:
++                    case "UNFOLLOWALLCURASORS" when access >= EAccess.Master:
++                    case "UFACU" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseUnFollowAllCurators(bot).ConfigureAwait(false);
+ 
+                     //Explorer
+@@ -325,8 +304,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return await Friend.Command.ResponseGetInviteLink(bot).ConfigureAwait(false);
+ 
+                     //Group
+-                    case "GROUPLIST" when Config.EULA && access >= EAccess.FamilySharing:
+-                    case "GL" when Config.EULA && access >= EAccess.FamilySharing:
++                    case "GROUPLIST" when access >= EAccess.FamilySharing:
++                    case "GL" when access >= EAccess.FamilySharing:
+                         return await Group.Command.ResponseGroupList(bot).ConfigureAwait(false);
+ 
+                     //Other
+@@ -395,13 +374,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                     case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
+                         return await DevFeature.Command.ResponseGetAccessToken(bot).ConfigureAwait(false);
+ 
+-                    //Limited Tips
+-                    case "CURATORLIST" when access >= EAccess.Master:
+-                    case "CL" when access >= EAccess.Master:
+-                    case "GROUPLIST" when access >= EAccess.Master:
+-                    case "GL" when access >= EAccess.Master:
+-                        return Other.Command.ResponseEulaCmdUnavilable();
+-
+                     case "COOKIES" when access >= EAccess.Owner:
+                     case "APIKEY" when access >= EAccess.Owner:
+                     case "ACCESSTOKEN" when access >= EAccess.Owner:
+@@ -561,27 +533,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return await Community.Command.ResponseClearNotification(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+                     //Curasor
+-                    case "CURATORLIST" when Config.EULA && access >= EAccess.Master:
+-                    case "CL" when Config.EULA && access >= EAccess.Master:
++                    case "CURATORLIST" when access >= EAccess.Master:
++                    case "CL" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseGetFollowingCurators(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+-                    case "FOLLOWCURATOR" when Config.EULA && argLength > 2 && access >= EAccess.Master:
+-                    case "FCU" when Config.EULA && argLength > 2 && access >= EAccess.Master:
++                    case "FOLLOWCURATOR" when argLength > 2 && access >= EAccess.Master:
++                    case "FCU" when argLength > 2 && access >= EAccess.Master:
+                         return await Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), true).ConfigureAwait(false);
+-                    case "FOLLOWCURATOR" when Config.EULA && access >= EAccess.Master:
+-                    case "FCU" when Config.EULA && access >= EAccess.Master:
++                    case "FOLLOWCURATOR" when access >= EAccess.Master:
++                    case "FCU" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseFollowCurator(bot, args[1], true).ConfigureAwait(false);
+ 
+-                    case "UNFOLLOWALLCURASOR" when Config.EULA && access >= EAccess.Master:
+-                    case "UNFOLLOWALLCURASORS" when Config.EULA && access >= EAccess.Master:
+-                    case "UFACU" when Config.EULA && access >= EAccess.Master:
++                    case "UNFOLLOWALLCURASOR" when access >= EAccess.Master:
++                    case "UNFOLLOWALLCURASORS" when access >= EAccess.Master:
++                    case "UFACU" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseUnFollowAllCurators(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+-                    case "UNFOLLOWCURATOR" when Config.EULA && argLength > 2 && access >= EAccess.Master:
+-                    case "UFCU" when Config.EULA && argLength > 2 && access >= EAccess.Master:
++                    case "UNFOLLOWCURATOR" when argLength > 2 && access >= EAccess.Master:
++                    case "UFCU" when argLength > 2 && access >= EAccess.Master:
+                         return await Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), false).ConfigureAwait(false);
+-                    case "UNFOLLOWCURATOR" when Config.EULA && access >= EAccess.Master:
+-                    case "UFCU" when Config.EULA && access >= EAccess.Master:
++                    case "UNFOLLOWCURATOR" when access >= EAccess.Master:
++                    case "UFCU" when access >= EAccess.Master:
+                         return await Curator.Command.ResponseFollowCurator(bot, args[1], false).ConfigureAwait(false);
+ 
+                     //Explorer
+@@ -623,22 +595,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return await Friend.Command.ResponseGetInviteLink(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+                     //Group
+-                    case "GROUPLIST" when Config.EULA && access >= EAccess.FamilySharing:
+-                    case "GL" when Config.EULA && access >= EAccess.FamilySharing:
++                    case "GROUPLIST" when access >= EAccess.FamilySharing:
++                    case "GL" when access >= EAccess.FamilySharing:
+                         return await Group.Command.ResponseGroupList(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+-                    case "JOINGROUP" when Config.EULA && argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
+-                    case "JG" when Config.EULA && argLength > 2 && access >= EAccess.Master:
++                    case "JOINGROUP" when argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
++                    case "JG" when argLength > 2 && access >= EAccess.Master:
+                         return await Group.Command.ResponseJoinGroup(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+-                    case "JOINGROUP" when Config.EULA && access >= EAccess.Master:
+-                    case "JG" when Config.EULA && access >= EAccess.Master:
++                    case "JOINGROUP" when access >= EAccess.Master:
++                    case "JG" when access >= EAccess.Master:
+                         return await Group.Command.ResponseJoinGroup(bot, args[1]).ConfigureAwait(false);
+ 
+-                    case "LEAVEGROUP" when Config.EULA && argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
+-                    case "LG" when Config.EULA && argLength > 2 && access >= EAccess.Master:
++                    case "LEAVEGROUP" when argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
++                    case "LG" when argLength > 2 && access >= EAccess.Master:
+                         return await Group.Command.ResponseLeaveGroup(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+-                    case "LEAVEGROUP" when Config.EULA && access >= EAccess.Master:
+-                    case "LG" when Config.EULA && access >= EAccess.Master:
++                    case "LEAVEGROUP" when access >= EAccess.Master:
++                    case "LG" when access >= EAccess.Master:
+                         return await Group.Command.ResponseLeaveGroup(bot, args[1]).ConfigureAwait(false);
+ 
+                     //Other
+@@ -738,18 +710,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                     case "AD" when access >= EAccess.Operator:
+                         return await Store.Command.ResponseGetAppsDetail(bot, args[1]).ConfigureAwait(false);
+ 
+-                    case "DELETERECOMMENT" when Config.EULA && argLength > 2 && access >= EAccess.Master:
+-                    case "DREC" when Config.EULA && argLength > 2 && access >= EAccess.Master:
++                    case "DELETERECOMMENT" when argLength > 2 && access >= EAccess.Master:
++                    case "DREC" when argLength > 2 && access >= EAccess.Master:
+                         return await Store.Command.ResponseDeleteReview(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+-                    case "DELETERECOMMENT" when Config.EULA && access >= EAccess.Master:
+-                    case "DREC" when Config.EULA && access >= EAccess.Master:
++                    case "DELETERECOMMENT" when access >= EAccess.Master:
++                    case "DREC" when access >= EAccess.Master:
+                         return await Store.Command.ResponseDeleteReview(bot, args[1]).ConfigureAwait(false);
+ 
+-                    case "PUBLISHRECOMMENT" when Config.EULA && argLength > 3 && access >= EAccess.Master:
+-                    case "PREC" when Config.EULA && argLength > 3 && access >= EAccess.Master:
++                    case "PUBLISHRECOMMENT" when argLength > 3 && access >= EAccess.Master:
++                    case "PREC" when argLength > 3 && access >= EAccess.Master:
+                         return await Store.Command.ResponsePublishReview(args[1], args[2], Utilities.GetArgsAsText(message, 3)).ConfigureAwait(false);
+-                    case "PUBLISHRECOMMENT" when Config.EULA && argLength == 3 && access >= EAccess.Master:
+-                    case "PREC" when Config.EULA && argLength == 3 && access >= EAccess.Master:
++                    case "PUBLISHRECOMMENT" when argLength == 3 && access >= EAccess.Master:
++                    case "PREC" when argLength == 3 && access >= EAccess.Master:
+                         return await Store.Command.ResponsePublishReview(bot, args[1], args[2]).ConfigureAwait(false);
+ 
+                     case "REQUESTACCESS" when argLength > 2 && access >= EAccess.Operator:
+@@ -836,25 +808,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                     case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
+                         return await DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+ 
+-                    //Limited Tips
+-                    case "FOLLOWCURATOR" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "FCU" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "UNFOLLOWCURATOR" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "UFCU" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "CURATORLIST" when !Config.EULA && access >= EAccess.Master:
+-                    case "CL" when !Config.EULA && access >= EAccess.Master:
+-                    case "JOINGROUP" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "JG" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "LEAVEGROUP" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "LG" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "GROUPLIST" when !Config.EULA && access >= EAccess.Master:
+-                    case "GL" when !Config.EULA && access >= EAccess.Master:
+-                    case "DELETERECOMMENT" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "DREC" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
+-                    case "PUBLISHRECOMMEND" when !Config.EULA && argLength >= 2 && access >= EAccess.Master:
+-                    case "PREC" when !Config.EULA && argLength >= 2 && access >= EAccess.Master:
+-                        return Other.Command.ResponseEulaCmdUnavilable();
+-
+                     case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
+                     case "APIKEY" when Config.DevFeature && access >= EAccess.Owner:
+                     case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
+diff --git a/ASFEnhance/Data/PluginConfig.cs b/ASFEnhance/Data/PluginConfig.cs
+index 2bd3cdf..066e8ba 100644
+--- a/ASFEnhance/Data/PluginConfig.cs
++++ b/ASFEnhance/Data/PluginConfig.cs
+@@ -7,18 +7,6 @@ namespace ASFEnhance.Data;
+ /// </summary>
+ public sealed record PluginConfig
+ {
+-    /// <summary>
+-    /// 是否同意使用协议
+-    /// </summary>
+-    [JsonProperty(Required = Required.DisallowNull)]
+-    public bool EULA { get; set; } = true;
+-
+-    /// <summary>
+-    /// 是否启用统计
+-    /// </summary>
+-    [JsonProperty(Required = Required.DisallowNull)]
+-    public bool Statistic { get; set; } = true;
+-
+     /// <summary>
+     /// 是否启用开发者特性
+     /// </summary>
+diff --git a/ASFEnhance/IPC/Controllers/CuratorController.cs b/ASFEnhance/IPC/Controllers/CuratorController.cs
+index 340d563..b197e9e 100644
+--- a/ASFEnhance/IPC/Controllers/CuratorController.cs
++++ b/ASFEnhance/IPC/Controllers/CuratorController.cs
+@@ -40,11 +40,6 @@ public sealed class CuratorController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -102,11 +97,6 @@ public sealed class CuratorController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -164,11 +154,6 @@ public sealed class CuratorController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
+index 665a16b..f855792 100644
+--- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
++++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
+@@ -39,11 +39,6 @@ public sealed class PurchaseController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -135,11 +130,6 @@ public sealed class PurchaseController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/IPC/Controllers/RecommendController.cs b/ASFEnhance/IPC/Controllers/RecommendController.cs
+index 1a0c0f4..8ee8551 100644
+--- a/ASFEnhance/IPC/Controllers/RecommendController.cs
++++ b/ASFEnhance/IPC/Controllers/RecommendController.cs
+@@ -39,11 +39,6 @@ public sealed class RecommendController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -110,11 +105,6 @@ public sealed class RecommendController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Utils.Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
+index 4212b5c..af62681 100644
+--- a/ASFEnhance/IPC/Controllers/WishlistController.cs
++++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
+@@ -39,11 +39,6 @@ public sealed class WishlistController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if ((bots == null) || (bots.Count == 0))
+@@ -102,11 +97,6 @@ public sealed class WishlistController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -165,11 +155,6 @@ public sealed class WishlistController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -228,11 +213,6 @@ public sealed class WishlistController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -291,11 +271,6 @@ public sealed class WishlistController : ASFEController
+             throw new ArgumentNullException(nameof(request));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         HashSet<Bot>? bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
+index 4606b5d..f547418 100644
+--- a/ASFEnhance/Localization/Langs.Designer.cs
++++ b/ASFEnhance/Localization/Langs.Designer.cs
+@@ -960,33 +960,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 尚未同意 ASFEnhance.EULA , 该命令不可用 的本地化字符串。
+-        /// </summary>
+-        internal static string EulaCmdUnavilable {
+-            get {
+-                return ResourceManager.GetString("EulaCmdUnavilable", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 尚未同意 ASFEnhance.EULA , 无法使用IPC功能 的本地化字符串。
+-        /// </summary>
+-        internal static string EulaFeatureUnavilable {
+-            get {
+-                return ResourceManager.GetString("EulaFeatureUnavilable", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 尚未同意 EULA , 部分命令已禁用 的本地化字符串。
+-        /// </summary>
+-        internal static string EulaWarning {
+-            get {
+-                return ResourceManager.GetString("EulaWarning", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 领取每日贴纸: {0} 的本地化字符串。
+         /// </summary>
+diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
+index 1149ce2..1a65aaa 100644
+--- a/ASFEnhance/Localization/Langs.en-US.resx
++++ b/ASFEnhance/Localization/Langs.en-US.resx
+@@ -690,18 +690,12 @@
+   <data name="DevFeatureNotEnabled" xml:space="preserve">
+     <value>ASFEnhance.DevFeature is disabled, this feature is unavilable</value>
+   </data>
+-  <data name="EulaFeatureUnavilable" xml:space="preserve">
+-    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-  </data>
+   <data name="ASFEnhanceCurator" xml:space="preserve">
+     <value>ASFEnhance's Curator</value>
+   </data>
+   <data name="ASFEnhanceGroup" xml:space="preserve">
+     <value>ASFEnhance's Group</value>
+   </data>
+-  <data name="EulaWarning" xml:space="preserve">
+-    <value>ASFEnhance.EULA not agreed, some features is disabled</value>
+-  </data>
+   <data name="ErrorLogErrorMessage" xml:space="preserve">
+     <value> - Exception Message: {0}</value>
+   </data>
+@@ -828,9 +822,6 @@
+   <data name="UsageJOINGROUP" xml:space="preserve">
+     <value>Let bot to join specified group</value>
+   </data>
+-  <data name="EulaCmdUnavilable" xml:space="preserve">
+-    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-  </data>
+   <data name="WhenWishlistRelease" xml:space="preserve">
+     <value>An item on my wishlist has released</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
+index dad0921..c9cc627 100644
+--- a/ASFEnhance/Localization/Langs.resx
++++ b/ASFEnhance/Localization/Langs.resx
+@@ -696,12 +696,6 @@
+   <data name="ASFEnhanceGroup" xml:space="preserve">
+     <value>ASFEnhance's Group</value>
+   </data>
+-  <data name="EulaFeatureUnavilable" xml:space="preserve">
+-    <value>尚未同意 ASFEnhance.EULA , 无法使用IPC功能</value>
+-  </data>
+-  <data name="EulaWarning" xml:space="preserve">
+-    <value>尚未同意 EULA , 部分命令已禁用</value>
+-  </data>
+   <data name="ErrorLogErrorMessage" xml:space="preserve">
+     <value> - 错误消息: {0}</value>
+   </data>
+@@ -828,9 +822,6 @@
+   <data name="UsageCARTRESET" xml:space="preserve">
+     <value>清空购物车</value>
+   </data>
+-  <data name="EulaCmdUnavilable" xml:space="preserve">
+-    <value>尚未同意 ASFEnhance.EULA , 该命令不可用</value>
+-  </data>
+   <data name="EnableEmailNotification" xml:space="preserve">
+     <value>启用邮件通知</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
+index c14d80c..aea3ba9 100644
+--- a/ASFEnhance/Localization/Langs.ru-RU.resx
++++ b/ASFEnhance/Localization/Langs.ru-RU.resx
+@@ -692,18 +692,12 @@ costs
+   <data name="DevFeatureNotEnabled" xml:space="preserve">
+     <value>"ASFEnhance.DevFeature" отключен, эта функция недоступна</value>
+   </data>
+-  <data name="EulaFeatureUnavilable" xml:space="preserve">
+-    <value>"ASFEnhance.EULA" не принят, эта функция недоступна</value>
+-  </data>
+   <data name="ASFEnhanceCurator" xml:space="preserve">
+     <value>ASFEnhance's Куратор</value>
+   </data>
+   <data name="ASFEnhanceGroup" xml:space="preserve">
+     <value>ASFEnhance's Группа</value>
+   </data>
+-  <data name="EulaWarning" xml:space="preserve">
+-    <value>"ASFEnhance.EULA" не принят, некоторые функции отключены</value>
+-  </data>
+   <data name="ErrorLogErrorMessage" xml:space="preserve">
+     <value> - Exception Message: {0}</value>
+   </data>
+@@ -830,9 +824,6 @@ costs
+   <data name="UsageJOINGROUP" xml:space="preserve">
+     <value>Разрешить боту присоединиться к указанной группе</value>
+   </data>
+-  <data name="EulaCmdUnavilable" xml:space="preserve">
+-    <value>"ASFEnhance.EULA" не принят, эта функция недоступна</value>
+-  </data>
+   <data name="WhenWishlistRelease" xml:space="preserve">
+     <value>An item on my wishlist has released</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
+index 50a1cb7..da7e8f4 100644
+--- a/ASFEnhance/Localization/Langs.zh-Hans.resx
++++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
+@@ -690,18 +690,12 @@
+   <data name="DevFeatureNotEnabled" xml:space="preserve">
+     <value>尚未启用 ASFEnhance.DevFeature , 该命令不可用</value>
+   </data>
+-  <data name="EulaFeatureUnavilable" xml:space="preserve">
+-    <value>尚未同意 ASFEnhance.EULA , 无法使用IPC功能</value>
+-  </data>
+   <data name="ASFEnhanceCurator" xml:space="preserve">
+     <value>ASFEnhance's Curator</value>
+   </data>
+   <data name="ASFEnhanceGroup" xml:space="preserve">
+     <value>ASFEnhance's Group</value>
+   </data>
+-  <data name="EulaWarning" xml:space="preserve">
+-    <value>尚未同意 EULA , 部分命令已禁用</value>
+-  </data>
+   <data name="ErrorLogErrorMessage" xml:space="preserve">
+     <value> - 错误消息: {0}</value>
+   </data>
+@@ -828,9 +822,6 @@
+   <data name="UsagePURCHASEGIFT" xml:space="preserve">
+     <value>结算机器人 A 的购物车, 发送礼物给机器人 B (使用 Steam 钱包余额结算)</value>
+   </data>
+-  <data name="EulaCmdUnavilable" xml:space="preserve">
+-    <value>尚未同意 ASFEnhance.EULA , 该命令不可用</value>
+-  </data>
+   <data name="WhenWishlistDiscount" xml:space="preserve">
+     <value>愿望单上的一项物品享有折扣时</value>
+   </data>
+diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
+index bb1917d..ab78b4d 100644
+--- a/ASFEnhance/Other/Command.cs
++++ b/ASFEnhance/Other/Command.cs
+@@ -158,15 +158,6 @@ internal static class Command
+         return FormatStaticResponse(Langs.DevFeatureNotEnabled);
+     }
+ 
+-    /// <summary>
+-    /// 提示命令不可用
+-    /// </summary>
+-    /// <returns></returns>
+-    internal static string ResponseEulaCmdUnavilable()
+-    {
+-        return FormatStaticResponse(Langs.EulaCmdUnavilable);
+-    }
+-
+     /// <summary>
+     /// 可用时显示命令提示
+     /// </summary>
+-- 
+2.41.0
+
