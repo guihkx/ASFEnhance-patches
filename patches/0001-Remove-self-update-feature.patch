@@ -1,0 +1,433 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: guihkx <626206+guihkx@users.noreply.github.com>
+Date: Sun, 23 Jul 2023 01:24:59 -0300
+Subject: Remove self-update feature
+
+---
+ ASFEnhance/ASFEnhance.cs                   |  5 --
+ ASFEnhance/Localization/Langs.Designer.cs  | 54 -------------
+ ASFEnhance/Localization/Langs.en-US.resx   | 18 -----
+ ASFEnhance/Localization/Langs.resx         | 18 -----
+ ASFEnhance/Localization/Langs.ru-RU.resx   | 18 -----
+ ASFEnhance/Localization/Langs.zh-Hans.resx | 18 -----
+ ASFEnhance/Update/Command.cs               | 94 ----------------------
+ ASFEnhance/Update/WebRequest.cs            | 17 ----
+ 8 files changed, 242 deletions(-)
+
+diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
+index 1bcce2a..4b0e45d 100644
+--- a/ASFEnhance/ASFEnhance.cs
++++ b/ASFEnhance/ASFEnhance.cs
+@@ -166,7 +166,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+         else
+         {
+             message.AppendLine(Langs.ASFEVersionTips);
+-            message.AppendLine(Langs.ASFEUpdateTips);
+         }
+ 
+         message.AppendLine(Static.Line);
+@@ -383,10 +382,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                     case "AV" when access >= EAccess.Operator:
+                         return await Update.Command.ResponseCheckLatestVersion().ConfigureAwait(false);
+ 
+-                    case "ASFEUPDATE" when access >= EAccess.Owner:
+-                    case "AU" when access >= EAccess.Owner:
+-                        return await Update.Command.ResponseUpdatePlugin().ConfigureAwait(false);
+-
+                     //DevFuture
+                     case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
+                         return DevFeature.Command.ResponseGetCookies(bot);
+diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
+index 4606b5d..1004f16 100644
+--- a/ASFEnhance/Localization/Langs.Designer.cs
++++ b/ASFEnhance/Localization/Langs.Designer.cs
+@@ -204,15 +204,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 当前已经是最新版本, 无需更新插件 的本地化字符串。
+-        /// </summary>
+-        internal static string AlreadyLatest {
+-            get {
+-                return ResourceManager.GetString("AlreadyLatest", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似  - 标签: {0} 的本地化字符串。
+         /// </summary>
+@@ -519,15 +510,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 使用命令 ASFEUPDATE / AU 自动更新插件 的本地化字符串。
+-        /// </summary>
+-        internal static string ASFEUpdateTips {
+-            get {
+-                return ResourceManager.GetString("ASFEUpdateTips", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 使用命令 ASFEVERSION / AV 检查插件更新 的本地化字符串。
+         /// </summary>
+@@ -861,15 +843,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 下载插件失败! 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadFailed {
+-            get {
+-                return ResourceManager.GetString("DownloadFailed", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 下载头像图片失败 的本地化字符串。
+         /// </summary>
+@@ -2058,33 +2031,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 插件更新失败, 压缩包内容解析失败 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdateFiledWithZip {
+-            get {
+-                return ResourceManager.GetString("UpdateFiledWithZip", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 插件更新完成, 重启ASF即可应用, 如果不兼容请更新ASF版本 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdateSuccess {
+-            get {
+-                return ResourceManager.GetString("UpdateSuccess", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 可以使用命令 ASFEUPDATE / AU 自动更新插件 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdateTips {
+-            get {
+-                return ResourceManager.GetString("UpdateTips", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
+         /// </summary>
+diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
+index 1149ce2..1389c92 100644
+--- a/ASFEnhance/Localization/Langs.en-US.resx
++++ b/ASFEnhance/Localization/Langs.en-US.resx
+@@ -540,9 +540,6 @@
+   <data name="Detail" xml:space="preserve">
+     <value> - Detail: {0}</value>
+   </data>
+-  <data name="DownloadFailed" xml:space="preserve">
+-    <value>Download plugin failed!</value>
+-  </data>
+   <data name="HelpArgsExplain" xml:space="preserve">
+     <value>[ ]: Optional parameters, &lt; &gt;: Array (use , separate)</value>
+   </data>
+@@ -558,21 +555,9 @@
+   <data name="SubName" xml:space="preserve">
+     <value>   - Name: {0}</value>
+   </data>
+-  <data name="UpdateSuccess" xml:space="preserve">
+-    <value>Plugin update finished, restart ASF to apply update, if not compatible, please also update the ASF</value>
+-  </data>
+-  <data name="UpdateFiledWithZip" xml:space="preserve">
+-    <value>Plugin update failed, unzip failed</value>
+-  </data>
+   <data name="Version" xml:space="preserve">
+     <value> - Version: {0}</value>
+   </data>
+-  <data name="UpdateTips" xml:space="preserve">
+-    <value>Use Command "ASFEUPDATE" / "AU" to update this plugin</value>
+-  </data>
+-  <data name="AlreadyLatest" xml:space="preserve">
+-    <value>The plugin is up to date, no need to update</value>
+-  </data>
+   <data name="CommandHelpWithShortName" xml:space="preserve">
+     <value> * Avilable shortcut: {0}</value>
+   </data>
+@@ -597,9 +582,6 @@
+   <data name="CleanUpOldBackupFailed" xml:space="preserve">
+     <value>Clear the old plugin's backup file failed</value>
+   </data>
+-  <data name="ASFEUpdateTips" xml:space="preserve">
+-    <value>Use Command "ASFEUPDATE" / "AU" to update the plugin</value>
+-  </data>
+   <data name="ASFEVersionTips" xml:space="preserve">
+     <value>Use Command "ASFEVERSION" / "AV" to check the plugin's latest version</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
+index dad0921..4d6cff3 100644
+--- a/ASFEnhance/Localization/Langs.resx
++++ b/ASFEnhance/Localization/Langs.resx
+@@ -558,21 +558,6 @@
+   <data name="SubLink" xml:space="preserve">
+     <value>   - 链接: {0}</value>
+   </data>
+-  <data name="UpdateTips" xml:space="preserve">
+-    <value>可以使用命令 ASFEUPDATE / AU 自动更新插件</value>
+-  </data>
+-  <data name="AlreadyLatest" xml:space="preserve">
+-    <value>当前已经是最新版本, 无需更新插件</value>
+-  </data>
+-  <data name="DownloadFailed" xml:space="preserve">
+-    <value>下载插件失败!</value>
+-  </data>
+-  <data name="UpdateSuccess" xml:space="preserve">
+-    <value>插件更新完成, 重启ASF即可应用, 如果不兼容请更新ASF版本</value>
+-  </data>
+-  <data name="UpdateFiledWithZip" xml:space="preserve">
+-    <value>插件更新失败, 压缩包内容解析失败</value>
+-  </data>
+   <data name="CommandHelpNoShortName" xml:space="preserve">
+     <value>- {0} {1} : {2}</value>
+   </data>
+@@ -600,9 +585,6 @@
+   <data name="ASFEVersionTips" xml:space="preserve">
+     <value>使用命令 ASFEVERSION / AV 检查插件更新</value>
+   </data>
+-  <data name="ASFEUpdateTips" xml:space="preserve">
+-    <value>使用命令 ASFEUPDATE / AU 自动更新插件</value>
+-  </data>
+   <data name="DeleteReview" xml:space="preserve">
+     <value>删除 {0} 的评测: </value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
+index c14d80c..7a2b145 100644
+--- a/ASFEnhance/Localization/Langs.ru-RU.resx
++++ b/ASFEnhance/Localization/Langs.ru-RU.resx
+@@ -542,9 +542,6 @@ costs
+   <data name="Detail" xml:space="preserve">
+     <value> - Описание: {0}</value>
+   </data>
+-  <data name="DownloadFailed" xml:space="preserve">
+-    <value>Не удалось загрузить плагин!</value>
+-  </data>
+   <data name="HelpArgsExplain" xml:space="preserve">
+     <value>[ ]: Необязательные параметры, &lt; &gt;: Массив (использовать , для разделения)</value>
+   </data>
+@@ -560,21 +557,9 @@ costs
+   <data name="SubName" xml:space="preserve">
+     <value>   - Название: {0}</value>
+   </data>
+-  <data name="UpdateSuccess" xml:space="preserve">
+-    <value>Обновление плагина завершено, перезапустите ASF, чтобы применить обновление, если оно несовместимо, пожалуйста, также обновите ASF</value>
+-  </data>
+-  <data name="UpdateFiledWithZip" xml:space="preserve">
+-    <value>Ошибка обновления плагина - не удалось распаковать архив</value>
+-  </data>
+   <data name="Version" xml:space="preserve">
+     <value> - Версия: {0}</value>
+   </data>
+-  <data name="UpdateTips" xml:space="preserve">
+-    <value>Используй команду "ASFEUPDATE" / "AU" для обновления плагина</value>
+-  </data>
+-  <data name="AlreadyLatest" xml:space="preserve">
+-    <value>Плагин уже обновлен, нет необходимости в обновлении</value>
+-  </data>
+   <data name="CommandHelpWithShortName" xml:space="preserve">
+     <value> * Доступные сокращения: {0}</value>
+   </data>
+@@ -599,9 +584,6 @@ costs
+   <data name="CleanUpOldBackupFailed" xml:space="preserve">
+     <value>Не удалось очистить старые бекапы плагина</value>
+   </data>
+-  <data name="ASFEUpdateTips" xml:space="preserve">
+-    <value>Используй команду "ASFEUPDATE" / "AU" для обновления плагина</value>
+-  </data>
+   <data name="ASFEVersionTips" xml:space="preserve">
+     <value>Используй команду "ASFEVERSION" / "AV" чтобы проверить последнюю версию плагина</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
+index 50a1cb7..087dfb9 100644
+--- a/ASFEnhance/Localization/Langs.zh-Hans.resx
++++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
+@@ -540,9 +540,6 @@
+   <data name="Detail" xml:space="preserve">
+     <value> - 描述: {0}</value>
+   </data>
+-  <data name="DownloadFailed" xml:space="preserve">
+-    <value>下载插件失败!</value>
+-  </data>
+   <data name="HelpArgsExplain" xml:space="preserve">
+     <value>[ ]: 可选参数, &lt; &gt;: 数组(使用,分隔)</value>
+   </data>
+@@ -558,21 +555,9 @@
+   <data name="SubName" xml:space="preserve">
+     <value>   - 名称: {0}</value>
+   </data>
+-  <data name="UpdateSuccess" xml:space="preserve">
+-    <value>插件更新完成, 重启ASF即可应用, 如果不兼容请更新ASF版本</value>
+-  </data>
+-  <data name="UpdateFiledWithZip" xml:space="preserve">
+-    <value>插件更新失败, 压缩包内容解析失败</value>
+-  </data>
+   <data name="Version" xml:space="preserve">
+     <value> - 版本: {0}</value>
+   </data>
+-  <data name="UpdateTips" xml:space="preserve">
+-    <value>可以使用命令 ASFEUPDATE / AU 自动更新插件</value>
+-  </data>
+-  <data name="AlreadyLatest" xml:space="preserve">
+-    <value>当前已经是最新版本, 无需更新插件</value>
+-  </data>
+   <data name="CommandHelpWithShortName" xml:space="preserve">
+     <value> * 可用缩写 : {0}</value>
+   </data>
+@@ -597,9 +582,6 @@
+   <data name="CleanUpOldBackupFailed" xml:space="preserve">
+     <value>旧的插件备份清理失败</value>
+   </data>
+-  <data name="ASFEUpdateTips" xml:space="preserve">
+-    <value>使用命令 ASFEUPDATE / AU 自动更新插件</value>
+-  </data>
+   <data name="ASFEVersionTips" xml:space="preserve">
+     <value>使用命令 ASFEVERSION / AV 检查插件更新</value>
+   </data>
+diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
+index 1d4fbd1..e65d025 100644
+--- a/ASFEnhance/Update/Command.cs
++++ b/ASFEnhance/Update/Command.cs
+@@ -41,100 +41,6 @@ internal static class Command
+             sb.AppendLine(string.Format(Langs.SubName, asset.Name));
+         }
+ 
+-        sb.AppendLine(Langs.UpdateTips);
+-
+         return sb.ToString();
+     }
+-
+-    /// <summary>
+-    /// 自动更新插件
+-    /// </summary>
+-    /// <returns></returns>
+-    internal static async Task<string?> ResponseUpdatePlugin()
+-    {
+-        var releaseResponse = await WebRequest.GetLatestRelease(true).ConfigureAwait(false);
+-
+-        if (releaseResponse == null)
+-        {
+-            return FormatStaticResponse(Langs.GetReleaseInfoFailed);
+-        }
+-
+-        if (MyVersion.ToString() == releaseResponse.TagName)
+-        {
+-            return FormatStaticResponse(Langs.AlreadyLatest);
+-        }
+-
+-        string langVersion = Langs.CurrentLanguage;
+-        string? downloadUrl = null;
+-
+-        foreach (var asset in releaseResponse.Assets)
+-        {
+-            if (asset.Name.Contains(langVersion))
+-            {
+-                downloadUrl = asset.DownloadUrl;
+-                break;
+-            }
+-        }
+-
+-        if (string.IsNullOrEmpty(downloadUrl) && releaseResponse.Assets.Any())
+-        {
+-            downloadUrl = releaseResponse.Assets?.First().DownloadUrl;
+-        }
+-
+-        var binResponse = await WebRequest.DownloadRelease(downloadUrl).ConfigureAwait(false);
+-
+-        if (binResponse == null)
+-        {
+-            return FormatStaticResponse(Langs.DownloadFailed);
+-        }
+-
+-        var zipBytes = binResponse?.Content as byte[] ?? binResponse?.Content?.ToArray();
+-
+-        if (zipBytes == null)
+-        {
+-            return FormatStaticResponse(Langs.DownloadFailed);
+-        }
+-
+-        MemoryStream ms = new(zipBytes);
+-
+-        try
+-        {
+-            await using (ms.ConfigureAwait(false))
+-            {
+-                using ZipArchive zipArchive = new(ms);
+-
+-                string currentPath = MyLocation ?? ".";
+-                string pluginFolder = Path.GetDirectoryName(currentPath) ?? ".";
+-                string backupPath = Path.Combine(pluginFolder, $"{nameof(ASFEnhance)}.bak");
+-
+-                File.Move(currentPath, backupPath, true);
+-
+-                foreach (var entry in zipArchive.Entries)
+-                {
+-                    if (entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+-                    {
+-                        entry.ExtractToFile(currentPath);
+-                        UpdatePadding = true;
+-
+-                        var sb = new StringBuilder();
+-                        sb.AppendLine(Langs.UpdateSuccess);
+-
+-                        sb.AppendLine();
+-                        sb.AppendLine(string.Format(Langs.ASFECurrentVersion, MyVersion.ToString()));
+-                        sb.AppendLine(string.Format(Langs.ASFEOnlineVersion, releaseResponse.TagName));
+-                        sb.AppendLine(string.Format(Langs.Detail, releaseResponse.Body));
+-
+-                        return sb.ToString();
+-                    }
+-                }
+-                File.Move(backupPath, currentPath);
+-                return Langs.UpdateFiledWithZip;
+-            }
+-        }
+-        catch (Exception e)
+-        {
+-            ASFLogger.LogGenericException(e);
+-            return FormatStaticResponse(Langs.UpdateFiledWithZip);
+-        }
+-    }
+ }
+diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
+index 57f4e8a..5c73e1a 100644
+--- a/ASFEnhance/Update/WebRequest.cs
++++ b/ASFEnhance/Update/WebRequest.cs
+@@ -24,21 +24,4 @@ internal static class WebRequest
+ 
+         return response?.Content;
+     }
+-
+-    /// <summary>
+-    /// 下载发行版
+-    /// </summary>
+-    /// <param name="downloadUrl"></param>
+-    /// <returns></returns>
+-    internal static async Task<BinaryResponse?> DownloadRelease(string? downloadUrl)
+-    {
+-        if (string.IsNullOrEmpty(downloadUrl))
+-        {
+-            return null;
+-        }
+-
+-        Uri request = new(downloadUrl);
+-        BinaryResponse? response = await ASF.WebBrowser!.UrlGetToBinary(request).ConfigureAwait(false);
+-        return response;
+-    }
+ }
+-- 
+2.41.0
+
