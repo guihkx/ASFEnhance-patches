@@ -19,7 +19,7 @@ Subject: Remove statistics and EULA
  12 files changed, 38 insertions(+), 229 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 1bcce2a..0cf1fcc 100644
+index 4b0e45d..bf063ee 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
@@ -64,7 +64,7 @@ index 1bcce2a..0cf1fcc 100644
          //禁用命令
          if (Config.DisabledCmds == null)
          {
-@@ -302,13 +281,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -301,13 +280,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Community.Command.ResponseClearNotification(bot).ConfigureAwait(false);
  
                      //Curasor
@@ -83,7 +83,7 @@ index 1bcce2a..0cf1fcc 100644
                          return await Curator.Command.ResponseUnFollowAllCurators(bot).ConfigureAwait(false);
  
                      //Explorer
-@@ -325,8 +304,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -324,8 +303,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Friend.Command.ResponseGetInviteLink(bot).ConfigureAwait(false);
  
                      //Group
@@ -94,7 +94,7 @@ index 1bcce2a..0cf1fcc 100644
                          return await Group.Command.ResponseGroupList(bot).ConfigureAwait(false);
  
                      //Other
-@@ -395,13 +374,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -390,13 +369,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
                          return await DevFeature.Command.ResponseGetAccessToken(bot).ConfigureAwait(false);
  
@@ -108,7 +108,7 @@ index 1bcce2a..0cf1fcc 100644
                      case "COOKIES" when access >= EAccess.Owner:
                      case "APIKEY" when access >= EAccess.Owner:
                      case "ACCESSTOKEN" when access >= EAccess.Owner:
-@@ -561,27 +533,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -556,27 +528,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Community.Command.ResponseClearNotification(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
                      //Curasor
@@ -149,7 +149,7 @@ index 1bcce2a..0cf1fcc 100644
                          return await Curator.Command.ResponseFollowCurator(bot, args[1], false).ConfigureAwait(false);
  
                      //Explorer
-@@ -623,22 +595,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -618,22 +590,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Friend.Command.ResponseGetInviteLink(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
                      //Group
@@ -182,7 +182,7 @@ index 1bcce2a..0cf1fcc 100644
                          return await Group.Command.ResponseLeaveGroup(bot, args[1]).ConfigureAwait(false);
  
                      //Other
-@@ -738,18 +710,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -733,18 +705,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AD" when access >= EAccess.Operator:
                          return await Store.Command.ResponseGetAppsDetail(bot, args[1]).ConfigureAwait(false);
  
@@ -209,7 +209,7 @@ index 1bcce2a..0cf1fcc 100644
                          return await Store.Command.ResponsePublishReview(bot, args[1], args[2]).ConfigureAwait(false);
  
                      case "REQUESTACCESS" when argLength > 2 && access >= EAccess.Operator:
-@@ -836,25 +808,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -831,25 +803,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
                          return await DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
@@ -419,10 +419,10 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 4606b5d..f547418 100644
+index 1752675..c6bcf2a 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -960,33 +960,6 @@ namespace ASFEnhance.Localization {
+@@ -942,33 +942,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -457,10 +457,10 @@ index 4606b5d..f547418 100644
          ///   查找类似 领取每日贴纸: {0} 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 1149ce2..1a65aaa 100644
+index f359a0b..30c3aa0 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
-@@ -690,18 +690,12 @@
+@@ -672,18 +672,12 @@
    <data name="DevFeatureNotEnabled" xml:space="preserve">
      <value>ASFEnhance.DevFeature is disabled, this feature is unavilable</value>
    </data>
@@ -479,7 +479,7 @@ index 1149ce2..1a65aaa 100644
    <data name="ErrorLogErrorMessage" xml:space="preserve">
      <value> - Exception Message: {0}</value>
    </data>
-@@ -828,9 +822,6 @@
+@@ -810,9 +804,6 @@
    <data name="UsageJOINGROUP" xml:space="preserve">
      <value>Let bot to join specified group</value>
    </data>
@@ -490,10 +490,10 @@ index 1149ce2..1a65aaa 100644
      <value>An item on my wishlist has released</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index dad0921..c9cc627 100644
+index 6d8c6ac..2524e51 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
-@@ -696,12 +696,6 @@
+@@ -678,12 +678,6 @@
    <data name="ASFEnhanceGroup" xml:space="preserve">
      <value>ASFEnhance's Group</value>
    </data>
@@ -506,7 +506,7 @@ index dad0921..c9cc627 100644
    <data name="ErrorLogErrorMessage" xml:space="preserve">
      <value> - 错误消息: {0}</value>
    </data>
-@@ -828,9 +822,6 @@
+@@ -810,9 +804,6 @@
    <data name="UsageCARTRESET" xml:space="preserve">
      <value>清空购物车</value>
    </data>
@@ -517,10 +517,10 @@ index dad0921..c9cc627 100644
      <value>启用邮件通知</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index c14d80c..aea3ba9 100644
+index 678b952..0a36a3d 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
-@@ -692,18 +692,12 @@ costs
+@@ -672,18 +672,12 @@
    <data name="DevFeatureNotEnabled" xml:space="preserve">
      <value>"ASFEnhance.DevFeature" отключен, эта функция недоступна</value>
    </data>
@@ -539,7 +539,7 @@ index c14d80c..aea3ba9 100644
    <data name="ErrorLogErrorMessage" xml:space="preserve">
      <value> - Exception Message: {0}</value>
    </data>
-@@ -830,9 +824,6 @@ costs
+@@ -810,9 +804,6 @@
    <data name="UsageJOINGROUP" xml:space="preserve">
      <value>Разрешить боту присоединиться к указанной группе</value>
    </data>
@@ -550,10 +550,10 @@ index c14d80c..aea3ba9 100644
      <value>An item on my wishlist has released</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
-index 50a1cb7..da7e8f4 100644
+index 25be81e..7afb902 100644
 --- a/ASFEnhance/Localization/Langs.zh-Hans.resx
 +++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
-@@ -690,18 +690,12 @@
+@@ -672,18 +672,12 @@
    <data name="DevFeatureNotEnabled" xml:space="preserve">
      <value>尚未启用 ASFEnhance.DevFeature , 该命令不可用</value>
    </data>
@@ -572,7 +572,7 @@ index 50a1cb7..da7e8f4 100644
    <data name="ErrorLogErrorMessage" xml:space="preserve">
      <value> - 错误消息: {0}</value>
    </data>
-@@ -828,9 +822,6 @@
+@@ -810,9 +804,6 @@
    <data name="UsagePURCHASEGIFT" xml:space="preserve">
      <value>结算机器人 A 的购物车, 发送礼物给机器人 B (使用 Steam 钱包余额结算)</value>
    </data>

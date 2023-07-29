@@ -38,7 +38,7 @@ index 1bcce2a..4b0e45d 100644
                      case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
                          return DevFeature.Command.ResponseGetCookies(bot);
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 4606b5d..1004f16 100644
+index b2c63bc..1752675 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -204,15 +204,6 @@ namespace ASFEnhance.Localization {
@@ -73,7 +73,7 @@ index 4606b5d..1004f16 100644
          /// <summary>
          ///   查找类似 使用命令 ASFEVERSION / AV 检查插件更新 的本地化字符串。
          /// </summary>
-@@ -861,15 +843,6 @@ namespace ASFEnhance.Localization {
+@@ -870,15 +852,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -89,7 +89,7 @@ index 4606b5d..1004f16 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -2058,33 +2031,6 @@ namespace ASFEnhance.Localization {
+@@ -2175,33 +2148,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -124,7 +124,7 @@ index 4606b5d..1004f16 100644
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 1149ce2..1389c92 100644
+index 01bcd35..f359a0b 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -540,9 +540,6 @@
@@ -170,7 +170,7 @@ index 1149ce2..1389c92 100644
      <value>Use Command "ASFEVERSION" / "AV" to check the plugin's latest version</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index dad0921..4d6cff3 100644
+index d8a6087..6d8c6ac 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -558,21 +558,6 @@
@@ -206,10 +206,10 @@ index dad0921..4d6cff3 100644
      <value>删除 {0} 的评测: </value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index c14d80c..7a2b145 100644
+index de9fba8..678b952 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
-@@ -542,9 +542,6 @@ costs
+@@ -540,9 +540,6 @@
    <data name="Detail" xml:space="preserve">
      <value> - Описание: {0}</value>
    </data>
@@ -219,7 +219,7 @@ index c14d80c..7a2b145 100644
    <data name="HelpArgsExplain" xml:space="preserve">
      <value>[ ]: Необязательные параметры, &lt; &gt;: Массив (использовать , для разделения)</value>
    </data>
-@@ -560,21 +557,9 @@ costs
+@@ -558,21 +555,9 @@
    <data name="SubName" xml:space="preserve">
      <value>   - Название: {0}</value>
    </data>
@@ -241,7 +241,7 @@ index c14d80c..7a2b145 100644
    <data name="CommandHelpWithShortName" xml:space="preserve">
      <value> * Доступные сокращения: {0}</value>
    </data>
-@@ -599,9 +584,6 @@ costs
+@@ -597,9 +582,6 @@
    <data name="CleanUpOldBackupFailed" xml:space="preserve">
      <value>Не удалось очистить старые бекапы плагина</value>
    </data>
@@ -252,7 +252,7 @@ index c14d80c..7a2b145 100644
      <value>Используй команду "ASFEVERSION" / "AV" чтобы проверить последнюю версию плагина</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
-index 50a1cb7..087dfb9 100644
+index 1865e2e..25be81e 100644
 --- a/ASFEnhance/Localization/Langs.zh-Hans.resx
 +++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
 @@ -540,9 +540,6 @@
