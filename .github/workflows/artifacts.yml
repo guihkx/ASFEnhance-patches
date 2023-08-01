@@ -49,7 +49,7 @@ jobs:
 
       - name: Setup variables
         id: vars
-        run: echo "version=$(git describe --long)" >> ${GITHUB_OUTPUT}
+        run: echo "version=$(git describe --always --long)" >> "${GITHUB_OUTPUT}"
 
       - name: Show ASFEnhance version
         run: echo '${{ steps.vars.outputs.version }}'
