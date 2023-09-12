@@ -19,7 +19,7 @@ Subject: Remove statistics and EULA
  12 files changed, 38 insertions(+), 229 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index a3f61c3..bbf2508 100644
+index 16496ab..29b9b8f 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
@@ -64,7 +64,7 @@ index a3f61c3..bbf2508 100644
          //禁用命令
          if (Config.DisabledCmds == null)
          {
-@@ -287,13 +266,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -292,13 +271,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Community.Command.ResponseClearNotification(bot).ConfigureAwait(false);
  
                      //Curasor
@@ -83,7 +83,7 @@ index a3f61c3..bbf2508 100644
                          return await Curator.Command.ResponseUnFollowAllCurators(bot).ConfigureAwait(false);
  
                      //Explorer
-@@ -310,8 +289,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -315,8 +294,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Friend.Command.ResponseGetInviteLink(bot).ConfigureAwait(false);
  
                      //Group
@@ -94,7 +94,7 @@ index a3f61c3..bbf2508 100644
                          return await Group.Command.ResponseGroupList(bot).ConfigureAwait(false);
  
                      //Other
-@@ -376,13 +355,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -381,13 +360,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
                          return await DevFeature.Command.ResponseGetAccessToken(bot).ConfigureAwait(false);
  
@@ -108,7 +108,7 @@ index a3f61c3..bbf2508 100644
                      case "COOKIES" when access >= EAccess.Owner:
                      case "APIKEY" when access >= EAccess.Owner:
                      case "ACCESSTOKEN" when access >= EAccess.Owner:
-@@ -542,27 +514,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -557,27 +529,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Community.Command.ResponseClearNotification(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
                      //Curasor
@@ -149,7 +149,7 @@ index a3f61c3..bbf2508 100644
                          return await Curator.Command.ResponseFollowCurator(bot, args[1], false).ConfigureAwait(false);
  
                      //Explorer
-@@ -604,22 +576,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -619,22 +591,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                          return await Friend.Command.ResponseGetInviteLink(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
                      //Group
@@ -182,7 +182,7 @@ index a3f61c3..bbf2508 100644
                          return await Group.Command.ResponseLeaveGroup(bot, args[1]).ConfigureAwait(false);
  
                      //Other
-@@ -719,18 +691,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -734,18 +706,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AD" when access >= EAccess.Operator:
                          return await Store.Command.ResponseGetAppsDetail(bot, args[1]).ConfigureAwait(false);
  
@@ -209,7 +209,7 @@ index a3f61c3..bbf2508 100644
                          return await Store.Command.ResponsePublishReview(bot, args[1], args[2]).ConfigureAwait(false);
  
                      case "REQUESTACCESS" when argLength > 2 && access >= EAccess.Operator:
-@@ -817,25 +789,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -832,25 +804,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
                          return await DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
  
