@@ -15,7 +15,7 @@ Subject: Remove self-update feature
  8 files changed, 242 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index c96080f..16496ab 100644
+index fdfb950..1200d09 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -152,7 +152,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
@@ -26,7 +26,7 @@ index c96080f..16496ab 100644
          }
  
          message.AppendLine(Static.Line);
-@@ -374,10 +373,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -378,10 +377,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AV" when access >= EAccess.Operator:
                          return await Update.Command.ResponseCheckLatestVersion().ConfigureAwait(false);
  
@@ -38,7 +38,7 @@ index c96080f..16496ab 100644
                      case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
                          return DevFeature.Command.ResponseGetCookies(bot);
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index b2c63bc..1752675 100644
+index 281d479..8f35f8f 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -204,15 +204,6 @@ namespace ASFEnhance.Localization {
@@ -73,7 +73,7 @@ index b2c63bc..1752675 100644
          /// <summary>
          ///   查找类似 使用命令 ASFEVERSION / AV 检查插件更新 的本地化字符串。
          /// </summary>
-@@ -870,15 +852,6 @@ namespace ASFEnhance.Localization {
+@@ -933,15 +915,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -89,7 +89,7 @@ index b2c63bc..1752675 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -2175,33 +2148,6 @@ namespace ASFEnhance.Localization {
+@@ -2256,33 +2229,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -124,7 +124,7 @@ index b2c63bc..1752675 100644
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 01bcd35..f359a0b 100644
+index 0979d3f..f232fad 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -540,9 +540,6 @@
@@ -170,7 +170,7 @@ index 01bcd35..f359a0b 100644
      <value>Use Command "ASFEVERSION" / "AV" to check the plugin's latest version</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index d8a6087..6d8c6ac 100644
+index a5235ec..96e766e 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -558,21 +558,6 @@
@@ -206,7 +206,7 @@ index d8a6087..6d8c6ac 100644
      <value>删除 {0} 的评测: </value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index de9fba8..678b952 100644
+index d4ebea8..7f6a97b 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
 @@ -540,9 +540,6 @@
@@ -252,7 +252,7 @@ index de9fba8..678b952 100644
      <value>Используй команду "ASFEVERSION" / "AV" чтобы проверить последнюю версию плагина</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
-index 1865e2e..25be81e 100644
+index c1f06fb..87aff20 100644
 --- a/ASFEnhance/Localization/Langs.zh-Hans.resx
 +++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
 @@ -540,9 +540,6 @@
