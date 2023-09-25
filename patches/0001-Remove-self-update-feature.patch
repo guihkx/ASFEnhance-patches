@@ -15,7 +15,7 @@ Subject: Remove self-update feature
  8 files changed, 242 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index fdfb950..1200d09 100644
+index 986f1c2..1ee6ce7 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -152,7 +152,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
@@ -26,7 +26,7 @@ index fdfb950..1200d09 100644
          }
  
          message.AppendLine(Static.Line);
-@@ -378,10 +377,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -382,10 +381,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AV" when access >= EAccess.Operator:
                          return await Update.Command.ResponseCheckLatestVersion().ConfigureAwait(false);
  
