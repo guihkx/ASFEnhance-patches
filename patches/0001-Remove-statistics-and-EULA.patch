@@ -19,10 +19,10 @@ Subject: Remove statistics and EULA
  12 files changed, 38 insertions(+), 229 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 1ee6ce7..5db86ee 100644
+index 22a0941..cac2ec2 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -20,8 +20,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
      [JsonProperty]
      public static PluginConfig Config => Utils.Config;
  
@@ -31,7 +31,7 @@ index 1ee6ce7..5db86ee 100644
      public string PhysicalPath => "www";
  
      public string WebPath => "/";
-@@ -68,14 +66,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -69,14 +67,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
              sb.AppendLine(Langs.DevFeatureEnabledWarning);
              sb.AppendLine(Static.Line);
          }
@@ -46,7 +46,7 @@ index 1ee6ce7..5db86ee 100644
          //地址信息
          if (Config.Addresses == null)
          {
-@@ -91,17 +81,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -92,17 +82,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
          {
              ASFLogger.LogGenericWarning(sb.ToString());
          }
@@ -64,15 +64,15 @@ index 1ee6ce7..5db86ee 100644
          //禁用命令
          if (Config.DisabledCmds == null)
          {
-@@ -300,13 +279,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
-                         return await Community.Command.ResponseClearNotification(bot).ConfigureAwait(false);
+@@ -301,13 +280,13 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return Community.Command.ResponseClearNotification(bot);
  
                      //Curasor
 -                    case "CURATORLIST" when Config.EULA && access >= EAccess.Master:
 -                    case "CL" when Config.EULA && access >= EAccess.Master:
 +                    case "CURATORLIST" when access >= EAccess.Master:
 +                    case "CL" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseGetFollowingCurators(bot).ConfigureAwait(false);
+                         return Curator.Command.ResponseGetFollowingCurators(bot);
  
 -                    case "UNFOLLOWALLCURASOR" when Config.EULA && access >= EAccess.Master:
 -                    case "UNFOLLOWALLCURASORS" when Config.EULA && access >= EAccess.Master:
@@ -80,54 +80,54 @@ index 1ee6ce7..5db86ee 100644
 +                    case "UNFOLLOWALLCURASOR" when access >= EAccess.Master:
 +                    case "UNFOLLOWALLCURASORS" when access >= EAccess.Master:
 +                    case "UFACU" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseUnFollowAllCurators(bot).ConfigureAwait(false);
+                         return Curator.Command.ResponseUnFollowAllCurators(bot);
  
                      //Explorer
-@@ -323,8 +302,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
-                         return await Friend.Command.ResponseGetInviteLink(bot).ConfigureAwait(false);
+@@ -324,8 +303,8 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return Friend.Command.ResponseGetInviteLink(bot);
  
                      //Group
 -                    case "GROUPLIST" when Config.EULA && access >= EAccess.FamilySharing:
 -                    case "GL" when Config.EULA && access >= EAccess.FamilySharing:
 +                    case "GROUPLIST" when access >= EAccess.FamilySharing:
 +                    case "GL" when access >= EAccess.FamilySharing:
-                         return await Group.Command.ResponseGroupList(bot).ConfigureAwait(false);
+                         return Group.Command.ResponseGroupList(bot);
  
                      //Other
-@@ -389,13 +368,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -390,13 +369,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
-                         return await DevFeature.Command.ResponseGetAccessToken(bot).ConfigureAwait(false);
+                         return DevFeature.Command.ResponseGetAccessToken(bot);
  
 -                    //Limited Tips
 -                    case "CURATORLIST" when access >= EAccess.Master:
 -                    case "CL" when access >= EAccess.Master:
 -                    case "GROUPLIST" when access >= EAccess.Master:
 -                    case "GL" when access >= EAccess.Master:
--                        return Other.Command.ResponseEulaCmdUnavilable();
+-                        return Task.FromResult(Other.Command.ResponseEulaCmdUnavilable());
 -
                      case "COOKIES" when access >= EAccess.Owner:
                      case "APIKEY" when access >= EAccess.Owner:
                      case "ACCESSTOKEN" when access >= EAccess.Owner:
-@@ -573,27 +545,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
-                         return await Community.Command.ResponseClearNotification(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+@@ -574,27 +546,27 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return Community.Command.ResponseClearNotification(Utilities.GetArgsAsText(args, 1, ","));
  
                      //Curasor
 -                    case "CURATORLIST" when Config.EULA && access >= EAccess.Master:
 -                    case "CL" when Config.EULA && access >= EAccess.Master:
 +                    case "CURATORLIST" when access >= EAccess.Master:
 +                    case "CL" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseGetFollowingCurators(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+                         return Curator.Command.ResponseGetFollowingCurators(Utilities.GetArgsAsText(args, 1, ","));
  
 -                    case "FOLLOWCURATOR" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 -                    case "FCU" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 +                    case "FOLLOWCURATOR" when argLength > 2 && access >= EAccess.Master:
 +                    case "FCU" when argLength > 2 && access >= EAccess.Master:
-                         return await Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), true).ConfigureAwait(false);
+                         return Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), true);
 -                    case "FOLLOWCURATOR" when Config.EULA && access >= EAccess.Master:
 -                    case "FCU" when Config.EULA && access >= EAccess.Master:
 +                    case "FOLLOWCURATOR" when access >= EAccess.Master:
 +                    case "FCU" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseFollowCurator(bot, args[1], true).ConfigureAwait(false);
+                         return Curator.Command.ResponseFollowCurator(bot, args[1], true);
  
 -                    case "UNFOLLOWALLCURASOR" when Config.EULA && access >= EAccess.Master:
 -                    case "UNFOLLOWALLCURASORS" when Config.EULA && access >= EAccess.Master:
@@ -135,83 +135,83 @@ index 1ee6ce7..5db86ee 100644
 +                    case "UNFOLLOWALLCURASOR" when access >= EAccess.Master:
 +                    case "UNFOLLOWALLCURASORS" when access >= EAccess.Master:
 +                    case "UFACU" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseUnFollowAllCurators(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+                         return Curator.Command.ResponseUnFollowAllCurators(Utilities.GetArgsAsText(args, 1, ","));
  
 -                    case "UNFOLLOWCURATOR" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 -                    case "UFCU" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 +                    case "UNFOLLOWCURATOR" when argLength > 2 && access >= EAccess.Master:
 +                    case "UFCU" when argLength > 2 && access >= EAccess.Master:
-                         return await Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), false).ConfigureAwait(false);
+                         return Curator.Command.ResponseFollowCurator(args[1], Utilities.GetArgsAsText(args, 2, ","), false);
 -                    case "UNFOLLOWCURATOR" when Config.EULA && access >= EAccess.Master:
 -                    case "UFCU" when Config.EULA && access >= EAccess.Master:
 +                    case "UNFOLLOWCURATOR" when access >= EAccess.Master:
 +                    case "UFCU" when access >= EAccess.Master:
-                         return await Curator.Command.ResponseFollowCurator(bot, args[1], false).ConfigureAwait(false);
+                         return Curator.Command.ResponseFollowCurator(bot, args[1], false);
  
                      //Explorer
-@@ -635,22 +607,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
-                         return await Friend.Command.ResponseGetInviteLink(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+@@ -636,22 +608,22 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                         return Friend.Command.ResponseGetInviteLink(Utilities.GetArgsAsText(args, 1, ","));
  
                      //Group
 -                    case "GROUPLIST" when Config.EULA && access >= EAccess.FamilySharing:
 -                    case "GL" when Config.EULA && access >= EAccess.FamilySharing:
 +                    case "GROUPLIST" when access >= EAccess.FamilySharing:
 +                    case "GL" when access >= EAccess.FamilySharing:
-                         return await Group.Command.ResponseGroupList(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+                         return Group.Command.ResponseGroupList(Utilities.GetArgsAsText(args, 1, ","));
  
 -                    case "JOINGROUP" when Config.EULA && argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
 -                    case "JG" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 +                    case "JOINGROUP" when argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
 +                    case "JG" when argLength > 2 && access >= EAccess.Master:
-                         return await Group.Command.ResponseJoinGroup(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+                         return Group.Command.ResponseJoinGroup(args[1], Utilities.GetArgsAsText(args, 2, ","));
 -                    case "JOINGROUP" when Config.EULA && access >= EAccess.Master:
 -                    case "JG" when Config.EULA && access >= EAccess.Master:
 +                    case "JOINGROUP" when access >= EAccess.Master:
 +                    case "JG" when access >= EAccess.Master:
-                         return await Group.Command.ResponseJoinGroup(bot, args[1]).ConfigureAwait(false);
+                         return Group.Command.ResponseJoinGroup(bot, args[1]);
  
 -                    case "LEAVEGROUP" when Config.EULA && argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
 -                    case "LG" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 +                    case "LEAVEGROUP" when argLength > 2 && access >= EAccess.Master && access >= EAccess.Master:
 +                    case "LG" when argLength > 2 && access >= EAccess.Master:
-                         return await Group.Command.ResponseLeaveGroup(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+                         return Group.Command.ResponseLeaveGroup(args[1], Utilities.GetArgsAsText(args, 2, ","));
 -                    case "LEAVEGROUP" when Config.EULA && access >= EAccess.Master:
 -                    case "LG" when Config.EULA && access >= EAccess.Master:
 +                    case "LEAVEGROUP" when access >= EAccess.Master:
 +                    case "LG" when access >= EAccess.Master:
-                         return await Group.Command.ResponseLeaveGroup(bot, args[1]).ConfigureAwait(false);
+                         return Group.Command.ResponseLeaveGroup(bot, args[1]);
  
                      //Other
-@@ -750,18 +722,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -751,18 +723,18 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AD" when access >= EAccess.Operator:
-                         return await Store.Command.ResponseGetAppsDetail(bot, args[1]).ConfigureAwait(false);
+                         return Store.Command.ResponseGetAppsDetail(bot, args[1]);
  
 -                    case "DELETERECOMMENT" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 -                    case "DREC" when Config.EULA && argLength > 2 && access >= EAccess.Master:
 +                    case "DELETERECOMMENT" when argLength > 2 && access >= EAccess.Master:
 +                    case "DREC" when argLength > 2 && access >= EAccess.Master:
-                         return await Store.Command.ResponseDeleteReview(args[1], Utilities.GetArgsAsText(args, 2, ",")).ConfigureAwait(false);
+                         return Store.Command.ResponseDeleteReview(args[1], Utilities.GetArgsAsText(args, 2, ","));
 -                    case "DELETERECOMMENT" when Config.EULA && access >= EAccess.Master:
 -                    case "DREC" when Config.EULA && access >= EAccess.Master:
 +                    case "DELETERECOMMENT" when access >= EAccess.Master:
 +                    case "DREC" when access >= EAccess.Master:
-                         return await Store.Command.ResponseDeleteReview(bot, args[1]).ConfigureAwait(false);
+                         return Store.Command.ResponseDeleteReview(bot, args[1]);
  
 -                    case "PUBLISHRECOMMENT" when Config.EULA && argLength > 3 && access >= EAccess.Master:
 -                    case "PREC" when Config.EULA && argLength > 3 && access >= EAccess.Master:
 +                    case "PUBLISHRECOMMENT" when argLength > 3 && access >= EAccess.Master:
 +                    case "PREC" when argLength > 3 && access >= EAccess.Master:
-                         return await Store.Command.ResponsePublishReview(args[1], args[2], Utilities.GetArgsAsText(message, 3)).ConfigureAwait(false);
+                         return Store.Command.ResponsePublishReview(args[1], args[2], Utilities.GetArgsAsText(message, 3));
 -                    case "PUBLISHRECOMMENT" when Config.EULA && argLength == 3 && access >= EAccess.Master:
 -                    case "PREC" when Config.EULA && argLength == 3 && access >= EAccess.Master:
 +                    case "PUBLISHRECOMMENT" when argLength == 3 && access >= EAccess.Master:
 +                    case "PREC" when argLength == 3 && access >= EAccess.Master:
-                         return await Store.Command.ResponsePublishReview(bot, args[1], args[2]).ConfigureAwait(false);
+                         return Store.Command.ResponsePublishReview(bot, args[1], args[2]);
  
                      case "REQUESTACCESS" when argLength > 2 && access >= EAccess.Operator:
-@@ -848,25 +820,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -849,25 +821,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner:
-                         return await DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ",")).ConfigureAwait(false);
+                         return DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ","));
  
 -                    //Limited Tips
 -                    case "FOLLOWCURATOR" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
@@ -230,7 +230,7 @@ index 1ee6ce7..5db86ee 100644
 -                    case "DREC" when !Config.EULA && argLength >= 1 && access >= EAccess.Master:
 -                    case "PUBLISHRECOMMEND" when !Config.EULA && argLength >= 2 && access >= EAccess.Master:
 -                    case "PREC" when !Config.EULA && argLength >= 2 && access >= EAccess.Master:
--                        return Other.Command.ResponseEulaCmdUnavilable();
+-                        return Task.FromResult(Other.Command.ResponseEulaCmdUnavilable());
 -
                      case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
                      case "APIKEY" when Config.DevFeature && access >= EAccess.Owner:
@@ -517,7 +517,7 @@ index 96e766e..c42b3ea 100644
      <value>启用邮件通知</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index 7f6a97b..2c48c32 100644
+index 310ebb9..e095750 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
 @@ -672,18 +672,12 @@
@@ -547,7 +547,7 @@ index 7f6a97b..2c48c32 100644
 -    <value>"ASFEnhance.EULA" не принят, эта функция недоступна</value>
 -  </data>
    <data name="WhenWishlistRelease" xml:space="preserve">
-     <value>An item on my wishlist has released</value>
+     <value>Когда игра выйдет в релиз добавить в мой список желаний</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
 index 87aff20..9057b47 100644
@@ -583,7 +583,7 @@ index 87aff20..9057b47 100644
      <value>愿望单上的一项物品享有折扣时</value>
    </data>
 diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
-index bb1917d..ab78b4d 100644
+index 9afc1a2..8bc8700 100644
 --- a/ASFEnhance/Other/Command.cs
 +++ b/ASFEnhance/Other/Command.cs
 @@ -158,15 +158,6 @@ internal static class Command
@@ -594,7 +594,7 @@ index bb1917d..ab78b4d 100644
 -    /// 提示命令不可用
 -    /// </summary>
 -    /// <returns></returns>
--    internal static string ResponseEulaCmdUnavilable()
+-    internal static string? ResponseEulaCmdUnavilable()
 -    {
 -        return FormatStaticResponse(Langs.EulaCmdUnavilable);
 -    }
@@ -603,5 +603,5 @@ index bb1917d..ab78b4d 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.41.0
+2.42.0
 

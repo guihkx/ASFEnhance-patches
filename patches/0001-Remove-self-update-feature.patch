@@ -15,10 +15,10 @@ Subject: Remove self-update feature
  8 files changed, 242 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 986f1c2..1ee6ce7 100644
+index 8aef92a..22a0941 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -152,7 +152,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -153,7 +153,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
          else
          {
              message.AppendLine(Langs.ASFEVersionTips);
@@ -26,17 +26,17 @@ index 986f1c2..1ee6ce7 100644
          }
  
          message.AppendLine(Static.Line);
-@@ -382,10 +381,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -383,10 +382,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
                      case "AV" when access >= EAccess.Operator:
-                         return await Update.Command.ResponseCheckLatestVersion().ConfigureAwait(false);
+                         return Update.Command.ResponseCheckLatestVersion();
  
 -                    case "ASFEUPDATE" when access >= EAccess.Owner:
 -                    case "AU" when access >= EAccess.Owner:
--                        return await Update.Command.ResponseUpdatePlugin().ConfigureAwait(false);
+-                        return Update.Command.ResponseUpdatePlugin();
 -
                      //DevFuture
                      case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
-                         return DevFeature.Command.ResponseGetCookies(bot);
+                         return Task.FromResult(DevFeature.Command.ResponseGetCookies(bot));
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
 index 281d479..8f35f8f 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
@@ -206,7 +206,7 @@ index a5235ec..96e766e 100644
      <value>删除 {0} 的评测: </value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index d4ebea8..7f6a97b 100644
+index 68bb61e..310ebb9 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
 @@ -540,9 +540,6 @@
@@ -298,7 +298,7 @@ index c1f06fb..87aff20 100644
      <value>使用命令 ASFEVERSION / AV 检查插件更新</value>
    </data>
 diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index 1d4fbd1..e65d025 100644
+index cc7296a..9af592d 100644
 --- a/ASFEnhance/Update/Command.cs
 +++ b/ASFEnhance/Update/Command.cs
 @@ -41,100 +41,6 @@ internal static class Command
@@ -429,5 +429,5 @@ index 57f4e8a..5c73e1a 100644
 -    }
  }
 -- 
-2.41.0
+2.42.0
 
