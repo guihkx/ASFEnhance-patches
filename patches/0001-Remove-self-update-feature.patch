@@ -15,10 +15,10 @@ Subject: Remove self-update feature
  8 files changed, 242 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 8aef92a..22a0941 100644
+index d4a975a..843005c 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -153,7 +153,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+@@ -152,7 +152,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
          else
          {
              message.AppendLine(Langs.ASFEVersionTips);
@@ -26,22 +26,22 @@ index 8aef92a..22a0941 100644
          }
  
          message.AppendLine(Static.Line);
-@@ -383,10 +382,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
-                     case "AV" when access >= EAccess.Operator:
-                         return Update.Command.ResponseCheckLatestVersion();
+@@ -385,10 +384,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IWebIn
+                 "AV" when access >= EAccess.Operator =>
+                     Update.Command.ResponseCheckLatestVersion(),
  
--                    case "ASFEUPDATE" when access >= EAccess.Owner:
--                    case "AU" when access >= EAccess.Owner:
--                        return Update.Command.ResponseUpdatePlugin();
+-                "ASFEUPDATE" or
+-                "AU" when access >= EAccess.Owner =>
+-                    Update.Command.ResponseUpdatePlugin(),
 -
-                     //DevFuture
-                     case "COOKIES" when Config.DevFeature && access >= EAccess.Owner:
-                         return Task.FromResult(DevFeature.Command.ResponseGetCookies(bot));
+                 //DevFuture
+                 "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
+                     Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 281d479..8f35f8f 100644
+index 2c434b3..1503e63 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -204,15 +204,6 @@ namespace ASFEnhance.Localization {
+@@ -213,15 +213,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -57,7 +57,7 @@ index 281d479..8f35f8f 100644
          /// <summary>
          ///   查找类似  - 标签: {0} 的本地化字符串。
          /// </summary>
-@@ -519,15 +510,6 @@ namespace ASFEnhance.Localization {
+@@ -528,15 +519,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -73,7 +73,7 @@ index 281d479..8f35f8f 100644
          /// <summary>
          ///   查找类似 使用命令 ASFEVERSION / AV 检查插件更新 的本地化字符串。
          /// </summary>
-@@ -933,15 +915,6 @@ namespace ASFEnhance.Localization {
+@@ -942,15 +924,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -89,7 +89,7 @@ index 281d479..8f35f8f 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -2256,33 +2229,6 @@ namespace ASFEnhance.Localization {
+@@ -2310,33 +2283,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -124,7 +124,7 @@ index 281d479..8f35f8f 100644
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 0979d3f..f232fad 100644
+index 425206d..7af8028 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -540,9 +540,6 @@
@@ -170,7 +170,7 @@ index 0979d3f..f232fad 100644
      <value>Use Command "ASFEVERSION" / "AV" to check the plugin's latest version</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index a5235ec..96e766e 100644
+index 0d2c29b..968d176 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -558,21 +558,6 @@
@@ -206,7 +206,7 @@ index a5235ec..96e766e 100644
      <value>删除 {0} 的评测: </value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.ru-RU.resx b/ASFEnhance/Localization/Langs.ru-RU.resx
-index 68bb61e..310ebb9 100644
+index 60abce3..40a0f05 100644
 --- a/ASFEnhance/Localization/Langs.ru-RU.resx
 +++ b/ASFEnhance/Localization/Langs.ru-RU.resx
 @@ -540,9 +540,6 @@
@@ -252,7 +252,7 @@ index 68bb61e..310ebb9 100644
      <value>Используй команду "ASFEVERSION" / "AV" чтобы проверить последнюю версию плагина</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.zh-Hans.resx b/ASFEnhance/Localization/Langs.zh-Hans.resx
-index c1f06fb..87aff20 100644
+index bc18264..c849b42 100644
 --- a/ASFEnhance/Localization/Langs.zh-Hans.resx
 +++ b/ASFEnhance/Localization/Langs.zh-Hans.resx
 @@ -540,9 +540,6 @@
@@ -298,11 +298,11 @@ index c1f06fb..87aff20 100644
      <value>使用命令 ASFEVERSION / AV 检查插件更新</value>
    </data>
 diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index cc7296a..9af592d 100644
+index 7da1c0f..8593e8d 100644
 --- a/ASFEnhance/Update/Command.cs
 +++ b/ASFEnhance/Update/Command.cs
-@@ -41,100 +41,6 @@ internal static class Command
-             sb.AppendLine(string.Format(Langs.SubName, asset.Name));
+@@ -40,100 +40,6 @@ internal static class Command
+             sb.AppendLineFormat(Langs.SubName, asset.Name);
          }
  
 -        sb.AppendLine(Langs.UpdateTips);
@@ -359,7 +359,7 @@ index cc7296a..9af592d 100644
 -            return FormatStaticResponse(Langs.DownloadFailed);
 -        }
 -
--        MemoryStream ms = new(zipBytes);
+-        var ms = new MemoryStream(zipBytes);
 -
 -        try
 -        {
@@ -384,9 +384,9 @@ index cc7296a..9af592d 100644
 -                        sb.AppendLine(Langs.UpdateSuccess);
 -
 -                        sb.AppendLine();
--                        sb.AppendLine(string.Format(Langs.ASFECurrentVersion, MyVersion.ToString()));
--                        sb.AppendLine(string.Format(Langs.ASFEOnlineVersion, releaseResponse.TagName));
--                        sb.AppendLine(string.Format(Langs.Detail, releaseResponse.Body));
+-                        sb.AppendLineFormat(Langs.ASFECurrentVersion, MyVersion.ToString());
+-                        sb.AppendLineFormat(Langs.ASFEOnlineVersion, releaseResponse.TagName);
+-                        sb.AppendLineFormat(Langs.Detail, releaseResponse.Body);
 -
 -                        return sb.ToString();
 -                    }
