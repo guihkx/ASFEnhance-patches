@@ -1,0 +1,863 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: guihkx <626206+guihkx@users.noreply.github.com>
+Date: Thu, 26 Oct 2023 22:24:16 -0300
+Subject: Remove all self-updating features
+
+---
+ ASFEnhance/ASFEnhance.cs                  |  30 ---
+ ASFEnhance/Data/GitHubReleaseResponse.cs  |  48 ----
+ ASFEnhance/Data/PluginUpdateResponse.cs   |  26 ---
+ ASFEnhance/Localization/Langs.Designer.cs | 189 ----------------
+ ASFEnhance/Other/CommandHelpData.cs       |   6 -
+ ASFEnhance/Update/Command.cs              | 129 -----------
+ ASFEnhance/Update/WebRequest.cs           | 258 ----------------------
+ 7 files changed, 686 deletions(-)
+ delete mode 100644 ASFEnhance/Data/GitHubReleaseResponse.cs
+ delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
+ delete mode 100644 ASFEnhance/Update/WebRequest.cs
+
+diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
+index ff8e8c8..a89811c 100644
+--- a/ASFEnhance/ASFEnhance.cs
++++ b/ASFEnhance/ASFEnhance.cs
+@@ -53,8 +53,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+         }
+         message.AppendLine(Static.Line);
+         message.AppendLine(Langs.SubModulePluginVersion);
+-        message.AppendLine(Langs.SubModulePluginUpdate);
+-        message.AppendLine(Langs.SubModuleCmdTips);
+         message.AppendLine(Static.Line);
+ 
+         ASFLogger.LogGenericInfo(message.ToString());
+@@ -208,28 +206,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+                 "ASFE" when access >= EAccess.FamilySharing =>
+                     Task.FromResult(PluginInfo),
+ 
+-                //Update
+-                "ASFEUPDATE" or
+-                "AU" or
+-                "ASFEVERSION" or
+-                "AV" when access >= EAccess.Operator =>
+-                    Task.FromResult(Update.Command.ResponseOldCmdTips()),
+-
+                 "PLUGINSLIST" or
+                 "PLUGINLIST" or
+                 "PL" when access >= EAccess.Operator =>
+                     Task.FromResult(Update.Command.ResponsePluginList()),
+ 
+-                "PLUGINSVERSION" or
+-                "PLUGINVERSION" or
+-                "PV" when access >= EAccess.Master =>
+-                    Update.Command.ResponseGetPluginLatestVersion(null),
+-
+-                "PLUGINSUPDATE" or
+-                "PLUGINUPDATE" or
+-                "PU" when access >= EAccess.Master =>
+-                    Update.Command.ResponsePluginUpdate(null),
+-
+                 //Event
+                 "SIM4" when access >= EAccess.Operator =>
+                     Event.Command.ResponseSim4(bot),
+@@ -437,17 +418,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+             },
+             _ => cmd switch //带参数
+             {
+-                //Update
+-                "PLUGINSVERSION" or
+-                "PLUGINVERSION" or
+-                "PV" when access >= EAccess.Master =>
+-                    Update.Command.ResponseGetPluginLatestVersion(Utilities.GetArgsAsText(args, 1, ",")),
+-
+-                "PLUGINSUPDATE" or
+-                "PLUGINUPDATE" or
+-                "PU" when access >= EAccess.Master =>
+-                    Update.Command.ResponsePluginUpdate(Utilities.GetArgsAsText(args, 1, ",")),
+-
+                 //Event
+                 "SIM4" when access >= EAccess.Operator =>
+                     Event.Command.ResponseSim4(Utilities.GetArgsAsText(args, 1, ",")),
+diff --git a/ASFEnhance/Data/GitHubReleaseResponse.cs b/ASFEnhance/Data/GitHubReleaseResponse.cs
+deleted file mode 100644
+index b4348ec..0000000
+--- a/ASFEnhance/Data/GitHubReleaseResponse.cs
++++ /dev/null
+@@ -1,48 +0,0 @@
+-using Newtonsoft.Json;
+-
+-namespace ASFEnhance.Data;
+-
+-/// <summary>
+-/// GitHub发行版
+-/// </summary>
+-internal sealed record GitHubReleaseResponse
+-{
+-    [JsonProperty(PropertyName = "html_url", Required = Required.Always)]
+-    public string Url { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "name", Required = Required.Always)]
+-    public string Name { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "body", Required = Required.Always)]
+-    public string Body { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "tag_name", Required = Required.Always)]
+-    public string TagName { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "created_at", Required = Required.Always)]
+-    public string CreatedAt { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "published_at", Required = Required.Always)]
+-    public string PublicAt { get; set; } = "";
+-
+-    [JsonProperty(PropertyName = "assets", Required = Required.Always)]
+-    public HashSet<GitHubAssetsData> Assets { get; set; } = new();
+-
+-    public sealed record GitHubAssetsData
+-    {
+-        [JsonProperty(PropertyName = "name", Required = Required.Always)]
+-        public string Name { get; set; } = "";
+-
+-        [JsonProperty(PropertyName = "size", Required = Required.Always)]
+-        public uint Size { get; set; }
+-
+-        [JsonProperty(PropertyName = "created_at", Required = Required.Always)]
+-        public string CreatedAt { get; set; } = "";
+-
+-        [JsonProperty(PropertyName = "updated_at", Required = Required.Always)]
+-        public string UpdatedAt { get; set; } = "";
+-
+-        [JsonProperty(PropertyName = "browser_download_url", Required = Required.Always)]
+-        public string DownloadUrl { get; set; } = "";
+-    }
+-}
+diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
+deleted file mode 100644
+index f8cabe1..0000000
+--- a/ASFEnhance/Data/PluginUpdateResponse.cs
++++ /dev/null
+@@ -1,26 +0,0 @@
+-namespace ASFEnhance.Data;
+-
+-/// <summary>
+-/// 插件更新信息
+-/// </summary>
+-internal sealed record PluginUpdateResponse
+-{
+-    /// <summary>
+-    /// 插件名称
+-    /// </summary>
+-    public string PluginName { get; set; } = "";
+-    /// <summary>
+-    /// 有可用更新
+-    /// </summary>
+-    public bool CanUpdate => OnlineVersion != null && OnlineVersion > CurrentVersion;
+-    /// <summary>
+-    /// 已经为最新版本
+-    /// </summary>
+-    public bool IsLatest => OnlineVersion == CurrentVersion;
+-
+-    public string Tips => CanUpdate ? Langs.CanUpdate : "";
+-    public Version? CurrentVersion { get; set; }
+-    public Version? OnlineVersion { get; set; }
+-    public string? UpdateLog { get; set; }
+-    public string ReleaseNote { get; set; } = "";
+-}
+diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
+index aae1b82..9f564db 100644
+--- a/ASFEnhance/Localization/Langs.Designer.cs
++++ b/ASFEnhance/Localization/Langs.Designer.cs
+@@ -510,15 +510,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 ASFEUPDATE 和 ASFEVERSION 已经被弃用, 请使用 PLUGINUPDATE 和 PLUGINVERSION, 使用方法参考文档 的本地化字符串。
+-        /// </summary>
+-        internal static string ASFUpdateTips {
+-            get {
+-                return ResourceManager.GetString("ASFUpdateTips", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 代码 | 区域名称 | 当前区域 的本地化字符串。
+         /// </summary>
+@@ -600,15 +591,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 *可更新* 的本地化字符串。
+-        /// </summary>
+-        internal static string CanUpdate {
+-            get {
+-                return ResourceManager.GetString("CanUpdate", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 响应为空 的本地化字符串。
+         /// </summary>
+@@ -906,24 +888,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 下载插件失败! 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadFailed {
+-            get {
+-                return ResourceManager.GetString("DownloadFailed", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 下载插件失败, 存在文件冲突, 请尝试重启 ASF 后再尝试更新 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadFailedFileConflict {
+-            get {
+-                return ResourceManager.GetString("DownloadFailedFileConflict", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 下载头像图片失败 的本地化字符串。
+         /// </summary>
+@@ -933,33 +897,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 下载插件失败 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadPluginFailed {
+-            get {
+-                return ResourceManager.GetString("DownloadPluginFailed", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 更新插件失败, 解压缩遇到错误 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadPluginFailedUnzipError {
+-            get {
+-                return ResourceManager.GetString("DownloadPluginFailedUnzipError", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 更新插件成功 的本地化字符串。
+-        /// </summary>
+-        internal static string DownloadPluginSuccess {
+-            get {
+-                return ResourceManager.GetString("DownloadPluginSuccess", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 启用邮件通知 的本地化字符串。
+         /// </summary>
+@@ -1662,15 +1599,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 插件不支持在线更新 的本地化字符串。
+-        /// </summary>
+-        internal static string PluginUpdateNotSupport {
+-            get {
+-                return ResourceManager.GetString("PluginUpdateNotSupport", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 {0} 版本 {1} 的本地化字符串。
+         /// </summary>
+@@ -2310,15 +2238,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 不指定插件名时, 可为所有支持的插件检查更新 / 安装更新 的本地化字符串。
+-        /// </summary>
+-        internal static string SubModuleCmdTips {
+-            get {
+-                return ResourceManager.GetString("SubModuleCmdTips", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
+         /// </summary>
+@@ -2364,15 +2283,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 使用 &quot;PLUGINUPDATE [插件名]&quot; / &quot;PU [插件名]&quot;  自动更新指定插件 的本地化字符串。
+-        /// </summary>
+-        internal static string SubModulePluginUpdate {
+-            get {
+-                return ResourceManager.GetString("SubModulePluginUpdate", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
+         /// </summary>
+@@ -2436,87 +2346,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 获取版本信息失败, 未找到插件 {0} 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdateFailedPluginNotFound {
+-            get {
+-                return ResourceManager.GetString("UpdateFailedPluginNotFound", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 插件更新失败, 压缩包内容解析失败 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdateFiledWithZip {
+-            get {
+-                return ResourceManager.GetString("UpdateFiledWithZip", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 插件名称: {0} {1} 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginListItemName {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginListItemName", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 版本说明: \n{0} 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginListItemReleaseNote {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginListItemReleaseNote", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 更新状态: {0} 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginListItemStatus {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginListItemStatus", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 更新插件完成, 重启 ASF 后生效, 如果不兼容请更新 ASF 版本 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginListItemUpdateTips {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginListItemUpdateTips", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 当前版本: {0} 在线版本: {1} 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginListItemVersion {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginListItemVersion", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 插件更新信息: 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginUpdateInfo {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginUpdateInfo", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 使用命令 PLUGINUPDATE [插件名] 自动更新指定插件, 省略插件名时可更新全部支持的插件 的本地化字符串。
+-        /// </summary>
+-        internal static string UpdatePluginVersionTips {
+-            get {
+-                return ResourceManager.GetString("UpdatePluginVersionTips", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
+         /// </summary>
+@@ -2589,24 +2418,6 @@ namespace ASFEnhance.Localization {
+             }
+         }
+         
+-        /// <summary>
+-        ///   查找类似 自动更新 ASFEnhance 到最新版本 (需要手动重启 ASF) 的本地化字符串。
+-        /// </summary>
+-        internal static string UsageASFEUPDATE {
+-            get {
+-                return ResourceManager.GetString("UsageASFEUPDATE", resourceCulture);
+-            }
+-        }
+-        
+-        /// <summary>
+-        ///   查找类似 检查 ASFEnhance 的最新版本 的本地化字符串。
+-        /// </summary>
+-        internal static string UsageASFEVERSION {
+-            get {
+-                return ResourceManager.GetString("UsageASFEVERSION", resourceCulture);
+-            }
+-        }
+-        
+         /// <summary>
+         ///   查找类似 查看机器人购物车 的本地化字符串。
+         /// </summary>
+diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
+index c7621ef..00d0cbc 100644
+--- a/ASFEnhance/Other/CommandHelpData.cs
++++ b/ASFEnhance/Other/CommandHelpData.cs
+@@ -9,8 +9,6 @@ internal static class CommandHelpData
+         // 更新
+         { "ASFENHANCE", "" },
+         { "PLUGINLIST", "" },
+-        { "PLUGINVERSION", "[<Plugin Name>]" },
+-        { "PLUGINUPDATE", "[<Plugin Name>]" },
+         
+         // 账号
+         { "PURCHASEHISTORY", "[Bots]" },
+@@ -102,8 +100,6 @@ internal static class CommandHelpData
+         // 更新
+         { "ASFENHANCE", Langs.UsageASFENHANCE},
+         { "PLUGINLIST", "" },
+-        { "PLUGINVERSION", "" },
+-        { "PLUGINUPDATE", "" },
+         
+         // 账号
+         { "PURCHASEHISTORY", Langs.UsagePURCHASEHISTORY },
+@@ -195,8 +191,6 @@ internal static class CommandHelpData
+         // 更新
+         { "ASFE", "ASFENHANCE" },
+         { "PL", "PLUGINLIST" },
+-        { "PV", "PLUGINVERSION" },
+-        { "PU", "PLUGINUPDATE" },
+         
+         // 账号
+         { "PH", "PURCHASEHISTORY" },
+diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
+index 99aa5ec..b2bb1b1 100644
+--- a/ASFEnhance/Update/Command.cs
++++ b/ASFEnhance/Update/Command.cs
+@@ -10,11 +10,6 @@ namespace ASFEnhance.Update;
+ 
+ internal static class Command
+ {
+-    internal static string? ResponseOldCmdTips()
+-    {
+-        return Langs.ASFUpdateTips;
+-    }
+-
+     /// <summary>
+     /// 获取已安装的插件列表
+     /// </summary>
+@@ -60,128 +55,4 @@ internal static class Command
+             return FormatStaticResponse(Langs.SubModuleNoModule);
+         }
+     }
+-
+-    /// <summary>
+-    /// 获取插件最新版本
+-    /// </summary>
+-    /// <param name="pluginNames"></param>
+-    /// <returns></returns>
+-    internal static async Task<string?> ResponseGetPluginLatestVersion(string? pluginNames = null)
+-    {
+-        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
+-
+-        var tasks = new List<Task<PluginUpdateResponse>>();
+-
+-        if (entries?.Any() == true)
+-        {
+-            foreach (var entry in entries)
+-            {
+-                if (entry == "ASFE" || entry == "ASFENHANCE")
+-                {
+-                    tasks.Add(WebRequest.GetPluginReleaseNote("ASFEnhance", MyVersion, "ASFEnhance"));
+-                }
+-                else if (_Adapter_.ExtensionCore.SubModules.TryGetValue(entry, out var subModule))
+-                {
+-                    tasks.Add(WebRequest.GetPluginReleaseNote(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
+-                }
+-            }
+-        }
+-        else
+-        {
+-            tasks.Add(WebRequest.GetPluginReleaseNote("ASFEnhance", MyVersion, "ASFEnhance"));
+-            foreach (var subModule in _Adapter_.ExtensionCore.SubModules.Values)
+-            {
+-                tasks.Add(WebRequest.GetPluginReleaseNote(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
+-            }
+-        }
+-
+-        if (!tasks.Any())
+-        {
+-            return FormatStaticResponse(Langs.UpdateFailedPluginNotFound, pluginNames);
+-        }
+-
+-        var results = await Utilities.InParallel(tasks).ConfigureAwait(false);
+-
+-        var sb = new StringBuilder();
+-        sb.AppendLine(FormatStaticResponse(Langs.UpdatePluginUpdateInfo));
+-
+-        foreach (var info in results)
+-        {
+-            sb.AppendLine(Static.Line);
+-            sb.AppendLineFormat(Langs.UpdatePluginListItemName, info.PluginName, info.Tips);
+-            sb.AppendLineFormat(Langs.UpdatePluginListItemVersion, info.CurrentVersion, info.OnlineVersion?.ToString() ?? "-.-.-.-");
+-            if (!string.IsNullOrEmpty(info.ReleaseNote))
+-            {
+-                sb.AppendLineFormat(Langs.UpdatePluginListItemReleaseNote, info.ReleaseNote);
+-            }
+-        }
+-
+-        sb.AppendLine(Static.Line);
+-        sb.AppendLine(Langs.UpdatePluginVersionTips);
+-
+-        return sb.ToString();
+-    }
+-
+-    internal static async Task<string?> ResponsePluginUpdate(string? pluginNames = null)
+-    {
+-        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
+-
+-        var tasks = new List<Task<PluginUpdateResponse>>();
+-
+-        if (entries?.Any() == true)
+-        {
+-            foreach (var entry in entries)
+-            {
+-                if (entry == "ASFE" || entry == "ASFENHANCE")
+-                {
+-                    tasks.Add(WebRequest.UpdatePluginFile("ASFEnhance", MyVersion, "ASFEnhance"));
+-                }
+-
+-                foreach (var (pluginId, subModule) in _Adapter_.ExtensionCore.SubModules)
+-                {
+-                    if (pluginId == entry || subModule.MatchCmdPrefix(entry))
+-                    {
+-                        tasks.Add(WebRequest.UpdatePluginFile(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
+-                    }
+-                }
+-
+-            }
+-        }
+-        else
+-        {
+-            tasks.Add(WebRequest.UpdatePluginFile("ASFEnhance", MyVersion, "ASFEnhance"));
+-            foreach (var subModule in _Adapter_.ExtensionCore.SubModules.Values)
+-            {
+-                tasks.Add(WebRequest.UpdatePluginFile(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
+-            }
+-        }
+-
+-        if (!tasks.Any())
+-        {
+-            return FormatStaticResponse(Langs.UpdateFailedPluginNotFound, pluginNames);
+-        }
+-
+-        var results = await Utilities.InParallel(tasks).ConfigureAwait(false);
+-
+-        var sb = new StringBuilder();
+-        sb.AppendLine(FormatStaticResponse(Langs.UpdatePluginUpdateInfo));
+-
+-        foreach (var info in results)
+-        {
+-            sb.AppendLine(Static.Line);
+-            sb.AppendLineFormat(Langs.UpdatePluginListItemName, info.PluginName, info.Tips);
+-            sb.AppendLineFormat(Langs.UpdatePluginListItemVersion, info.CurrentVersion, info.OnlineVersion?.ToString() ?? "-.-.-.-");
+-            sb.AppendLineFormat(Langs.UpdatePluginListItemStatus, info.UpdateLog);
+-
+-            if (!string.IsNullOrEmpty(info.ReleaseNote))
+-            {
+-                sb.AppendLineFormat(Langs.UpdatePluginListItemReleaseNote, info.ReleaseNote);
+-            }
+-        }
+-
+-        sb.AppendLine(Static.Line);
+-        sb.AppendLine(Langs.UpdatePluginListItemUpdateTips);
+-
+-        return sb.ToString();
+-    }
+ }
+diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
+deleted file mode 100644
+index c719441..0000000
+--- a/ASFEnhance/Update/WebRequest.cs
++++ /dev/null
+@@ -1,258 +0,0 @@
+-using ArchiSteamFarm.Core;
+-using ASFEnhance.Data;
+-using System.IO.Compression;
+-
+-namespace ASFEnhance.Update;
+-
+-internal static class WebRequest
+-{
+-    /// <summary>
+-    /// 获取最新的发行版
+-    /// </summary>
+-    /// <returns></returns>
+-    private static async Task<GitHubReleaseResponse?> GetLatestRelease(Uri request)
+-    {
+-        var response = await ASF.WebBrowser!.UrlGetToJsonObject<GitHubReleaseResponse>(request).ConfigureAwait(false);
+-        var content = response?.Content;
+-        if (content != null)
+-        {
+-            var splits = content.Body.Split("---", StringSplitOptions.RemoveEmptyEntries);
+-            content.Body = (splits.Length >= 2 ? splits[1] : content.Body).Trim();
+-        }
+-
+-        return content;
+-    }
+-
+-    /// <summary>
+-    /// 获取最新的发行版
+-    /// </summary>
+-    /// <returns></returns>
+-    private static async Task<GitHubReleaseResponse?> GetLatestRelease(string repoPath)
+-    {
+-        var splits = repoPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+-        if (!splits.Any())
+-        {
+-            return null;
+-        }
+-
+-        string user;
+-        string repo;
+-
+-        if (splits.Length >= 2)
+-        {
+-            user = splits[0];
+-            repo = splits[1];
+-        }
+-        else
+-        {
+-            user = "chr233";
+-            repo = splits[0];
+-        }
+-
+-        GitHubReleaseResponse? data = null;
+-
+-        if (user == "chr233")
+-        {
+-            //使用镜像站
+-            data = await GetLatestRelease(new Uri($"https://hub.chrxw.com/{repo}/releases/latest")).ConfigureAwait(false);
+-        }
+-
+-        data ??= await GetLatestRelease(new Uri($"https://api.github.com/repos/{user}/{repo}/releases/latest")).ConfigureAwait(false);
+-
+-        return data;
+-    }
+-
+-    /// <summary>
+-    /// 获取发行版信息
+-    /// </summary>
+-    /// <param name="pluginName"></param>
+-    /// <param name="pluginVersion"></param>
+-    /// <param name="pluginRepo"></param>
+-    /// <returns></returns>
+-    internal static async Task<PluginUpdateResponse> GetPluginReleaseNote(string pluginName, Version pluginVersion, string? pluginRepo)
+-    {
+-        var response = new PluginUpdateResponse
+-        {
+-            PluginName = pluginName,
+-            CurrentVersion = pluginVersion,
+-            OnlineVersion = null,
+-            ReleaseNote = "",
+-        };
+-
+-        if (string.IsNullOrEmpty(pluginRepo))
+-        {
+-            response.ReleaseNote = Langs.PluginUpdateNotSupport;
+-        }
+-        else
+-        {
+-            var relesaeData = await GetLatestRelease(pluginRepo).ConfigureAwait(false);
+-            if (relesaeData == null)
+-            {
+-                response.ReleaseNote = Langs.GetReleaseInfoFailedNetworkError;
+-            }
+-            else
+-            {
+-                response.ReleaseNote = relesaeData.Body;
+-                response.OnlineVersion = Version.TryParse(relesaeData.TagName, out var version) ? version : null;
+-            }
+-        }
+-
+-        return response;
+-    }
+-
+-    /// <summary>
+-    /// 获取更新文件链接
+-    /// </summary>
+-    /// <param name="relesaeData"></param>
+-    /// <returns></returns>
+-    internal static string? FetchDownloadUrl(GitHubReleaseResponse relesaeData)
+-    {
+-        if (!relesaeData.Assets.Any())
+-        {
+-            return null;
+-        }
+-
+-        //优先下载当前语言的版本
+-        foreach (var asset in relesaeData.Assets)
+-        {
+-            if (asset.Name.Contains(Langs.CurrentLanguage))
+-            {
+-                return asset.DownloadUrl;
+-            }
+-        }
+-
+-        //优先下载英文版本
+-        foreach (var asset in relesaeData.Assets)
+-        {
+-            if (asset.Name.Contains("en-US"))
+-            {
+-                return asset.DownloadUrl;
+-            }
+-        }
+-
+-        //如果没有找到当前语言的版本, 则下载第一个
+-        return relesaeData.Assets.First().DownloadUrl;
+-    }
+-
+-    /// <summary>
+-    /// 自动更新插件
+-    /// </summary>
+-    /// <param name="pluginName"></param>
+-    /// <param name="pluginVersion"></param>
+-    /// <param name="pluginRepo"></param>
+-    /// <returns></returns>
+-    internal static async Task<PluginUpdateResponse> UpdatePluginFile(string pluginName, Version pluginVersion, string? pluginRepo)
+-    {
+-        var response = new PluginUpdateResponse
+-        {
+-            PluginName = pluginName,
+-            CurrentVersion = pluginVersion,
+-            OnlineVersion = null,
+-            ReleaseNote = "",
+-        };
+-
+-
+-        if (string.IsNullOrEmpty(pluginRepo))
+-        {
+-            response.UpdateLog = Langs.PluginUpdateNotSupport;
+-        }
+-        else
+-        {
+-            var relesaeData = await GetLatestRelease(pluginRepo).ConfigureAwait(false);
+-            if (relesaeData == null)
+-            {
+-                response.UpdateLog = Langs.GetReleaseInfoFailedNetworkError;
+-            }
+-            else
+-            {
+-                response.ReleaseNote = relesaeData.Body;
+-                response.OnlineVersion = Version.TryParse(relesaeData.TagName, out var version) ? version : null;
+-
+-                if (!response.CanUpdate)
+-                {
+-                    response.UpdateLog = response.IsLatest ? Langs.AlreadyLatest : Langs.VersionHigher;
+-                }
+-                else
+-                {
+-                    var downloadUri = FetchDownloadUrl(relesaeData);
+-                    if (downloadUri == null)
+-                    {
+-                        response.UpdateLog = Langs.NoAssetFoundInReleaseInfo;
+-                    }
+-                    else
+-                    {
+-                        response.UpdateLog = await DownloadRelease(downloadUri).ConfigureAwait(false);
+-                    }
+-                }
+-            }
+-        }
+-
+-        return response;
+-    }
+-
+-    /// <summary>
+-    /// 下载发行版
+-    /// </summary>
+-    /// <param name="downloadUrl"></param>
+-    /// <returns></returns>
+-    internal static async Task<string> DownloadRelease(string downloadUrl)
+-    {
+-        var request = new Uri(downloadUrl);
+-        var binResponse = await ASF.WebBrowser!.UrlGetToBinary(request).ConfigureAwait(false);
+-
+-        if (binResponse == null)
+-        {
+-            return Langs.DownloadPluginFailed;
+-        }
+-
+-        var zipBytes = binResponse?.Content as byte[] ?? binResponse?.Content?.ToArray();
+-        if (zipBytes == null)
+-        {
+-            return Langs.DownloadPluginFailed;
+-        }
+-
+-        var ms = new MemoryStream(zipBytes);
+-        try
+-        {
+-            await using (ms.ConfigureAwait(false))
+-            {
+-                using var zipArchive = new ZipArchive(ms);
+-                string pluginFolder = Path.GetDirectoryName(MyLocation) ?? ".";
+-
+-                foreach (var entry in zipArchive.Entries)
+-                {
+-                    if (entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+-                    {
+-                        var targetPath = Path.Combine(pluginFolder, entry.FullName);
+-
+-                        if (File.Exists(targetPath))
+-                        {
+-                            var backupPath = $"{targetPath}.autobak";
+-                            int i = 1;
+-                            while (File.Exists(backupPath) && i < 10)
+-                            {
+-                                backupPath = $"{targetPath}.{i++}.autobak";
+-
+-                                if (i >= 10)
+-                                {
+-                                    return Langs.DownloadFailedFileConflict;
+-                                }
+-                            }
+-
+-                            File.Move(targetPath, backupPath, true);
+-                        }
+-
+-                        entry.ExtractToFile(targetPath);
+-                    }
+-                }
+-
+-                return Langs.DownloadPluginSuccess;
+-            }
+-        }
+-        catch (Exception ex)
+-        {
+-            ASFLogger.LogGenericException(ex);
+-            return Langs.DownloadPluginFailedUnzipError;
+-        }
+-    }
+-}
+-- 
+2.42.0
+
