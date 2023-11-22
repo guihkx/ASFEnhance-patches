@@ -17,7 +17,7 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index ff8e8c8..a89811c 100644
+index fbe5125..99eaf6d 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -53,8 +53,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -29,7 +29,7 @@ index ff8e8c8..a89811c 100644
          message.AppendLine(Static.Line);
  
          ASFLogger.LogGenericInfo(message.ToString());
-@@ -208,28 +206,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -207,28 +205,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -58,7 +58,7 @@ index ff8e8c8..a89811c 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(bot),
-@@ -437,17 +418,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -444,17 +425,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              },
              _ => cmd switch //带参数
              {
@@ -163,7 +163,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index aae1b82..9f564db 100644
+index 359969b..bf7a3be 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -510,15 +510,6 @@ namespace ASFEnhance.Localization {
@@ -182,7 +182,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 代码 | 区域名称 | 当前区域 的本地化字符串。
          /// </summary>
-@@ -600,15 +591,6 @@ namespace ASFEnhance.Localization {
+@@ -609,15 +600,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -198,7 +198,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 响应为空 的本地化字符串。
          /// </summary>
-@@ -906,24 +888,6 @@ namespace ASFEnhance.Localization {
+@@ -915,24 +897,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -223,7 +223,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -933,33 +897,6 @@ namespace ASFEnhance.Localization {
+@@ -942,33 +906,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -257,7 +257,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 启用邮件通知 的本地化字符串。
          /// </summary>
-@@ -1662,15 +1599,6 @@ namespace ASFEnhance.Localization {
+@@ -1671,15 +1608,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -273,7 +273,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 {0} 版本 {1} 的本地化字符串。
          /// </summary>
-@@ -2310,15 +2238,6 @@ namespace ASFEnhance.Localization {
+@@ -2319,15 +2247,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -289,7 +289,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
          /// </summary>
-@@ -2364,15 +2283,6 @@ namespace ASFEnhance.Localization {
+@@ -2373,15 +2292,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -305,7 +305,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
          /// </summary>
-@@ -2436,87 +2346,6 @@ namespace ASFEnhance.Localization {
+@@ -2445,87 +2355,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -393,7 +393,7 @@ index aae1b82..9f564db 100644
          /// <summary>
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
-@@ -2589,24 +2418,6 @@ namespace ASFEnhance.Localization {
+@@ -2598,24 +2427,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -596,7 +596,7 @@ index 99aa5ec..b2bb1b1 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index c719441..0000000
+index f581bef..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
 @@ -1,258 +0,0 @@
@@ -819,7 +819,7 @@ index c719441..0000000
 -            await using (ms.ConfigureAwait(false))
 -            {
 -                using var zipArchive = new ZipArchive(ms);
--                string pluginFolder = Path.GetDirectoryName(MyLocation) ?? ".";
+-                string pluginFolder = MyDirectory;
 -
 -                foreach (var entry in zipArchive.Entries)
 -                {
@@ -859,5 +859,5 @@ index c719441..0000000
 -    }
 -}
 -- 
-2.42.0
+2.43.0
 

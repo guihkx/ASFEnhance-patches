@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 18 insertions(+), 184 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index a89811c..1dd74e6 100644
+index 99eaf6d..603a053 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -71,7 +71,7 @@ index a89811c..1dd74e6 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -323,12 +291,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -330,12 +298,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -86,7 +86,7 @@ index a89811c..1dd74e6 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -346,7 +314,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -353,7 +321,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -95,7 +95,7 @@ index a89811c..1dd74e6 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -402,13 +370,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -409,13 +377,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetAccessToken(bot),
  
@@ -109,7 +109,7 @@ index a89811c..1dd74e6 100644
                  "COOKIES" or
                  "APIKEY" or
                  "ACCESSTOKEN" when access >= EAccess.Owner =>
-@@ -587,26 +548,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -605,26 +566,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -142,7 +142,7 @@ index a89811c..1dd74e6 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -649,21 +610,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -667,21 +628,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -169,7 +169,7 @@ index a89811c..1dd74e6 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -758,17 +719,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -776,17 +737,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "DELETERECOMMENT" or
@@ -191,7 +191,7 @@ index a89811c..1dd74e6 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -855,25 +816,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -873,25 +834,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetAccessToken(Utilities.GetArgsAsText(args, 1, ",")),
  
@@ -401,10 +401,10 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 9f564db..705e5c6 100644
+index bf7a3be..ab891f6 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -978,33 +978,6 @@ namespace ASFEnhance.Localization {
+@@ -987,33 +987,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -439,7 +439,7 @@ index 9f564db..705e5c6 100644
          ///   查找类似 领取每日贴纸: {0} 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
-index fc551c7..2d32e53 100644
+index f83d3b8..4c7df80 100644
 --- a/ASFEnhance/Other/Command.cs
 +++ b/ASFEnhance/Other/Command.cs
 @@ -156,15 +156,6 @@ internal static class Command
@@ -459,5 +459,5 @@ index fc551c7..2d32e53 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.42.0
+2.43.0
 
