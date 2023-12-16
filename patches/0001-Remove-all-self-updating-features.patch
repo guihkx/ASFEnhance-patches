@@ -17,7 +17,7 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index fbe5125..99eaf6d 100644
+index 51d8575..e287589 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -53,8 +53,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -163,7 +163,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 359969b..bf7a3be 100644
+index 59cb084..fd21b95 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -510,15 +510,6 @@ namespace ASFEnhance.Localization {
