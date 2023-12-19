@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 18 insertions(+), 192 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 4c2ca97..43e6d94 100644
+index 0a18fed..8105e58 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -175,7 +175,7 @@ index 4c2ca97..43e6d94 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -783,17 +738,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -789,17 +744,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "DELETERECOMMENT" or
@@ -197,7 +197,7 @@ index 4c2ca97..43e6d94 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -875,27 +830,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -881,27 +836,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -409,10 +409,10 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index e79e0e1..60bec77 100644
+index 5437622..899f120 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -987,33 +987,6 @@ namespace ASFEnhance.Localization {
+@@ -996,33 +996,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
