@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 18 insertions(+), 192 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 0a18fed..8105e58 100644
+index 50a528a..b9f1841 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -409,10 +409,10 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 5437622..899f120 100644
+index f2ae03b..aa96a14 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -996,33 +996,6 @@ namespace ASFEnhance.Localization {
+@@ -1005,33 +1005,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
