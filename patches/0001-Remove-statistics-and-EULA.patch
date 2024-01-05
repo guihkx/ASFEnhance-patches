@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 18 insertions(+), 192 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 50a528a..b9f1841 100644
+index fe12952..727c986 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -24,10 +24,10 @@ index 50a528a..b9f1841 100644
  
 -    private Timer? StatisticTimer { get; set; }
 -
+     private Timer? ClaimItemTimer { get; set; }
+ 
      /// <summary>
-     /// ASF启动事件
-     /// </summary>
-@@ -93,14 +91,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -95,14 +93,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              warnings.AppendLine(Static.Line);
          }
  
@@ -42,7 +42,7 @@ index 50a528a..b9f1841 100644
          if (warnings.Length > 1)
          {
              ASFLogger.LogGenericWarning(warnings.ToString());
-@@ -117,28 +107,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -119,28 +109,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              Config.Address = null;
          }
  
@@ -52,7 +52,7 @@ index 50a528a..b9f1841 100644
 -            var request = new Uri("https://asfe.chrxw.com/asfenhace");
 -            if (_Adapter_.ExtensionCore.HasSubModule)
 -            {
--                var names = new List<string> { "asfenhance" };
+-                List<string>? names = ["asfenhance"];
 -                foreach (var subModules in _Adapter_.ExtensionCore.SubModules.Keys)
 -                {
 -                    names.Add(subModules.ToLowerInvariant());
@@ -71,7 +71,7 @@ index 50a528a..b9f1841 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -335,12 +303,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -360,12 +328,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -86,7 +86,7 @@ index 50a528a..b9f1841 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -358,7 +326,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -383,7 +351,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -95,7 +95,7 @@ index 50a528a..b9f1841 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -409,19 +377,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -434,19 +402,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -115,7 +115,7 @@ index 50a528a..b9f1841 100644
  
                  _ => null,
              },
-@@ -612,26 +567,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -637,26 +592,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index 50a528a..b9f1841 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -674,21 +629,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -699,21 +654,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -175,7 +175,7 @@ index 50a528a..b9f1841 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -789,17 +744,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -814,17 +769,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "DELETERECOMMENT" or
@@ -197,7 +197,7 @@ index 50a528a..b9f1841 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -881,27 +836,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -906,27 +861,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -226,7 +226,7 @@ index 50a528a..b9f1841 100644
                  "COOKIES" or
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
 diff --git a/ASFEnhance/Data/PluginConfig.cs b/ASFEnhance/Data/PluginConfig.cs
-index e10ea4b..0042231 100644
+index 1e06e0b..1cd84c0 100644
 --- a/ASFEnhance/Data/PluginConfig.cs
 +++ b/ASFEnhance/Data/PluginConfig.cs
 @@ -7,18 +7,6 @@ namespace ASFEnhance.Data;
@@ -409,10 +409,10 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index f2ae03b..aa96a14 100644
+index 18918ae..ee6f832 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -1005,33 +1005,6 @@ namespace ASFEnhance.Localization {
+@@ -1014,33 +1014,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
