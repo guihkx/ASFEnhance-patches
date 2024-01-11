@@ -76,7 +76,7 @@ jobs:
       - name: Publish ASFEnhance
         run: |
           mv -v ASFEnhance/Localization/Langs.en-US.resx ASFEnhance/Localization/Langs.resx
-          dotnet publish ASFEnhance -o ../builds/ASFEnhance
+          dotnet publish ASFEnhance -p:TreatWarningsAsErrors=False -o ../builds/ASFEnhance
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
