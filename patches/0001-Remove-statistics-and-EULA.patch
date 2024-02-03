@@ -249,12 +249,12 @@ index 1e06e0b..1cd84c0 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/IPC/Controllers/CuratorController.cs b/ASFEnhance/IPC/Controllers/CuratorController.cs
-index 340d563..b197e9e 100644
+index 0fe56dc..2f2e3a5 100644
 --- a/ASFEnhance/IPC/Controllers/CuratorController.cs
 +++ b/ASFEnhance/IPC/Controllers/CuratorController.cs
-@@ -40,11 +40,6 @@ public sealed class CuratorController : ASFEController
-             throw new ArgumentNullException(nameof(request));
+@@ -37,11 +37,6 @@ public sealed class CuratorController : ASFEController
          }
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -264,9 +264,9 @@ index 340d563..b197e9e 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -102,11 +97,6 @@ public sealed class CuratorController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -96,11 +91,6 @@ public sealed class CuratorController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -276,9 +276,9 @@ index 340d563..b197e9e 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -164,11 +154,6 @@ public sealed class CuratorController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -155,11 +145,6 @@ public sealed class CuratorController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -289,12 +289,12 @@ index 340d563..b197e9e 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-index c1518cd..18b1314 100644
+index 85df7cb..59d4e3b 100644
 --- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-@@ -39,11 +39,6 @@ public sealed class PurchaseController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -36,11 +36,6 @@ public sealed class PurchaseController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -304,9 +304,9 @@ index c1518cd..18b1314 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -135,11 +130,6 @@ public sealed class PurchaseController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -129,11 +124,6 @@ public sealed class PurchaseController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -317,12 +317,12 @@ index c1518cd..18b1314 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/RecommendController.cs b/ASFEnhance/IPC/Controllers/RecommendController.cs
-index 1a0c0f4..8ee8551 100644
+index fe5a37e..345608e 100644
 --- a/ASFEnhance/IPC/Controllers/RecommendController.cs
 +++ b/ASFEnhance/IPC/Controllers/RecommendController.cs
-@@ -39,11 +39,6 @@ public sealed class RecommendController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -36,11 +36,6 @@ public sealed class RecommendController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -332,9 +332,9 @@ index 1a0c0f4..8ee8551 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -110,11 +105,6 @@ public sealed class RecommendController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -104,11 +99,6 @@ public sealed class RecommendController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Utils.Config.EULA)
 -        {
@@ -345,12 +345,12 @@ index 1a0c0f4..8ee8551 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
-index 4212b5c..af62681 100644
+index 55bd6d2..6562872 100644
 --- a/ASFEnhance/IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
-@@ -39,11 +39,6 @@ public sealed class WishlistController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -36,11 +36,6 @@ public sealed class WishlistController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -360,9 +360,9 @@ index 4212b5c..af62681 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if ((bots == null) || (bots.Count == 0))
-@@ -102,11 +97,6 @@ public sealed class WishlistController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -96,11 +91,6 @@ public sealed class WishlistController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -372,9 +372,9 @@ index 4212b5c..af62681 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -165,11 +155,6 @@ public sealed class WishlistController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -156,11 +146,6 @@ public sealed class WishlistController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -384,9 +384,9 @@ index 4212b5c..af62681 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -228,11 +213,6 @@ public sealed class WishlistController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -216,11 +201,6 @@ public sealed class WishlistController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -396,9 +396,9 @@ index 4212b5c..af62681 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -291,11 +271,6 @@ public sealed class WishlistController : ASFEController
-             throw new ArgumentNullException(nameof(request));
-         }
+@@ -276,11 +256,6 @@ public sealed class WishlistController : ASFEController
+ 
+         ArgumentNullException.ThrowIfNull(request);
  
 -        if (!Config.EULA)
 -        {
@@ -409,7 +409,7 @@ index 4212b5c..af62681 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 18918ae..ee6f832 100644
+index dd54113..0106239 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -1014,33 +1014,6 @@ namespace ASFEnhance.Localization {
