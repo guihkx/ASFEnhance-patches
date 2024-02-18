@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 18 insertions(+), 192 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 72f108f..d83420f 100644
+index 4e5dec0..14598ae 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -95,7 +95,7 @@ index 72f108f..d83420f 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -438,19 +406,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -442,19 +410,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -115,7 +115,7 @@ index 72f108f..d83420f 100644
  
                  _ => null,
              },
-@@ -641,26 +596,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -645,26 +600,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index 72f108f..d83420f 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -703,21 +658,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -707,21 +662,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -175,7 +175,7 @@ index 72f108f..d83420f 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -829,17 +784,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -837,17 +792,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "DELETERECOMMENT" or
@@ -197,7 +197,7 @@ index 72f108f..d83420f 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -939,27 +894,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -947,27 +902,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -409,7 +409,7 @@ index 55bd6d2..6562872 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index acf26e4..706409b 100644
+index 14cd03b..9af7f51 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -1032,33 +1032,6 @@ namespace ASFEnhance.Localization {
@@ -467,5 +467,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.43.0
+2.43.2
 
