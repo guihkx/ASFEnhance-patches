@@ -5,21 +5,21 @@ Subject: Remove statistics and EULA
 
 ---
  ASFEnhance/ASFEnhance.cs                      | 102 ++++--------------
- ASFEnhance/Data/PluginConfig.cs               |  12 ---
+ ASFEnhance/Data/Plugin/PluginConfig.cs        |  10 --
  .../IPC/Controllers/CuratorController.cs      |  15 ---
- .../IPC/Controllers/PurchaseController.cs     |  10 --
+ .../IPC/Controllers/PurchaseController.cs     |  27 -----
  .../IPC/Controllers/RecommendController.cs    |  10 --
  .../IPC/Controllers/WishlistController.cs     |  25 -----
  ASFEnhance/Localization/Langs.Designer.cs     |  27 -----
  ASFEnhance/Other/Command.cs                   |   9 --
- 8 files changed, 18 insertions(+), 192 deletions(-)
+ 8 files changed, 18 insertions(+), 207 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index f55ab19..08865db 100644
+index 686869b..4d44798 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -19,8 +19,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
-     [JsonProperty]
+@@ -20,8 +20,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+     [JsonInclude]
      public static PluginConfig Config => Utils.Config;
  
 -    private Timer? StatisticTimer { get; set; }
@@ -27,7 +27,7 @@ index f55ab19..08865db 100644
      private Timer? ClaimItemTimer { get; set; }
  
      /// <summary>
-@@ -95,14 +93,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -96,14 +94,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              warnings.AppendLine(Static.Line);
          }
  
@@ -42,7 +42,7 @@ index f55ab19..08865db 100644
          if (warnings.Length > 1)
          {
              ASFLogger.LogGenericWarning(warnings.ToString());
-@@ -119,28 +109,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -120,28 +110,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              Config.Address = null;
          }
  
@@ -71,7 +71,7 @@ index f55ab19..08865db 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -360,12 +328,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -357,12 +325,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -86,7 +86,7 @@ index f55ab19..08865db 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -383,7 +351,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -380,7 +348,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -95,7 +95,7 @@ index f55ab19..08865db 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -442,19 +410,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -439,19 +407,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -115,7 +115,7 @@ index f55ab19..08865db 100644
  
                  _ => null,
              },
-@@ -645,26 +600,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -663,26 +618,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index f55ab19..08865db 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -707,21 +662,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -725,21 +680,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -175,7 +175,7 @@ index f55ab19..08865db 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -837,17 +792,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -859,17 +814,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "DELETERECOMMENT" or
@@ -197,7 +197,7 @@ index f55ab19..08865db 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -947,27 +902,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -962,27 +917,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -225,31 +225,29 @@ index f55ab19..08865db 100644
  
                  "COOKIES" or
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
-diff --git a/ASFEnhance/Data/PluginConfig.cs b/ASFEnhance/Data/PluginConfig.cs
-index 1e06e0b..1cd84c0 100644
---- a/ASFEnhance/Data/PluginConfig.cs
-+++ b/ASFEnhance/Data/PluginConfig.cs
-@@ -7,18 +7,6 @@ namespace ASFEnhance.Data;
+diff --git a/ASFEnhance/Data/Plugin/PluginConfig.cs b/ASFEnhance/Data/Plugin/PluginConfig.cs
+index eb83d9a..5d25f66 100644
+--- a/ASFEnhance/Data/Plugin/PluginConfig.cs
++++ b/ASFEnhance/Data/Plugin/PluginConfig.cs
+@@ -5,16 +5,6 @@ namespace ASFEnhance.Data.Plugin;
  /// </summary>
  public sealed record PluginConfig
  {
 -    /// <summary>
 -    /// 是否同意使用协议
 -    /// </summary>
--    [JsonProperty(Required = Required.DisallowNull)]
 -    public bool EULA { get; set; } = true;
 -
 -    /// <summary>
 -    /// 是否启用统计
 -    /// </summary>
--    [JsonProperty(Required = Required.DisallowNull)]
 -    public bool Statistic { get; set; } = true;
 -
      /// <summary>
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/IPC/Controllers/CuratorController.cs b/ASFEnhance/IPC/Controllers/CuratorController.cs
-index 0fe56dc..2f2e3a5 100644
+index bfcc3fb..f882e12 100644
 --- a/ASFEnhance/IPC/Controllers/CuratorController.cs
 +++ b/ASFEnhance/IPC/Controllers/CuratorController.cs
 @@ -37,11 +37,6 @@ public sealed class CuratorController : ASFEController
@@ -289,10 +287,60 @@ index 0fe56dc..2f2e3a5 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-index 85df7cb..59d4e3b 100644
+index fb4305d..5b573d3 100644
 --- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-@@ -36,11 +36,6 @@ public sealed class PurchaseController : ASFEController
+@@ -40,13 +40,6 @@ public sealed class PurchaseController : ASFEController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        ArgumentNullException.ThrowIfNull(request);
+-
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -163,11 +156,6 @@ public sealed class PurchaseController : ASFEController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -209,11 +197,6 @@ public sealed class PurchaseController : ASFEController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -328,11 +311,6 @@ public sealed class PurchaseController : ASFEController
+         ArgumentNullException.ThrowIfNull(request);
+         ArgumentNullException.ThrowIfNull(request.Items);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -493,11 +471,6 @@ public sealed class PurchaseController : ASFEController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -301,23 +349,11 @@ index 85df7cb..59d4e3b 100644
 -            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
 -        }
 -
-         HashSet<Bot>? bots = Bot.GetBots(botNames);
- 
+         var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
-@@ -129,11 +124,6 @@ public sealed class PurchaseController : ASFEController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         HashSet<Bot>? bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
+         {
 diff --git a/ASFEnhance/IPC/Controllers/RecommendController.cs b/ASFEnhance/IPC/Controllers/RecommendController.cs
-index fe5a37e..345608e 100644
+index 5509dcd..be912b5 100644
 --- a/ASFEnhance/IPC/Controllers/RecommendController.cs
 +++ b/ASFEnhance/IPC/Controllers/RecommendController.cs
 @@ -36,11 +36,6 @@ public sealed class RecommendController : ASFEController
@@ -345,7 +381,7 @@ index fe5a37e..345608e 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
-index 55bd6d2..6562872 100644
+index d3ba386..47e4526 100644
 --- a/ASFEnhance/IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
 @@ -36,11 +36,6 @@ public sealed class WishlistController : ASFEController
@@ -409,10 +445,10 @@ index 55bd6d2..6562872 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 14cd03b..9af7f51 100644
+index a186bf2..fb24f0d 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -1032,33 +1032,6 @@ namespace ASFEnhance.Localization {
+@@ -1212,33 +1212,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -467,5 +503,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.43.2
+2.44.0
 

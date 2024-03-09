@@ -4,23 +4,23 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                  |  30 ---
- ASFEnhance/Data/GitHubReleaseResponse.cs  |  48 ----
- ASFEnhance/Data/PluginUpdateResponse.cs   |  26 ---
- ASFEnhance/Localization/Langs.Designer.cs | 189 ----------------
- ASFEnhance/Other/CommandHelpData.cs       |   6 -
- ASFEnhance/Update/Command.cs              | 129 -----------
- ASFEnhance/Update/WebRequest.cs           | 258 ----------------------
- 7 files changed, 686 deletions(-)
- delete mode 100644 ASFEnhance/Data/GitHubReleaseResponse.cs
+ ASFEnhance/ASFEnhance.cs                      |  30 --
+ .../Data/Plugin/GitHubReleaseResponse.cs      |  48 ----
+ ASFEnhance/Data/PluginUpdateResponse.cs       |  26 --
+ ASFEnhance/Localization/Langs.Designer.cs     | 189 -------------
+ ASFEnhance/Other/CommandHelpData.cs           |   6 -
+ ASFEnhance/Update/Command.cs                  | 135 ---------
+ ASFEnhance/Update/WebRequest.cs               | 259 ------------------
+ 7 files changed, 693 deletions(-)
+ delete mode 100644 ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 67e9403..f55ab19 100644
+index 3bb0a34..686869b 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -55,8 +55,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -56,8 +56,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
          }
          message.AppendLine(Static.Line);
          message.AppendLine(Langs.SubModulePluginVersion);
@@ -29,7 +29,7 @@ index 67e9403..f55ab19 100644
          message.AppendLine(Static.Line);
  
          ASFLogger.LogGenericInfo(message.ToString());
-@@ -232,28 +230,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -233,28 +231,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -58,7 +58,7 @@ index 67e9403..f55ab19 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(bot),
-@@ -479,17 +460,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -476,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              },
              _ => cmd switch //带参数
              {
@@ -76,57 +76,57 @@ index 67e9403..f55ab19 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(Utilities.GetArgsAsText(args, 1, ",")),
-diff --git a/ASFEnhance/Data/GitHubReleaseResponse.cs b/ASFEnhance/Data/GitHubReleaseResponse.cs
+diff --git a/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs b/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
 deleted file mode 100644
-index a4407dc..0000000
---- a/ASFEnhance/Data/GitHubReleaseResponse.cs
+index 739a02a..0000000
+--- a/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
 +++ /dev/null
 @@ -1,48 +0,0 @@
--using Newtonsoft.Json;
+-using System.Text.Json.Serialization;
 -
--namespace ASFEnhance.Data;
+-namespace ASFEnhance.Data.Plugin;
 -
 -/// <summary>
 -/// GitHub发行版
 -/// </summary>
 -internal sealed record GitHubReleaseResponse
 -{
--    [JsonProperty(PropertyName = "html_url", Required = Required.Always)]
+-    [JsonPropertyName("html_url")]
 -    public string Url { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "name", Required = Required.Always)]
+-    [JsonPropertyName("name")]
 -    public string Name { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "body", Required = Required.Always)]
+-    [JsonPropertyName("body")]
 -    public string Body { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "tag_name", Required = Required.Always)]
+-    [JsonPropertyName("tag_name")]
 -    public string TagName { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "created_at", Required = Required.Always)]
+-    [JsonPropertyName("created_at")]
 -    public string CreatedAt { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "published_at", Required = Required.Always)]
+-    [JsonPropertyName("published_at")]
 -    public string PublicAt { get; set; } = "";
 -
--    [JsonProperty(PropertyName = "assets", Required = Required.Always)]
+-    [JsonPropertyName("assets")]
 -    public HashSet<GitHubAssetsData> Assets { get; set; } = [];
 -
 -    public sealed record GitHubAssetsData
 -    {
--        [JsonProperty(PropertyName = "name", Required = Required.Always)]
+-        [JsonPropertyName("name")]
 -        public string Name { get; set; } = "";
 -
--        [JsonProperty(PropertyName = "size", Required = Required.Always)]
+-        [JsonPropertyName("size")]
 -        public uint Size { get; set; }
 -
--        [JsonProperty(PropertyName = "created_at", Required = Required.Always)]
+-        [JsonPropertyName("created_at")]
 -        public string CreatedAt { get; set; } = "";
 -
--        [JsonProperty(PropertyName = "updated_at", Required = Required.Always)]
+-        [JsonPropertyName("updated_at")]
 -        public string UpdatedAt { get; set; } = "";
 -
--        [JsonProperty(PropertyName = "browser_download_url", Required = Required.Always)]
+-        [JsonPropertyName("browser_download_url")]
 -        public string DownloadUrl { get; set; } = "";
 -    }
 -}
@@ -163,10 +163,10 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 6b4879e..14cd03b 100644
+index 6ae4b65..a186bf2 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -519,15 +519,6 @@ namespace ASFEnhance.Localization {
+@@ -555,15 +555,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -182,7 +182,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 代码 | 区域名称 | 当前区域 的本地化字符串。
          /// </summary>
-@@ -618,15 +609,6 @@ namespace ASFEnhance.Localization {
+@@ -672,15 +663,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -198,7 +198,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 响应为空 的本地化字符串。
          /// </summary>
-@@ -942,24 +924,6 @@ namespace ASFEnhance.Localization {
+@@ -1122,24 +1104,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -223,7 +223,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -969,33 +933,6 @@ namespace ASFEnhance.Localization {
+@@ -1149,33 +1113,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -257,7 +257,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 修改失败, 原因: {0} 的本地化字符串。
          /// </summary>
-@@ -1743,15 +1680,6 @@ namespace ASFEnhance.Localization {
+@@ -1923,15 +1860,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -273,7 +273,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 {0} 版本 {1} 的本地化字符串。
          /// </summary>
-@@ -2391,15 +2319,6 @@ namespace ASFEnhance.Localization {
+@@ -2625,15 +2553,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -289,7 +289,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
          /// </summary>
-@@ -2454,15 +2373,6 @@ namespace ASFEnhance.Localization {
+@@ -2688,15 +2607,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -305,7 +305,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
          /// </summary>
-@@ -2526,87 +2436,6 @@ namespace ASFEnhance.Localization {
+@@ -2760,87 +2670,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -337,7 +337,7 @@ index 6b4879e..14cd03b 100644
 -        }
 -        
 -        /// <summary>
--        ///   查找类似 版本说明: \n{0} 的本地化字符串。
+-        ///   查找类似 版本说明: 的本地化字符串。
 -        /// </summary>
 -        internal static string UpdatePluginListItemReleaseNote {
 -            get {
@@ -393,7 +393,7 @@ index 6b4879e..14cd03b 100644
          /// <summary>
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
-@@ -2679,24 +2508,6 @@ namespace ASFEnhance.Localization {
+@@ -2913,24 +2742,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -419,7 +419,7 @@ index 6b4879e..14cd03b 100644
          ///   查找类似 查看机器人购物车 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
-index c7621ef..00d0cbc 100644
+index b7db85e..11bf3ef 100644
 --- a/ASFEnhance/Other/CommandHelpData.cs
 +++ b/ASFEnhance/Other/CommandHelpData.cs
 @@ -9,8 +9,6 @@ internal static class CommandHelpData
@@ -431,7 +431,7 @@ index c7621ef..00d0cbc 100644
          
          // 账号
          { "PURCHASEHISTORY", "[Bots]" },
-@@ -102,8 +100,6 @@ internal static class CommandHelpData
+@@ -101,8 +99,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFENHANCE", Langs.UsageASFENHANCE},
          { "PLUGINLIST", "" },
@@ -440,7 +440,7 @@ index c7621ef..00d0cbc 100644
          
          // 账号
          { "PURCHASEHISTORY", Langs.UsagePURCHASEHISTORY },
-@@ -195,8 +191,6 @@ internal static class CommandHelpData
+@@ -193,8 +189,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFE", "ASFENHANCE" },
          { "PL", "PLUGINLIST" },
@@ -450,10 +450,10 @@ index c7621ef..00d0cbc 100644
          // 账号
          { "PH", "PURCHASEHISTORY" },
 diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index 00586f9..28d6d7a 100644
+index cd21c54..381f964 100644
 --- a/ASFEnhance/Update/Command.cs
 +++ b/ASFEnhance/Update/Command.cs
-@@ -10,11 +10,6 @@ namespace ASFEnhance.Update;
+@@ -11,11 +11,6 @@ namespace ASFEnhance.Update;
  
  internal static class Command
  {
@@ -465,7 +465,7 @@ index 00586f9..28d6d7a 100644
      /// <summary>
      /// 获取已安装的插件列表
      /// </summary>
-@@ -69,128 +64,4 @@ internal static class Command
+@@ -70,134 +65,4 @@ internal static class Command
              return FormatStaticResponse(Langs.SubModuleNoModule);
          }
      }
@@ -531,6 +531,11 @@ index 00586f9..28d6d7a 100644
 -        return sb.ToString();
 -    }
 -
+-    /// <summary>
+-    /// 检查插件版本
+-    /// </summary>
+-    /// <param name="pluginNames"></param>
+-    /// <returns></returns>
 -    internal static async Task<string?> ResponsePluginUpdate(string? pluginNames = null)
 -    {
 -        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -584,7 +589,8 @@ index 00586f9..28d6d7a 100644
 -
 -            if (!string.IsNullOrEmpty(info.ReleaseNote))
 -            {
--                sb.AppendLineFormat(Langs.UpdatePluginListItemReleaseNote, info.ReleaseNote);
+-                sb.AppendLine(Langs.UpdatePluginListItemReleaseNote);
+-                sb.AppendLine(info.ReleaseNote);
 -            }
 -        }
 -
@@ -596,12 +602,13 @@ index 00586f9..28d6d7a 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index 6cea927..0000000
+index 3e6d6f6..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
-@@ -1,258 +0,0 @@
+@@ -1,259 +0,0 @@
 -using ArchiSteamFarm.Core;
 -using ASFEnhance.Data;
+-using ASFEnhance.Data.Plugin;
 -using System.IO.Compression;
 -
 -namespace ASFEnhance.Update;
@@ -859,5 +866,5 @@ index 6cea927..0000000
 -    }
 -}
 -- 
-2.43.2
+2.44.0
 
