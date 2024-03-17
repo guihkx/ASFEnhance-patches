@@ -4,7 +4,7 @@ Date: Thu, 26 Oct 2023 22:37:19 -0300
 Subject: Remove statistics and EULA
 
 ---
- ASFEnhance/ASFEnhance.cs                      | 102 ++++--------------
+ ASFEnhance/ASFEnhance.cs                      | 106 ++++--------------
  ASFEnhance/Data/Plugin/PluginConfig.cs        |  10 --
  .../IPC/Controllers/CuratorController.cs      |  15 ---
  .../IPC/Controllers/PurchaseController.cs     |  27 -----
@@ -12,13 +12,13 @@ Subject: Remove statistics and EULA
  .../IPC/Controllers/WishlistController.cs     |  25 -----
  ASFEnhance/Localization/Langs.Designer.cs     |  27 -----
  ASFEnhance/Other/Command.cs                   |   9 --
- 8 files changed, 18 insertions(+), 207 deletions(-)
+ 8 files changed, 20 insertions(+), 209 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 686869b..4d44798 100644
+index 632d1ca..4c813b1 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -20,8 +20,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -21,8 +21,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
      [JsonInclude]
      public static PluginConfig Config => Utils.Config;
  
@@ -27,7 +27,7 @@ index 686869b..4d44798 100644
      private Timer? ClaimItemTimer { get; set; }
  
      /// <summary>
-@@ -96,14 +94,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -97,14 +95,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              warnings.AppendLine(Static.Line);
          }
  
@@ -42,7 +42,7 @@ index 686869b..4d44798 100644
          if (warnings.Length > 1)
          {
              ASFLogger.LogGenericWarning(warnings.ToString());
-@@ -120,28 +110,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -121,28 +111,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              Config.Address = null;
          }
  
@@ -71,7 +71,7 @@ index 686869b..4d44798 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -357,12 +325,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -358,12 +326,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -86,7 +86,7 @@ index 686869b..4d44798 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -380,7 +348,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -381,7 +349,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -95,7 +95,7 @@ index 686869b..4d44798 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -439,19 +407,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -440,19 +408,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -115,7 +115,7 @@ index 686869b..4d44798 100644
  
                  _ => null,
              },
-@@ -663,26 +618,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -664,26 +619,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Curasor
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index 686869b..4d44798 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -725,21 +680,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -726,21 +681,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  
                  //Group
                  "GROUPLIST" or
@@ -175,8 +175,17 @@ index 686869b..4d44798 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -859,17 +814,17 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -860,24 +815,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
+ 
+                 "RECOMMENT" or
+-                "REC" when Config.EULA && argLength > 2 && access >= EAccess.Master =>
++                "REC" when argLength > 2 && access >= EAccess.Master =>
+                     Store.Command.ResponseGetReview(args[1], Utilities.GetArgsAsText(args, 2, ",")),
+                 "RECOMMENT" or
+-                "REC" when Config.EULA && access >= EAccess.Master =>
++                "REC" when access >= EAccess.Master =>
+                     Store.Command.ResponseGetReview(bot, args[1]),
  
                  "DELETERECOMMENT" or
 -                "DREC" when Config.EULA && argLength > 2 && access >= EAccess.Master =>
@@ -197,7 +206,7 @@ index 686869b..4d44798 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -962,27 +917,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -970,27 +925,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -445,10 +454,10 @@ index d3ba386..47e4526 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index a186bf2..fb24f0d 100644
+index c9680dd..a7f74e8 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -1212,33 +1212,6 @@ namespace ASFEnhance.Localization {
+@@ -1221,33 +1221,6 @@ namespace ASFEnhance.Localization {
              }
          }
          

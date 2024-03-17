@@ -17,10 +17,10 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 3bb0a34..686869b 100644
+index c53246f..632d1ca 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -56,8 +56,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -57,8 +57,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
          }
          message.AppendLine(Static.Line);
          message.AppendLine(Langs.SubModulePluginVersion);
@@ -29,7 +29,7 @@ index 3bb0a34..686869b 100644
          message.AppendLine(Static.Line);
  
          ASFLogger.LogGenericInfo(message.ToString());
-@@ -233,28 +231,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -234,28 +232,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -58,7 +58,7 @@ index 3bb0a34..686869b 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(bot),
-@@ -476,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -477,17 +458,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
              },
              _ => cmd switch //带参数
              {
@@ -163,7 +163,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 6ae4b65..a186bf2 100644
+index 9937117..c9680dd 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -555,15 +555,6 @@ namespace ASFEnhance.Localization {
@@ -198,7 +198,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 响应为空 的本地化字符串。
          /// </summary>
-@@ -1122,24 +1104,6 @@ namespace ASFEnhance.Localization {
+@@ -1131,24 +1113,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -223,7 +223,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 下载头像图片失败 的本地化字符串。
          /// </summary>
-@@ -1149,33 +1113,6 @@ namespace ASFEnhance.Localization {
+@@ -1158,33 +1122,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -257,7 +257,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 修改失败, 原因: {0} 的本地化字符串。
          /// </summary>
-@@ -1923,15 +1860,6 @@ namespace ASFEnhance.Localization {
+@@ -1941,15 +1878,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -273,7 +273,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 {0} 版本 {1} 的本地化字符串。
          /// </summary>
-@@ -2625,15 +2553,6 @@ namespace ASFEnhance.Localization {
+@@ -2697,15 +2625,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -289,7 +289,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
          /// </summary>
-@@ -2688,15 +2607,6 @@ namespace ASFEnhance.Localization {
+@@ -2760,15 +2679,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -305,7 +305,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
          /// </summary>
-@@ -2760,87 +2670,6 @@ namespace ASFEnhance.Localization {
+@@ -2832,87 +2742,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -393,7 +393,7 @@ index 6ae4b65..a186bf2 100644
          /// <summary>
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
-@@ -2913,24 +2742,6 @@ namespace ASFEnhance.Localization {
+@@ -2985,24 +2814,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
