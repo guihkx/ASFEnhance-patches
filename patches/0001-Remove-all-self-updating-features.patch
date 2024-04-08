@@ -4,23 +4,32 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                      |  30 --
+ ASFEnhance/ASFEnhance.cs                      |  55 +---
  .../Data/Plugin/GitHubReleaseResponse.cs      |  48 ----
  ASFEnhance/Data/PluginUpdateResponse.cs       |  26 --
  ASFEnhance/Localization/Langs.Designer.cs     | 189 -------------
  ASFEnhance/Other/CommandHelpData.cs           |   6 -
  ASFEnhance/Update/Command.cs                  | 135 ---------
  ASFEnhance/Update/WebRequest.cs               | 259 ------------------
- 7 files changed, 693 deletions(-)
+ 7 files changed, 1 insertion(+), 717 deletions(-)
  delete mode 100644 ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 923be00..12fb59f 100644
+index 5643d7e..c704a11 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -56,8 +56,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
+ namespace ASFEnhance;
+ 
+ [Export(typeof(IPlugin))]
+-internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHubPluginUpdates
++internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+ {
+     public string Name => nameof(ASFEnhance);
+ 
+@@ -57,8 +57,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
          }
          message.AppendLine(Static.Line);
          message.AppendLine(Langs.SubModulePluginVersion);
@@ -29,7 +38,7 @@ index 923be00..12fb59f 100644
          message.AppendLine(Static.Line);
  
          ASFLogger.LogGenericInfo(message.ToString());
-@@ -233,28 +231,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -236,28 +234,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -58,7 +67,7 @@ index 923be00..12fb59f 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(bot),
-@@ -476,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -483,17 +464,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
              },
              _ => cmd switch //带参数
              {
@@ -76,6 +85,34 @@ index 923be00..12fb59f 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(Utilities.GetArgsAsText(args, 1, ",")),
+@@ -1187,27 +1157,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+         }
+         return Task.FromResult(false);
+     }
+-
+-    /// <summary>
+-    /// 
+-    /// </summary>
+-    /// <param name="asfVersion"></param>
+-    /// <param name="asfVariant"></param>
+-    /// <param name="asfUpdate"></param>
+-    /// <param name="updateChannel"></param>
+-    /// <param name="forced"></param>
+-    /// <returns></returns>
+-    /// <exception cref="NotImplementedException"></exception>
+-    public async Task<Uri?> GetTargetReleaseURL(Version asfVersion, string asfVariant, bool asfUpdate, GlobalConfig.EUpdateChannel updateChannel, bool forced)
+-    {
+-        var response = await Update.WebRequest.GetLatestRelease("chr233/ASFEnhance").ConfigureAwait(false);
+-        if (response == null)
+-        {
+-            return null;
+-        }
+-
+-        var releaseUrl = Update.WebRequest.FetchDownloadUrl(response);
+-
+-        return !string.IsNullOrEmpty(releaseUrl) ? new Uri(releaseUrl) : null;
+-    }
+ }
 diff --git a/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs b/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
 deleted file mode 100644
 index 739a02a..0000000
@@ -602,7 +639,7 @@ index cd21c54..381f964 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index 3e6d6f6..0000000
+index e87517b..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
 @@ -1,259 +0,0 @@
@@ -636,7 +673,7 @@ index 3e6d6f6..0000000
 -    /// 获取最新的发行版
 -    /// </summary>
 -    /// <returns></returns>
--    private static async Task<GitHubReleaseResponse?> GetLatestRelease(string repoPath)
+-    internal static async Task<GitHubReleaseResponse?> GetLatestRelease(string repoPath)
 -    {
 -        var splits = repoPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
 -        if (splits.Length == 0)
