@@ -235,7 +235,7 @@ index c704a11..124254c 100644
                  "COOKIES" or
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
 diff --git a/ASFEnhance/Data/Plugin/PluginConfig.cs b/ASFEnhance/Data/Plugin/PluginConfig.cs
-index eb83d9a..5d25f66 100644
+index 92b3ec5..0158b64 100644
 --- a/ASFEnhance/Data/Plugin/PluginConfig.cs
 +++ b/ASFEnhance/Data/Plugin/PluginConfig.cs
 @@ -5,16 +5,6 @@ namespace ASFEnhance.Data.Plugin;
@@ -296,7 +296,7 @@ index bfcc3fb..f882e12 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-index fb4305d..5b573d3 100644
+index 52ff8c5..51c6668 100644
 --- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
 @@ -40,13 +40,6 @@ public sealed class PurchaseController : ASFEController
@@ -390,7 +390,7 @@ index 5509dcd..be912b5 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
-index d3ba386..47e4526 100644
+index 5b00a04..291a410 100644
 --- a/ASFEnhance/IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
 @@ -36,11 +36,6 @@ public sealed class WishlistController : ASFEController
@@ -454,10 +454,10 @@ index d3ba386..47e4526 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index c9680dd..a7f74e8 100644
+index 273221f..d13c69b 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -1221,33 +1221,6 @@ namespace ASFEnhance.Localization {
+@@ -1230,33 +1230,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -512,5 +512,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.44.0
+2.45.0
 
