@@ -4,41 +4,42 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                      |  55 +---
- .../Data/Plugin/GitHubReleaseResponse.cs      |  48 ----
- ASFEnhance/Data/PluginUpdateResponse.cs       |  26 --
- ASFEnhance/Localization/Langs.Designer.cs     | 189 -------------
- ASFEnhance/Other/CommandHelpData.cs           |   6 -
- ASFEnhance/Update/Command.cs                  | 135 ---------
- ASFEnhance/Update/WebRequest.cs               | 259 ------------------
- 7 files changed, 1 insertion(+), 717 deletions(-)
- delete mode 100644 ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
+ ASFEnhance/ASFEnhance.cs                  |  77 +------
+ ASFEnhance/Data/PluginUpdateResponse.cs   |  26 ---
+ ASFEnhance/Localization/Langs.Designer.cs | 198 ------------------
+ ASFEnhance/Other/CommandHelpData.cs       |   6 -
+ ASFEnhance/Update/Command.cs              | 135 -------------
+ ASFEnhance/Update/WebRequest.cs           | 234 ----------------------
+ 6 files changed, 1 insertion(+), 675 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index b31042b..d67bea4 100644
+index d57f3d2..cbd6029 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
+@@ -13,7 +13,7 @@ using static ArchiSteamFarm.Storage.GlobalConfig;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
--internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IPluginUpdates
+-internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHubPluginUpdates
 +internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -57,8 +57,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IPlugi
+@@ -60,11 +60,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+         {
+             message.AppendLine(Langs.SubModuleNoModule);
          }
-         message.AppendLine(Static.Line);
-         message.AppendLine(Langs.SubModulePluginVersion);
+-        message.AppendLine(Static.Line);
+-        message.AppendLine(Langs.SubModulePluginVersion);
 -        message.AppendLine(Langs.SubModulePluginUpdate);
 -        message.AppendLine(Langs.SubModuleCmdTips);
-         message.AppendLine(Static.Line);
+-        message.AppendLine(Static.Line);
  
          ASFLogger.LogGenericInfo(message.ToString());
-@@ -236,28 +234,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IPlugi
+ 
+@@ -240,28 +235,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -67,7 +68,7 @@ index b31042b..d67bea4 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(bot),
-@@ -483,17 +464,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IPlugi
+@@ -494,17 +472,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
              },
              _ => cmd switch //带参数
              {
@@ -85,7 +86,7 @@ index b31042b..d67bea4 100644
                  //Event
                  "SIM4" when access >= EAccess.Operator =>
                      Event.Command.ResponseSim4(Utilities.GetArgsAsText(args, 1, ",")),
-@@ -1194,27 +1164,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IPlugi
+@@ -1231,46 +1198,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
          }
          return Task.FromResult(false);
      }
@@ -100,73 +101,38 @@ index b31042b..d67bea4 100644
 -    /// <param name="forced"></param>
 -    /// <returns></returns>
 -    /// <exception cref="NotImplementedException"></exception>
--    public async Task<Uri?> GetTargetReleaseURL(Version asfVersion, string asfVariant, bool asfUpdate, GlobalConfig.EUpdateChannel updateChannel, bool forced)
+-    public async Task<Uri?> GetTargetReleaseURL(Version asfVersion, string asfVariant, bool asfUpdate, EUpdateChannel updateChannel, bool forced)
 -    {
--        var response = await Update.WebRequest.GetLatestRelease("chr233/ASFEnhance").ConfigureAwait(false);
--        if (response == null)
+-        var releaseResponse = await GitHubService.GetLatestRelease("chr233/ASFEnhance", true, default).ConfigureAwait(false);
+-        if (releaseResponse == null)
 -        {
 -            return null;
 -        }
 -
--        var releaseUrl = Update.WebRequest.FetchDownloadUrl(response);
+-        Version newVersion = new(releaseResponse.Tag);
+-        if (!forced && (Version >= newVersion))
+-        {
+-            ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemName, Name, Langs.AlreadyLatest));
+-            return null;
+-        }
 -
--        return !string.IsNullOrEmpty(releaseUrl) ? new Uri(releaseUrl) : null;
+-        if (releaseResponse.Assets.Count == 0)
+-        {
+-            ASFLogger.LogGenericWarning(Langs.NoAssetFoundInReleaseInfo);
+-            return null;
+-        }
+-
+-        ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemName, Name, Langs.CanUpdate));
+-        ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemVersion, Version, newVersion));
+-        if (!string.IsNullOrEmpty(releaseResponse.MarkdownBody))
+-        {
+-            ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemReleaseNote, releaseResponse.MarkdownBody));
+-        }
+-
+-        var releaseUrl = Update.WebRequest.FetchDownloadUrl(releaseResponse);
+-        return releaseUrl;
 -    }
  }
-diff --git a/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs b/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
-deleted file mode 100644
-index 739a02a..0000000
---- a/ASFEnhance/Data/Plugin/GitHubReleaseResponse.cs
-+++ /dev/null
-@@ -1,48 +0,0 @@
--using System.Text.Json.Serialization;
--
--namespace ASFEnhance.Data.Plugin;
--
--/// <summary>
--/// GitHub发行版
--/// </summary>
--internal sealed record GitHubReleaseResponse
--{
--    [JsonPropertyName("html_url")]
--    public string Url { get; set; } = "";
--
--    [JsonPropertyName("name")]
--    public string Name { get; set; } = "";
--
--    [JsonPropertyName("body")]
--    public string Body { get; set; } = "";
--
--    [JsonPropertyName("tag_name")]
--    public string TagName { get; set; } = "";
--
--    [JsonPropertyName("created_at")]
--    public string CreatedAt { get; set; } = "";
--
--    [JsonPropertyName("published_at")]
--    public string PublicAt { get; set; } = "";
--
--    [JsonPropertyName("assets")]
--    public HashSet<GitHubAssetsData> Assets { get; set; } = [];
--
--    public sealed record GitHubAssetsData
--    {
--        [JsonPropertyName("name")]
--        public string Name { get; set; } = "";
--
--        [JsonPropertyName("size")]
--        public uint Size { get; set; }
--
--        [JsonPropertyName("created_at")]
--        public string CreatedAt { get; set; } = "";
--
--        [JsonPropertyName("updated_at")]
--        public string UpdatedAt { get; set; } = "";
--
--        [JsonPropertyName("browser_download_url")]
--        public string DownloadUrl { get; set; } = "";
--    }
--}
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
 index f8cabe1..0000000
@@ -200,7 +166,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index e6de4f7..273221f 100644
+index d96251d..af270b7 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -564,15 +564,6 @@ namespace ASFEnhance.Localization {
@@ -294,7 +260,7 @@ index e6de4f7..273221f 100644
          /// <summary>
          ///   查找类似 修改失败, 原因: {0} 的本地化字符串。
          /// </summary>
-@@ -1950,15 +1887,6 @@ namespace ASFEnhance.Localization {
+@@ -1977,15 +1914,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -310,7 +276,7 @@ index e6de4f7..273221f 100644
          /// <summary>
          ///   查找类似 {0} 版本 {1} 的本地化字符串。
          /// </summary>
-@@ -2706,15 +2634,6 @@ namespace ASFEnhance.Localization {
+@@ -2742,15 +2670,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -326,7 +292,7 @@ index e6de4f7..273221f 100644
          /// <summary>
          ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
          /// </summary>
-@@ -2769,15 +2688,6 @@ namespace ASFEnhance.Localization {
+@@ -2805,24 +2724,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -339,10 +305,19 @@ index e6de4f7..273221f 100644
 -            }
 -        }
 -        
+-        /// <summary>
+-        ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
+-        /// </summary>
+-        internal static string SubModulePluginVersion {
+-            get {
+-                return ResourceManager.GetString("SubModulePluginVersion", resourceCulture);
+-            }
+-        }
+-        
          /// <summary>
-         ///   查找类似 使用 &quot;PLUGINVERSION [插件名]&quot; / &quot;PV [插件名]&quot; 检查插件可用更新 的本地化字符串。
+         ///   查找类似 子模块注册失败, 重复的ID 的本地化字符串。
          /// </summary>
-@@ -2841,87 +2751,6 @@ namespace ASFEnhance.Localization {
+@@ -2886,87 +2787,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -430,7 +405,7 @@ index e6de4f7..273221f 100644
          /// <summary>
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
-@@ -2994,24 +2823,6 @@ namespace ASFEnhance.Localization {
+@@ -3039,24 +2859,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -639,75 +614,21 @@ index cd21c54..381f964 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index e87517b..0000000
+index 2c6c1b2..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
-@@ -1,259 +0,0 @@
+@@ -1,234 +0,0 @@
 -using ArchiSteamFarm.Core;
+-using ArchiSteamFarm.Web.GitHub;
+-using ArchiSteamFarm.Web.GitHub.Data;
+-using ArchiSteamFarm.Web.Responses;
 -using ASFEnhance.Data;
--using ASFEnhance.Data.Plugin;
 -using System.IO.Compression;
 -
 -namespace ASFEnhance.Update;
 -
 -internal static class WebRequest
 -{
--    /// <summary>
--    /// 获取最新的发行版
--    /// </summary>
--    /// <returns></returns>
--    private static async Task<GitHubReleaseResponse?> GetLatestRelease(Uri request)
--    {
--        var response = await ASF.WebBrowser!.UrlGetToJsonObject<GitHubReleaseResponse>(request).ConfigureAwait(false);
--        var content = response?.Content;
--        if (content != null)
--        {
--            var splits = content.Body.Split("---", StringSplitOptions.RemoveEmptyEntries);
--            content.Body = (splits.Length >= 2 ? splits[1] : content.Body).Trim();
--        }
--
--        return content;
--    }
--
--    /// <summary>
--    /// 获取最新的发行版
--    /// </summary>
--    /// <returns></returns>
--    internal static async Task<GitHubReleaseResponse?> GetLatestRelease(string repoPath)
--    {
--        var splits = repoPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
--        if (splits.Length == 0)
--        {
--            return null;
--        }
--
--        string user;
--        string repo;
--
--        if (splits.Length >= 2)
--        {
--            user = splits[0];
--            repo = splits[1];
--        }
--        else
--        {
--            user = "chr233";
--            repo = splits[0];
--        }
--
--        GitHubReleaseResponse? data = null;
--
--        if (user == "chr233")
--        {
--            //使用镜像站
--            data = await GetLatestRelease(new Uri($"https://hub.chrxw.com/{repo}/releases/latest")).ConfigureAwait(false);
--        }
--
--        data ??= await GetLatestRelease(new Uri($"https://api.github.com/repos/{user}/{repo}/releases/latest")).ConfigureAwait(false);
--
--        return data;
--    }
--
 -    /// <summary>
 -    /// 获取发行版信息
 -    /// </summary>
@@ -731,15 +652,20 @@ index e87517b..0000000
 -        }
 -        else
 -        {
--            var relesaeData = await GetLatestRelease(pluginRepo).ConfigureAwait(false);
+-            if (!pluginRepo.Contains('/'))
+-            {
+-                pluginRepo = "chr233/" + pluginRepo;
+-            }
+-
+-            var relesaeData = await GitHubService.GetLatestRelease(pluginRepo, true, default).ConfigureAwait(false);
 -            if (relesaeData == null)
 -            {
 -                response.ReleaseNote = Langs.GetReleaseInfoFailedNetworkError;
 -            }
 -            else
 -            {
--                response.ReleaseNote = relesaeData.Body;
--                response.OnlineVersion = Version.TryParse(relesaeData.TagName, out var version) ? version : null;
+-                response.ReleaseNote = relesaeData.MarkdownBody;
+-                response.OnlineVersion = Version.TryParse(relesaeData.Tag, out var version) ? version : null;
 -            }
 -        }
 -
@@ -751,7 +677,7 @@ index e87517b..0000000
 -    /// </summary>
 -    /// <param name="relesaeData"></param>
 -    /// <returns></returns>
--    internal static string? FetchDownloadUrl(GitHubReleaseResponse relesaeData)
+-    internal static Uri? FetchDownloadUrl(ReleaseResponse relesaeData)
 -    {
 -        if (relesaeData.Assets.Count == 0)
 -        {
@@ -763,7 +689,7 @@ index e87517b..0000000
 -        {
 -            if (asset.Name.Contains(Langs.CurrentLanguage))
 -            {
--                return asset.DownloadUrl;
+-                return asset.DownloadURL;
 -            }
 -        }
 -
@@ -772,12 +698,12 @@ index e87517b..0000000
 -        {
 -            if (asset.Name.Contains("en-US"))
 -            {
--                return asset.DownloadUrl;
+-                return asset.DownloadURL;
 -            }
 -        }
 -
 -        //如果没有找到当前语言的版本, 则下载第一个
--        return relesaeData.Assets.First().DownloadUrl;
+-        return relesaeData.Assets.FirstOrDefault()?.DownloadURL;
 -    }
 -
 -    /// <summary>
@@ -797,22 +723,26 @@ index e87517b..0000000
 -            ReleaseNote = "",
 -        };
 -
--
 -        if (string.IsNullOrEmpty(pluginRepo))
 -        {
 -            response.UpdateLog = Langs.PluginUpdateNotSupport;
 -        }
 -        else
 -        {
--            var relesaeData = await GetLatestRelease(pluginRepo).ConfigureAwait(false);
+-            if (!pluginRepo.Contains('/'))
+-            {
+-                pluginRepo = "chr233/" + pluginRepo;
+-            }
+-
+-            var relesaeData = await GitHubService.GetLatestRelease(pluginRepo, true, default).ConfigureAwait(false);
 -            if (relesaeData == null)
 -            {
 -                response.UpdateLog = Langs.GetReleaseInfoFailedNetworkError;
 -            }
 -            else
 -            {
--                response.ReleaseNote = relesaeData.Body;
--                response.OnlineVersion = Version.TryParse(relesaeData.TagName, out var version) ? version : null;
+-                response.ReleaseNote = relesaeData.MarkdownBody;
+-                response.OnlineVersion = Version.TryParse(relesaeData.Tag, out var version) ? version : null;
 -
 -                if (!response.CanUpdate)
 -                {
@@ -827,7 +757,17 @@ index e87517b..0000000
 -                    }
 -                    else
 -                    {
--                        response.UpdateLog = await DownloadRelease(downloadUri).ConfigureAwait(false);
+-                        var mirrorUrl = new Uri(downloadUri.AbsoluteUri.Replace("https://github.com/chr233", "https://dl.chrxw.com"));
+-                        var binResponse = await DownloadRelease(mirrorUrl).ConfigureAwait(false) ?? await DownloadRelease(downloadUri).ConfigureAwait(false);
+-
+-                        if (binResponse == null)
+-                        {
+-                            response.UpdateLog = Langs.DownloadFailed;
+-                        }
+-                        else
+-                        {
+-                            response.UpdateLog = await UnzipRelease(binResponse).ConfigureAwait(false);
+-                        }
 -                    }
 -                }
 -            }
@@ -839,18 +779,20 @@ index e87517b..0000000
 -    /// <summary>
 -    /// 下载发行版
 -    /// </summary>
--    /// <param name="downloadUrl"></param>
+-    /// <param name="request"></param>
 -    /// <returns></returns>
--    internal static async Task<string> DownloadRelease(string downloadUrl)
+-    internal static Task<BinaryResponse?> DownloadRelease(Uri request)
 -    {
--        var request = new Uri(downloadUrl);
--        var binResponse = await ASF.WebBrowser!.UrlGetToBinary(request).ConfigureAwait(false);
+-        return ASF.WebBrowser?.UrlGetToBinary(request) ?? Task.FromResult<BinaryResponse?>(null);
+-    }
 -
--        if (binResponse == null)
--        {
--            return Langs.DownloadPluginFailed;
--        }
--
+-    /// <summary>
+-    /// 下载发行版
+-    /// </summary>
+-    /// <param name="binResponse"></param>
+-    /// <returns></returns>
+-    internal static async Task<string> UnzipRelease(BinaryResponse binResponse)
+-    {
 -        var zipBytes = binResponse?.Content as byte[] ?? binResponse?.Content?.ToArray();
 -        if (zipBytes == null)
 -        {
@@ -865,30 +807,38 @@ index e87517b..0000000
 -                using var zipArchive = new ZipArchive(ms);
 -                string pluginFolder = MyDirectory;
 -
--                foreach (var entry in zipArchive.Entries)
+-                var updateFolder = Path.Combine(pluginFolder, "_ASFEnhanceTemp_");
+-                if (Directory.Exists(updateFolder))
 -                {
--                    if (entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+-                    Directory.Delete(updateFolder, true);
+-                }
+-
+-                zipArchive.ExtractToDirectory(updateFolder);
+-
+-                foreach (var filePath in Directory.GetFiles(updateFolder, "*.dll"))
+-                {
+-                    var pluginName = Path.GetFileName(filePath);
+-
+-                    var oldPluginPath = Path.Combine(pluginFolder, pluginName);
+-
+-                    if (File.Exists(oldPluginPath))
 -                    {
--                        var targetPath = Path.Combine(pluginFolder, entry.FullName);
+-                        var originPath = Path.Combine(pluginFolder, pluginName);
+-                        var backupPath = $"{oldPluginPath}.autobak";
 -
--                        if (File.Exists(targetPath))
+-                        int i = 1;
+-                        while (File.Exists(backupPath))
 -                        {
--                            var backupPath = $"{targetPath}.autobak";
--                            int i = 1;
--                            while (File.Exists(backupPath) && i < 10)
+-                            backupPath = $"{oldPluginPath}.{i++}.autobak";
+-
+-                            if (i >= 10)
 -                            {
--                                backupPath = $"{targetPath}.{i++}.autobak";
--
--                                if (i >= 10)
--                                {
--                                    return Langs.DownloadFailedFileConflict;
--                                }
+-                                return Langs.DownloadFailedFileConflict;
 -                            }
--
--                            File.Move(targetPath, backupPath, true);
 -                        }
 -
--                        entry.ExtractToFile(targetPath);
+-                        File.Move(oldPluginPath, backupPath, true);
+-                        File.Move(filePath, oldPluginPath, true);
 -                    }
 -                }
 -
