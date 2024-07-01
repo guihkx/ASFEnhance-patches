@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 20 insertions(+), 209 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 4fecd75..c238edf 100644
+index 965130d..15aacf6 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -26,8 +26,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
@@ -52,8 +52,8 @@ index 4fecd75..c238edf 100644
 -            var request = new Uri("https://asfe.chrxw.com/asfenhace");
 -            if (_Adapter_.ExtensionCore.HasSubModule)
 -            {
--                List<string>? names = ["asfenhance"];
--                foreach (var subModules in _Adapter_.ExtensionCore.SubModules.Keys)
+-                List<string> names = ["asfenhance"];
+-                foreach (var (subModules, _) in _Adapter_.ExtensionCore.SubModules)
 -                {
 -                    names.Add(subModules.ToLowerInvariant());
 -                }
@@ -175,7 +175,7 @@ index 4fecd75..c238edf 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -894,24 +849,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -903,24 +858,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -206,7 +206,7 @@ index 4fecd75..c238edf 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1023,27 +978,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+@@ -1032,27 +987,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
