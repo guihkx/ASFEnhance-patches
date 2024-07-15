@@ -4,21 +4,21 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                  |  77 +--------
+ ASFEnhance/ASFEnhance.cs                  |  39 +----
  ASFEnhance/Data/PluginUpdateResponse.cs   |  26 ---
  ASFEnhance/Localization/Langs.Designer.cs | 198 ----------------------
  ASFEnhance/Other/CommandHelpData.cs       |   6 -
- ASFEnhance/Update/Command.cs              | 116 -------------
- ASFEnhance/Update/WebRequest.cs           |  88 ----------
- 6 files changed, 1 insertion(+), 510 deletions(-)
+ ASFEnhance/Update/Command.cs              | 111 ------------
+ ASFEnhance/Update/WebRequest.cs           |  54 ------
+ 6 files changed, 1 insertion(+), 433 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 2a2c569..219f66c 100644
+index efb4b4b..eca0a4d 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -13,7 +13,7 @@ using static ArchiSteamFarm.Storage.GlobalConfig;
+@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -27,31 +27,7 @@ index 2a2c569..219f66c 100644
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -60,11 +60,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
-         {
-             message.AppendLine(Langs.SubModuleNoModule);
-         }
--        message.AppendLine(Static.Line);
--        message.AppendLine(Langs.SubModulePluginVersion);
--        message.AppendLine(Langs.SubModulePluginUpdate);
--        message.AppendLine(Langs.SubModuleCmdTips);
--        message.AppendLine(Static.Line);
- 
-         ASFLogger.LogGenericInfo(message.ToString());
- 
-@@ -240,28 +235,11 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
-                 "ASFE" when access >= EAccess.FamilySharing =>
-                     Task.FromResult(PluginInfo),
- 
--                //Update
--                "ASFEUPDATE" or
--                "AU" or
--                "ASFEVERSION" or
--                "AV" when access >= EAccess.Operator =>
--                    Task.FromResult(Update.Command.ResponseOldCmdTips()),
--
-                 "PLUGINSLIST" or
-                 "PLUGINLIST" or
+@@ -227,16 +227,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -68,7 +44,7 @@ index 2a2c569..219f66c 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -492,17 +470,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -467,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
              },
              _ => cmd switch //带参数
              {
@@ -86,51 +62,25 @@ index 2a2c569..219f66c 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
-@@ -1234,46 +1201,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -1223,20 +1202,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
          }
          return Task.FromResult(false);
      }
 -
--    /// <summary>
--    /// 
--    /// </summary>
--    /// <param name="asfVersion"></param>
--    /// <param name="asfVariant"></param>
--    /// <param name="asfUpdate"></param>
--    /// <param name="updateChannel"></param>
--    /// <param name="forced"></param>
--    /// <returns></returns>
--    /// <exception cref="NotImplementedException"></exception>
--    public async Task<Uri?> GetTargetReleaseURL(Version asfVersion, string asfVariant, bool asfUpdate, EUpdateChannel updateChannel, bool forced)
+-    /// <inheritdoc/>
+-    public Task<ReleaseAsset?> GetTargetReleaseAsset(Version asfVersion, string asfVariant, Version newPluginVersion, IReadOnlyCollection<ReleaseAsset> releaseAssets)
 -    {
--        var releaseResponse = await GitHubService.GetLatestRelease("chr233/ASFEnhance", updateChannel == EUpdateChannel.Stable, default).ConfigureAwait(false);
--        if (releaseResponse == null)
+-        var result = releaseAssets.Count switch
 -        {
--            return null;
--        }
+-            0 => null,
+-            1 => //如果找到一个文件，则第一个
+-                releaseAssets.First(),
+-            _ => //优先下载当前语言的版本
+-                releaseAssets.FirstOrDefault(static x => x.Name.Contains(Langs.CurrentLanguage)) ??
+-                releaseAssets.FirstOrDefault(static x => x.Name.Contains("en-US"))
+-        };
 -
--        Version newVersion = new(releaseResponse.Tag);
--        if (!forced && (Version >= newVersion))
--        {
--            ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemName, Name, Langs.AlreadyLatest));
--            return null;
--        }
--
--        if (releaseResponse.Assets.Count == 0)
--        {
--            ASFLogger.LogGenericWarning(Langs.NoAssetFoundInReleaseInfo);
--            return null;
--        }
--
--        ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemName, Name, Langs.CanUpdate));
--        ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemVersion, Version, newVersion));
--        if (!string.IsNullOrEmpty(releaseResponse.MarkdownBody))
--        {
--            ASFLogger.LogGenericInfo(string.Format(Langs.UpdatePluginListItemReleaseNote, releaseResponse.MarkdownBody));
--        }
--
--        var releaseUrl = Update.WebRequest.FetchDownloadUrl(releaseResponse);
--        return releaseUrl;
+-        return Task.FromResult(result);
 -    }
  }
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
@@ -462,22 +412,10 @@ index b7db85e..11bf3ef 100644
          // 账号
          { "PH", "PURCHASEHISTORY" },
 diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index a3dd73c..7ac23ae 100644
+index 3bdeca9..7ac23ae 100644
 --- a/ASFEnhance/Update/Command.cs
 +++ b/ASFEnhance/Update/Command.cs
-@@ -12,11 +12,6 @@ namespace ASFEnhance.Update;
- 
- internal static class Command
- {
--    internal static string? ResponseOldCmdTips()
--    {
--        return Langs.ASFUpdateTips;
--    }
--
-     /// <summary>
-     /// 获取已安装的插件列表
-     /// </summary>
-@@ -71,115 +66,4 @@ internal static class Command
+@@ -66,115 +66,4 @@ internal static class Command
              return FormatStaticResponse(Langs.SubModuleNoModule);
          }
      }
@@ -595,10 +533,10 @@ index a3dd73c..7ac23ae 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index 591caa2..0000000
+index 6806181..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
-@@ -1,88 +0,0 @@
+@@ -1,54 +0,0 @@
 -using ArchiSteamFarm.Core;
 -using ArchiSteamFarm.Web.GitHub;
 -using ArchiSteamFarm.Web.GitHub.Data;
@@ -651,40 +589,6 @@ index 591caa2..0000000
 -        }
 -
 -        return response;
--    }
--
--    /// <summary>
--    /// 获取更新文件链接
--    /// </summary>
--    /// <param name="relesaeData"></param>
--    /// <returns></returns>
--    internal static Uri? FetchDownloadUrl(ReleaseResponse relesaeData)
--    {
--        if (relesaeData.Assets.Count == 0)
--        {
--            return null;
--        }
--
--        //优先下载当前语言的版本
--        foreach (var asset in relesaeData.Assets)
--        {
--            if (asset.Name.Contains(Langs.CurrentLanguage))
--            {
--                return asset.DownloadURL;
--            }
--        }
--
--        //优先下载英文版本
--        foreach (var asset in relesaeData.Assets)
--        {
--            if (asset.Name.Contains("en-US"))
--            {
--                return asset.DownloadURL;
--            }
--        }
--
--        //如果没有找到当前语言的版本, 则下载第一个
--        return relesaeData.Assets.FirstOrDefault()?.DownloadURL;
 -    }
 -}
 -- 
