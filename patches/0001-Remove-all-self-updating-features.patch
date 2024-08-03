@@ -9,16 +9,16 @@ Subject: Remove all self-updating features
  ASFEnhance/Localization/Langs.Designer.cs | 198 ----------------------
  ASFEnhance/Other/CommandHelpData.cs       |   6 -
  ASFEnhance/Update/Command.cs              | 111 ------------
- ASFEnhance/Update/WebRequest.cs           |  54 ------
- 6 files changed, 1 insertion(+), 433 deletions(-)
+ ASFEnhance/Update/WebRequest.cs           |  50 ------
+ 6 files changed, 1 insertion(+), 429 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index efb4b4b..eca0a4d 100644
+index 09cee0b..a2fda9e 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
+@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -27,7 +27,7 @@ index efb4b4b..eca0a4d 100644
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -227,16 +227,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -228,16 +228,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -44,7 +44,7 @@ index efb4b4b..eca0a4d 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -467,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -463,17 +453,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
              },
              _ => cmd switch //带参数
              {
@@ -62,7 +62,7 @@ index efb4b4b..eca0a4d 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
-@@ -1223,20 +1202,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -1204,20 +1183,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
          }
          return Task.FromResult(false);
      }
@@ -116,7 +116,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index e42bd09..9d115c9 100644
+index e34a96c..9567ea7 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -573,15 +573,6 @@ namespace ASFEnhance.Localization {
@@ -381,10 +381,10 @@ index e42bd09..9d115c9 100644
          ///   查找类似 查看机器人购物车 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
-index b7db85e..11bf3ef 100644
+index cd9750f..1b500a6 100644
 --- a/ASFEnhance/Other/CommandHelpData.cs
 +++ b/ASFEnhance/Other/CommandHelpData.cs
-@@ -9,8 +9,6 @@ internal static class CommandHelpData
+@@ -11,8 +11,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFENHANCE", "" },
          { "PLUGINLIST", "" },
@@ -393,7 +393,7 @@ index b7db85e..11bf3ef 100644
          
          // 账号
          { "PURCHASEHISTORY", "[Bots]" },
-@@ -101,8 +99,6 @@ internal static class CommandHelpData
+@@ -103,8 +101,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFENHANCE", Langs.UsageASFENHANCE},
          { "PLUGINLIST", "" },
@@ -402,7 +402,7 @@ index b7db85e..11bf3ef 100644
          
          // 账号
          { "PURCHASEHISTORY", Langs.UsagePURCHASEHISTORY },
-@@ -193,8 +189,6 @@ internal static class CommandHelpData
+@@ -195,8 +191,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFE", "ASFENHANCE" },
          { "PL", "PLUGINLIST" },
@@ -533,16 +533,12 @@ index 3bdeca9..7ac23ae 100644
  }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
-index 6806181..0000000
+index 0870d60..0000000
 --- a/ASFEnhance/Update/WebRequest.cs
 +++ /dev/null
-@@ -1,54 +0,0 @@
--using ArchiSteamFarm.Core;
+@@ -1,50 +0,0 @@
 -using ArchiSteamFarm.Web.GitHub;
--using ArchiSteamFarm.Web.GitHub.Data;
--using ArchiSteamFarm.Web.Responses;
 -using ASFEnhance.Data;
--using System.IO.Compression;
 -
 -namespace ASFEnhance.Update;
 -
@@ -592,5 +588,5 @@ index 6806181..0000000
 -    }
 -}
 -- 
-2.45.2
+2.46.0
 
