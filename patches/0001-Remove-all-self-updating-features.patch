@@ -4,30 +4,30 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                  |  39 +----
+ ASFEnhance/ASFEnhance.cs                  |  41 +----
  ASFEnhance/Data/PluginUpdateResponse.cs   |  26 ---
  ASFEnhance/Localization/Langs.Designer.cs | 198 ----------------------
  ASFEnhance/Other/CommandHelpData.cs       |   6 -
  ASFEnhance/Update/Command.cs              | 111 ------------
  ASFEnhance/Update/WebRequest.cs           |  50 ------
- 6 files changed, 1 insertion(+), 429 deletions(-)
+ 6 files changed, 2 insertions(+), 430 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 09cee0b..a2fda9e 100644
+index 0750ea5..78597fa 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
--internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHubPluginUpdates
-+internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest
+-internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotModules, IGitHubPluginUpdates
++internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotModules
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -228,16 +228,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -228,16 +228,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -44,7 +44,7 @@ index 09cee0b..a2fda9e 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -463,17 +453,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
+@@ -467,17 +457,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -62,11 +62,10 @@ index 09cee0b..a2fda9e 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
-@@ -1204,20 +1183,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IGitHu
-         }
+@@ -1228,22 +1207,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
          return Task.FromResult(false);
      }
--
+ 
 -    /// <inheritdoc/>
 -    public Task<ReleaseAsset?> GetTargetReleaseAsset(Version asfVersion, string asfVariant, Version newPluginVersion, IReadOnlyCollection<ReleaseAsset> releaseAssets)
 -    {
@@ -82,7 +81,17 @@ index 09cee0b..a2fda9e 100644
 -
 -        return Task.FromResult(result);
 -    }
- }
+-
+     /// <inheritdoc/>
+     public Task OnBotInitModules(Bot bot, IReadOnlyDictionary<string, JsonElement>? additionalConfigProperties)
+     {
+@@ -1264,4 +1227,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+         }
+         return Task.CompletedTask;
+     }
+-}
++}
+\ No newline at end of file
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
 index f8cabe1..0000000
@@ -116,7 +125,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index e34a96c..9567ea7 100644
+index a78b6e5..58c135d 100644
 --- a/ASFEnhance/Localization/Langs.Designer.cs
 +++ b/ASFEnhance/Localization/Langs.Designer.cs
 @@ -573,15 +573,6 @@ namespace ASFEnhance.Localization {
@@ -210,7 +219,7 @@ index e34a96c..9567ea7 100644
          /// <summary>
          ///   查找类似 修改失败, 原因: {0} 的本地化字符串。
          /// </summary>
-@@ -1995,15 +1932,6 @@ namespace ASFEnhance.Localization {
+@@ -2148,15 +2085,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -226,7 +235,7 @@ index e34a96c..9567ea7 100644
          /// <summary>
          ///   查找类似 {0} 版本 {1} 的本地化字符串。
          /// </summary>
-@@ -2778,15 +2706,6 @@ namespace ASFEnhance.Localization {
+@@ -2940,15 +2868,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -242,7 +251,7 @@ index e34a96c..9567ea7 100644
          /// <summary>
          ///   查找类似 删除旧版插件备份失败 {0} 的本地化字符串。
          /// </summary>
-@@ -2841,24 +2760,6 @@ namespace ASFEnhance.Localization {
+@@ -3003,24 +2922,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -267,7 +276,7 @@ index e34a96c..9567ea7 100644
          /// <summary>
          ///   查找类似 子模块注册失败, 重复的ID 的本地化字符串。
          /// </summary>
-@@ -2931,87 +2832,6 @@ namespace ASFEnhance.Localization {
+@@ -3093,87 +2994,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -355,7 +364,7 @@ index e34a96c..9567ea7 100644
          /// <summary>
          ///   查找类似 让BotA添加BotB为好友 的本地化字符串。
          /// </summary>
-@@ -3084,24 +2904,6 @@ namespace ASFEnhance.Localization {
+@@ -3246,24 +3066,6 @@ namespace ASFEnhance.Localization {
              }
          }
          
@@ -381,7 +390,7 @@ index e34a96c..9567ea7 100644
          ///   查找类似 查看机器人购物车 的本地化字符串。
          /// </summary>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
-index cd9750f..1b500a6 100644
+index 036e5f9..054ccb8 100644
 --- a/ASFEnhance/Other/CommandHelpData.cs
 +++ b/ASFEnhance/Other/CommandHelpData.cs
 @@ -11,8 +11,6 @@ internal static class CommandHelpData
@@ -393,7 +402,7 @@ index cd9750f..1b500a6 100644
          
          // 账号
          { "PURCHASEHISTORY", "[Bots]" },
-@@ -103,8 +101,6 @@ internal static class CommandHelpData
+@@ -102,8 +100,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFENHANCE", Langs.UsageASFENHANCE},
          { "PLUGINLIST", "" },
@@ -402,7 +411,7 @@ index cd9750f..1b500a6 100644
          
          // 账号
          { "PURCHASEHISTORY", Langs.UsagePURCHASEHISTORY },
-@@ -195,8 +191,6 @@ internal static class CommandHelpData
+@@ -193,8 +189,6 @@ internal static class CommandHelpData
          // 更新
          { "ASFE", "ASFENHANCE" },
          { "PL", "PLUGINLIST" },
