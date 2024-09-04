@@ -10,12 +10,12 @@ Subject: Remove statistics and EULA
  .../IPC/Controllers/PurchaseController.cs     |  27 -----
  .../IPC/Controllers/RecommendController.cs    |  10 --
  .../IPC/Controllers/WishlistController.cs     |  25 -----
- ASFEnhance/Localization/Langs.Designer.cs     |  27 -----
+ ASFEnhance/Localization/Langs.en-US.resx      |   9 --
  ASFEnhance/Other/Command.cs                   |   9 --
- 8 files changed, 20 insertions(+), 209 deletions(-)
+ 8 files changed, 20 insertions(+), 191 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 78597fa..e8cd7a2 100644
+index 3dfff3e..c2eabef 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -25,8 +25,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
@@ -95,7 +95,7 @@ index 78597fa..e8cd7a2 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -439,19 +407,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -449,19 +417,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -115,7 +115,7 @@ index 78597fa..e8cd7a2 100644
  
                  _ => null,
              },
-@@ -686,26 +641,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -685,26 +640,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index 78597fa..e8cd7a2 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -752,21 +707,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -751,21 +706,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -175,7 +175,7 @@ index 78597fa..e8cd7a2 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -895,24 +850,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -894,24 +849,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -206,7 +206,7 @@ index 78597fa..e8cd7a2 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1038,27 +993,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1075,27 +1030,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -453,44 +453,33 @@ index e8dd2b9..565d7cf 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-diff --git a/ASFEnhance/Localization/Langs.Designer.cs b/ASFEnhance/Localization/Langs.Designer.cs
-index 58c135d..3c744f7 100644
---- a/ASFEnhance/Localization/Langs.Designer.cs
-+++ b/ASFEnhance/Localization/Langs.Designer.cs
-@@ -1248,33 +1248,6 @@ namespace ASFEnhance.Localization {
-             }
-         }
-         
--        /// <summary>
--        ///   查找类似 尚未同意 ASFEnhance.EULA , 该命令不可用 的本地化字符串。
--        /// </summary>
--        internal static string EulaCmdUnavilable {
--            get {
--                return ResourceManager.GetString("EulaCmdUnavilable", resourceCulture);
--            }
--        }
--        
--        /// <summary>
--        ///   查找类似 尚未同意 ASFEnhance.EULA , 无法使用IPC功能 的本地化字符串。
--        /// </summary>
--        internal static string EulaFeatureUnavilable {
--            get {
--                return ResourceManager.GetString("EulaFeatureUnavilable", resourceCulture);
--            }
--        }
--        
--        /// <summary>
--        ///   查找类似 {0}: 尚未同意 ASFEnhance.EULA , 部分命令已禁用 的本地化字符串。
--        /// </summary>
--        internal static string EulaWarning {
--            get {
--                return ResourceManager.GetString("EulaWarning", resourceCulture);
--            }
--        }
--        
-         /// <summary>
-         ///   查找类似 领取每日贴纸: {0} 的本地化字符串。
-         /// </summary>
+diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
+index e66cf3e..3ca1cd7 100644
+--- a/ASFEnhance/Localization/Langs.en-US.resx
++++ b/ASFEnhance/Localization/Langs.en-US.resx
+@@ -648,12 +648,6 @@
+   <data name="ASFEnhanceGroup" xml:space="preserve">
+     <value>ASFEnhance's Group</value>
+   </data>
+-  <data name="EulaFeatureUnavilable" xml:space="preserve">
+-    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-  </data>
+-  <data name="EulaWarning" xml:space="preserve">
+-    <value>{0}: ASFEnhance.EULA not agreed, some features is disabled</value>
+-  </data>
+   <data name="ErrorLogErrorMessage" xml:space="preserve">
+     <value> - Exception Message: {0}</value>
+   </data>
+@@ -771,9 +765,6 @@
+   <data name="UsageCARTRESET" xml:space="preserve">
+     <value>Clear bot's cart</value>
+   </data>
+-  <data name="EulaCmdUnavilable" xml:space="preserve">
+-    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-  </data>
+   <data name="EnableEmailNotification" xml:space="preserve">
+     <value>Enable email notification</value>
+   </data>
 diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
 index f83d3b8..4c7df80 100644
 --- a/ASFEnhance/Other/Command.cs
