@@ -235,7 +235,7 @@ index 3dfff3e..c2eabef 100644
                  "COOKIES" or
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
 diff --git a/ASFEnhance/Data/Plugin/PluginConfig.cs b/ASFEnhance/Data/Plugin/PluginConfig.cs
-index 92b3ec5..0158b64 100644
+index 5f5d211..ded84ff 100644
 --- a/ASFEnhance/Data/Plugin/PluginConfig.cs
 +++ b/ASFEnhance/Data/Plugin/PluginConfig.cs
 @@ -5,16 +5,6 @@ namespace ASFEnhance.Data.Plugin;
@@ -501,5 +501,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.46.0
+2.46.2
 
