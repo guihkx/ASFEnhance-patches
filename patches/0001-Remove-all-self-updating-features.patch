@@ -4,18 +4,18 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                 |  39 +-------
- ASFEnhance/Data/PluginUpdateResponse.cs  |  26 ------
- ASFEnhance/Localization/Langs.en-US.resx |  78 ----------------
+ ASFEnhance/ASFEnhance.cs                 |  23 +----
+ ASFEnhance/Data/PluginUpdateResponse.cs  |  26 -----
+ ASFEnhance/Localization/Langs.en-US.resx |  87 -----------------
  ASFEnhance/Other/CommandHelpData.cs      |   6 --
- ASFEnhance/Update/Command.cs             | 111 -----------------------
+ ASFEnhance/Update/Command.cs             | 116 -----------------------
  ASFEnhance/Update/WebRequest.cs          |  50 ----------
- 6 files changed, 1 insertion(+), 309 deletions(-)
+ 6 files changed, 1 insertion(+), 307 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 1f70c13..3dfff3e 100644
+index 73dab69..f4e95fa 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
@@ -62,29 +62,6 @@ index 1f70c13..3dfff3e 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
-@@ -1265,22 +1244,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
-         return Task.FromResult(false);
-     }
- 
--    /// <inheritdoc/>
--    public Task<ReleaseAsset?> GetTargetReleaseAsset(Version asfVersion, string asfVariant, Version newPluginVersion, IReadOnlyCollection<ReleaseAsset> releaseAssets)
--    {
--        var result = releaseAssets.Count switch
--        {
--            0 => null,
--            1 => //如果找到一个文件，则第一个
--                releaseAssets.First(),
--            _ => //优先下载当前语言的版本
--                releaseAssets.FirstOrDefault(static x => x.Name.Contains(Langs.CurrentLanguage)) ??
--                releaseAssets.FirstOrDefault(static x => x.Name.Contains("en-US"))
--        };
--
--        return Task.FromResult(result);
--    }
--
-     /// <inheritdoc/>
-     public Task OnBotInitModules(Bot bot, IReadOnlyDictionary<string, JsonElement>? additionalConfigProperties)
-     {
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
 index f8cabe1..0000000
@@ -118,7 +95,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index d2c2091..e66cf3e 100644
+index 3d53b5e..dd24f01 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -193,7 +170,7 @@ index d2c2091..e66cf3e 100644
 -    <value>获取版本信息失败, 未找到插件 {0}</value>
 -  </data>
 -  <data name="UpdatePluginUpdateInfo" xml:space="preserve">
--    <value>插件更新信息:</value>
+-    <value>plugin update information:</value>
 -  </data>
 -  <data name="UpdatePluginListItemName" xml:space="preserve">
 -    <value>Plugin name: {0} {1}</value>
@@ -208,7 +185,7 @@ index d2c2091..e66cf3e 100644
 -    <value>Release note:</value>
 -  </data>
 -  <data name="UpdatePluginVersionTips" xml:space="preserve">
--    <value>使用命令 PLUGINUPDATE [插件名] 自动更新指定插件, 省略插件名时可更新全部支持的插件</value>
+-    <value>Use PLUGINUPDATE [plugin name] command to automatically update the specified plugin. If the plugin name is omitted, all supported plugins will be updated.</value>
 -  </data>
 -  <data name="UpdatePluginListItemUpdateTips" xml:space="preserve">
 -    <value>更新插件完成, 重启 ASF 后生效, 如果不兼容请更新 ASF 版本</value>
@@ -216,20 +193,22 @@ index d2c2091..e66cf3e 100644
    <data name="PluginListTips" xml:space="preserve">
      <value>已安装 {0} 个外部模块, 末尾带 [] 的为 ASFEnhance 和子模块</value>
    </data>
-@@ -1116,9 +1056,6 @@
+@@ -1116,39 +1056,12 @@
    <data name="PluginListItem2" xml:space="preserve">
      <value>{0}: {1,-20} {2}</value>
    </data>
 -  <data name="PluginUpdateNotSupport" xml:space="preserve">
 -    <value>插件不支持在线更新</value>
 -  </data>
-   <data name="GetReleaseInfoFailedNetworkError" xml:space="preserve">
-     <value>Netword error, can not load releases info</value>
-   </data>
-@@ -1128,27 +1065,12 @@
-   <data name="NoAssetFoundInReleaseInfo" xml:space="preserve">
-     <value>No asset found in the release</value>
-   </data>
+-  <data name="GetReleaseInfoFailedNetworkError" xml:space="preserve">
+-    <value>Netword error, can not load releases info</value>
+-  </data>
+-  <data name="VersionHigher" xml:space="preserve">
+-    <value>当前版本号更高, 无需更新</value>
+-  </data>
+-  <data name="NoAssetFoundInReleaseInfo" xml:space="preserve">
+-    <value>No asset found in the release</value>
+-  </data>
 -  <data name="DownloadPluginFailed" xml:space="preserve">
 -    <value>下载插件失败</value>
 -  </data>
@@ -286,10 +265,10 @@ index 036e5f9..054ccb8 100644
          // 账号
          { "PH", "PURCHASEHISTORY" },
 diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index 3bdeca9..7ac23ae 100644
+index 5071ba7..a3ac59e 100644
 --- a/ASFEnhance/Update/Command.cs
 +++ b/ASFEnhance/Update/Command.cs
-@@ -66,115 +66,4 @@ internal static class Command
+@@ -67,120 +67,4 @@ internal static class Command
              return FormatStaticResponse(Langs.SubModuleNoModule);
          }
      }
@@ -356,7 +335,7 @@ index 3bdeca9..7ac23ae 100644
 -    }
 -
 -    /// <summary>
--    /// 检查插件版本
+-    /// 更新插件版本
 -    /// </summary>
 -    /// <param name="bot"></param>
 -    /// <param name="access"></param>
@@ -366,7 +345,12 @@ index 3bdeca9..7ac23ae 100644
 -    {
 -        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
 -
--        const string channel = "stable";
+-#if DEBUG
+-        var channel = nameof(EUpdateChannel.PreRelease);
+-#else
+-        var channel = nameof(EUpdateChannel.Stable);
+-#endif
+-
 -        List<string> plugins = [];
 -
 -        if (entries?.Length > 0)
@@ -462,5 +446,5 @@ index 0870d60..0000000
 -    }
 -}
 -- 
-2.46.2
+2.47.0
 

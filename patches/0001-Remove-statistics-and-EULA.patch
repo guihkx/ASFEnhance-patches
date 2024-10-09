@@ -15,7 +15,7 @@ Subject: Remove statistics and EULA
  8 files changed, 20 insertions(+), 191 deletions(-)
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 3dfff3e..c2eabef 100644
+index f4e95fa..2fd4b33 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -25,8 +25,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
@@ -115,7 +115,7 @@ index 3dfff3e..c2eabef 100644
  
                  _ => null,
              },
-@@ -685,26 +640,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -690,26 +645,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -148,7 +148,7 @@ index 3dfff3e..c2eabef 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -751,21 +706,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -756,21 +711,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -175,7 +175,7 @@ index 3dfff3e..c2eabef 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -894,24 +849,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -899,24 +854,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -206,7 +206,7 @@ index 3dfff3e..c2eabef 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1075,27 +1030,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1080,27 +1035,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -296,10 +296,10 @@ index 0997320..9db3171 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-index 52ff8c5..51c6668 100644
+index 8096201..1ffa4f3 100644
 --- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-@@ -40,13 +40,6 @@ public sealed class PurchaseController : ASFEController
+@@ -41,13 +41,6 @@ public sealed class PurchaseController : ASFEController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -313,7 +313,7 @@ index 52ff8c5..51c6668 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -163,11 +156,6 @@ public sealed class PurchaseController : ASFEController
+@@ -164,11 +157,6 @@ public sealed class PurchaseController : ASFEController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -325,7 +325,7 @@ index 52ff8c5..51c6668 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -209,11 +197,6 @@ public sealed class PurchaseController : ASFEController
+@@ -210,11 +198,6 @@ public sealed class PurchaseController : ASFEController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -337,7 +337,7 @@ index 52ff8c5..51c6668 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -328,11 +311,6 @@ public sealed class PurchaseController : ASFEController
+@@ -329,11 +312,6 @@ public sealed class PurchaseController : ASFEController
          ArgumentNullException.ThrowIfNull(request);
          ArgumentNullException.ThrowIfNull(request.Items);
  
@@ -349,7 +349,7 @@ index 52ff8c5..51c6668 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -493,11 +471,6 @@ public sealed class PurchaseController : ASFEController
+@@ -494,11 +472,6 @@ public sealed class PurchaseController : ASFEController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -454,7 +454,7 @@ index e8dd2b9..565d7cf 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index e66cf3e..3ca1cd7 100644
+index dd24f01..ac76834 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -501,5 +501,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.46.2
+2.47.0
 
