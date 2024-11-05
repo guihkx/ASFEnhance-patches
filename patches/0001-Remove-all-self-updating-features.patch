@@ -15,10 +15,10 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 73dab69..f4e95fa 100644
+index c45acd3..8b5df98 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -13,7 +13,7 @@ using System.Text.Json.Serialization;
+@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -27,7 +27,7 @@ index 73dab69..f4e95fa 100644
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -228,16 +228,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -227,16 +227,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -44,7 +44,7 @@ index 73dab69..f4e95fa 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -477,17 +467,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -476,17 +466,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -95,7 +95,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 3d53b5e..dd24f01 100644
+index bd89570..af5cf2c 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
