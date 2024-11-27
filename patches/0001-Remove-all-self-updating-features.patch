@@ -15,7 +15,7 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index c45acd3..8b5df98 100644
+index 2de9aa4..1da9dd0 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
@@ -44,7 +44,7 @@ index c45acd3..8b5df98 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -476,17 +466,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -479,17 +469,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -446,5 +446,5 @@ index 0870d60..0000000
 -    }
 -}
 -- 
-2.47.0
+2.47.1
 

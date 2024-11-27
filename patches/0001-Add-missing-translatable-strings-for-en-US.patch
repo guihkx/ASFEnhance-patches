@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: guihkx <626206+guihkx@users.noreply.github.com>
+Date: Wed, 27 Nov 2024 15:34:50 -0300
+Subject: Add missing translatable strings for en-US
+
+---
+ ASFEnhance/Localization/Langs.en-US.resx | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
+index 8f62780..728afb5 100644
+--- a/ASFEnhance/Localization/Langs.en-US.resx
++++ b/ASFEnhance/Localization/Langs.en-US.resx
+@@ -1374,4 +1374,10 @@
+   <data name="PurchaseAddFundsSuccess" xml:space="preserve">
+     <value>预计充值 {0}, 支付链接 {1}</value>
+   </data>
++  <data name="AccountHasNoBanRecord" xml:space="preserve">
++    <value>账号未受到游戏封禁</value>
++  </data>
++  <data name="AccountBanRecordList" xml:space="preserve">
++    <value>账号受到的游戏封禁记录:</value>
++  </data>
+ </root>
+\ No newline at end of file
+-- 
+2.47.1
+
