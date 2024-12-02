@@ -4,21 +4,22 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                 |  23 +----
+ ASFEnhance/ASFEnhance.cs                 |  28 +-----
  ASFEnhance/Data/PluginUpdateResponse.cs  |  26 -----
  ASFEnhance/Localization/Langs.en-US.resx |  87 -----------------
+ ASFEnhance/Localization/Langs.resx       |   3 -
  ASFEnhance/Other/CommandHelpData.cs      |   6 --
  ASFEnhance/Update/Command.cs             | 116 -----------------------
  ASFEnhance/Update/WebRequest.cs          |  50 ----------
- 6 files changed, 1 insertion(+), 307 deletions(-)
+ 7 files changed, 2 insertions(+), 314 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index df95151..f10a9c9 100644
+index c54852b..e9090e2 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
+@@ -12,15 +12,12 @@ using System.Text.Json.Serialization;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -27,7 +28,15 @@ index df95151..f10a9c9 100644
  {
      public string Name => nameof(ASFEnhance);
  
-@@ -227,16 +227,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+     public Version Version => MyVersion;
+ 
+-    public bool CanUpdate => true;
+-    public string RepositoryName => "chr233/ASFEnhance";
+-
+     private Timer? StatisticTimer { get; set; }
+ 
+     private Timer? ClaimItemTimer { get; set; }
+@@ -224,16 +221,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -44,7 +53,7 @@ index df95151..f10a9c9 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -479,17 +469,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -476,17 +463,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -62,6 +71,13 @@ index df95151..f10a9c9 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
+@@ -1298,4 +1274,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+         }
+         return Task.CompletedTask;
+     }
+-}
++}
+\ No newline at end of file
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
 index f8cabe1..0000000
@@ -232,6 +248,20 @@ index 534995d..121491c 100644
 -  </data>
    <data name="VoteNominateAtLeastOne" xml:space="preserve">
      <value>Nominate at least 1 game</value>
+   </data>
+diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
+index fdd72a6..16a685e 100644
+--- a/ASFEnhance/Localization/Langs.resx
++++ b/ASFEnhance/Localization/Langs.resx
+@@ -1056,9 +1056,6 @@
+   <data name="CommandDisabled" xml:space="preserve">
+     <value>命令 {0} 被禁用!</value>
+   </data>
+-  <data name="CanUpdate" xml:space="preserve">
+-    <value>*可更新*</value>
+-  </data>
+   <data name="SubModuleLoadedModules" xml:space="preserve">
+     <value>已加载 {0} 个外部模块</value>
    </data>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
 index 036e5f9..054ccb8 100644
