@@ -16,7 +16,7 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index c54852b..e9090e2 100644
+index 5a44655..0ceab52 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -12,15 +12,12 @@ using System.Text.Json.Serialization;
@@ -111,7 +111,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 534995d..121491c 100644
+index 90f6c58..560f1c0 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -250,7 +250,7 @@ index 534995d..121491c 100644
      <value>Nominate at least 1 game</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index fdd72a6..16a685e 100644
+index c96d752..9ffc6da 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -1056,9 +1056,6 @@
