@@ -256,10 +256,10 @@ index 5f5d211..ded84ff 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/IPC/Controllers/CuratorController.cs b/ASFEnhance/IPC/Controllers/CuratorController.cs
-index 0997320..9db3171 100644
+index 7cf9038..aaf6bcb 100644
 --- a/ASFEnhance/IPC/Controllers/CuratorController.cs
 +++ b/ASFEnhance/IPC/Controllers/CuratorController.cs
-@@ -37,11 +37,6 @@ public sealed class CuratorController : ASFEController
+@@ -38,11 +38,6 @@ public sealed class CuratorController : AbstractController
          }
          ArgumentNullException.ThrowIfNull(request);
  
@@ -271,7 +271,7 @@ index 0997320..9db3171 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -96,11 +91,6 @@ public sealed class CuratorController : ASFEController
+@@ -98,11 +93,6 @@ public sealed class CuratorController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -283,7 +283,7 @@ index 0997320..9db3171 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -155,11 +145,6 @@ public sealed class CuratorController : ASFEController
+@@ -158,11 +148,6 @@ public sealed class CuratorController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -296,10 +296,10 @@ index 0997320..9db3171 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-index 8096201..1ffa4f3 100644
+index b6880ab..e356d63 100644
 --- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
-@@ -41,13 +41,6 @@ public sealed class PurchaseController : ASFEController
+@@ -42,13 +42,6 @@ public sealed class PurchaseController : AbstractController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -313,7 +313,7 @@ index 8096201..1ffa4f3 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -164,11 +157,6 @@ public sealed class PurchaseController : ASFEController
+@@ -166,11 +159,6 @@ public sealed class PurchaseController : AbstractController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -325,7 +325,7 @@ index 8096201..1ffa4f3 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -210,11 +198,6 @@ public sealed class PurchaseController : ASFEController
+@@ -213,11 +201,6 @@ public sealed class PurchaseController : AbstractController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -337,7 +337,7 @@ index 8096201..1ffa4f3 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -329,11 +312,6 @@ public sealed class PurchaseController : ASFEController
+@@ -333,11 +316,6 @@ public sealed class PurchaseController : AbstractController
          ArgumentNullException.ThrowIfNull(request);
          ArgumentNullException.ThrowIfNull(request.Items);
  
@@ -349,7 +349,7 @@ index 8096201..1ffa4f3 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -494,11 +472,6 @@ public sealed class PurchaseController : ASFEController
+@@ -499,11 +477,6 @@ public sealed class PurchaseController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -362,10 +362,10 @@ index 8096201..1ffa4f3 100644
          if (bots == null || bots.Count == 0)
          {
 diff --git a/ASFEnhance/IPC/Controllers/RecommendController.cs b/ASFEnhance/IPC/Controllers/RecommendController.cs
-index 5509dcd..be912b5 100644
+index 9c6c487..467afdd 100644
 --- a/ASFEnhance/IPC/Controllers/RecommendController.cs
 +++ b/ASFEnhance/IPC/Controllers/RecommendController.cs
-@@ -36,11 +36,6 @@ public sealed class RecommendController : ASFEController
+@@ -38,11 +38,6 @@ public sealed class RecommendController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -377,7 +377,7 @@ index 5509dcd..be912b5 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -104,11 +99,6 @@ public sealed class RecommendController : ASFEController
+@@ -107,11 +102,6 @@ public sealed class RecommendController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -390,10 +390,10 @@ index 5509dcd..be912b5 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
-index e8dd2b9..565d7cf 100644
+index d77a12e..f8cd196 100644
 --- a/ASFEnhance/IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
-@@ -36,11 +36,6 @@ public sealed class WishlistController : ASFEController
+@@ -38,11 +38,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -405,7 +405,7 @@ index e8dd2b9..565d7cf 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if ((bots == null) || (bots.Count == 0))
-@@ -96,11 +91,6 @@ public sealed class WishlistController : ASFEController
+@@ -99,11 +94,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -417,7 +417,7 @@ index e8dd2b9..565d7cf 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -156,11 +146,6 @@ public sealed class WishlistController : ASFEController
+@@ -160,11 +150,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -429,7 +429,7 @@ index e8dd2b9..565d7cf 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -216,11 +201,6 @@ public sealed class WishlistController : ASFEController
+@@ -221,11 +206,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -441,7 +441,7 @@ index e8dd2b9..565d7cf 100644
          HashSet<Bot>? bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -276,11 +256,6 @@ public sealed class WishlistController : ASFEController
+@@ -282,11 +262,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -501,5 +501,5 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 -- 
-2.47.1
+2.48.1
 
