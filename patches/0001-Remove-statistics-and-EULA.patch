@@ -235,7 +235,7 @@ index e9a402c..c34ee8e 100644
                  "COOKIES" or
                  "ACCESSTOKEN" when Config.DevFeature && access >= EAccess.Owner =>
 diff --git a/ASFEnhance/Data/Plugin/PluginConfig.cs b/ASFEnhance/Data/Plugin/PluginConfig.cs
-index 5f5d211..ded84ff 100644
+index b18a11f..8586c2e 100644
 --- a/ASFEnhance/Data/Plugin/PluginConfig.cs
 +++ b/ASFEnhance/Data/Plugin/PluginConfig.cs
 @@ -5,16 +5,6 @@ namespace ASFEnhance.Data.Plugin;
@@ -454,7 +454,7 @@ index d77a12e..f8cd196 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index ea178a4..18303b7 100644
+index 9949aed..4e1f76d 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
