@@ -11,15 +11,15 @@ Subject: Remove all self-updating features
  ASFEnhance/Other/CommandHelpData.cs      |   6 --
  ASFEnhance/Update/Command.cs             | 116 -----------------------
  ASFEnhance/Update/WebRequest.cs          |  50 ----------
- 7 files changed, 2 insertions(+), 314 deletions(-)
+ 7 files changed, 1 insertion(+), 315 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 1dad2cf..e9a402c 100644
+index f8221c5..63902b4 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -11,15 +11,12 @@ using System.Text.Json;
+@@ -12,17 +12,12 @@ using System.Text.Json;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -33,10 +33,12 @@ index 1dad2cf..e9a402c 100644
 -    public bool CanUpdate => true;
 -    public string RepositoryName => "chr233/ASFEnhance";
 -
-     private Timer? StatisticTimer { get; set; }
+-    private Timer? StatisticTimer;
+-
+     private Timer? ClaimItemTimer;
  
-     private Timer? ClaimItemTimer { get; set; }
-@@ -223,16 +220,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+     /// <summary>
+@@ -190,16 +185,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -53,7 +55,7 @@ index 1dad2cf..e9a402c 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -479,17 +466,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -442,17 +427,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -71,13 +73,6 @@ index 1dad2cf..e9a402c 100644
                  //Event
                  "DL2" when argLength > 2 && access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
-@@ -1312,4 +1288,4 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
-         }
-         return Task.CompletedTask;
-     }
--}
-+}
-\ No newline at end of file
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
 index f8cabe1..0000000
@@ -111,7 +106,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 2673fd5..9949aed 100644
+index add06d8..8c73093 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -250,7 +245,7 @@ index 2673fd5..9949aed 100644
      <value>Nominate at least 1 game</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index 2fd53e4..f5403f2 100644
+index beb503c..09405e8 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -1056,9 +1056,6 @@
