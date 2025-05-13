@@ -16,10 +16,10 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index f8221c5..63902b4 100644
+index 7412859..9f5b06f 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -12,17 +12,12 @@ using System.Text.Json;
+@@ -11,17 +11,12 @@ using System.Text.Json;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
@@ -38,7 +38,7 @@ index f8221c5..63902b4 100644
      private Timer? ClaimItemTimer;
  
      /// <summary>
-@@ -190,16 +185,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -189,16 +184,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "PL" when access >= EAccess.Operator =>
                      Task.FromResult(Update.Command.ResponsePluginList()),
  
@@ -55,7 +55,7 @@ index f8221c5..63902b4 100644
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -442,17 +427,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -450,17 +435,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              },
              _ => cmd switch //带参数
              {
@@ -106,7 +106,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index add06d8..8c73093 100644
+index 4e62dce..b886229 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -245,7 +245,7 @@ index add06d8..8c73093 100644
      <value>Nominate at least 1 game</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index beb503c..09405e8 100644
+index 59fa0a2..b8050ab 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -1056,9 +1056,6 @@

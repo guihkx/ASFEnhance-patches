@@ -165,10 +165,10 @@ index 9c55ae2..eebe8ca 100644
          if (bot == null)
          {
 diff --git a/ASFEnhance.IPC/Controllers/WishlistController.cs b/ASFEnhance.IPC/Controllers/WishlistController.cs
-index 526f722..909a4e5 100644
+index 50ca995..b16f9f7 100644
 --- a/ASFEnhance.IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance.IPC/Controllers/WishlistController.cs
-@@ -40,11 +40,6 @@ public sealed class WishlistController : AbstractController
+@@ -79,11 +79,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -180,7 +180,7 @@ index 526f722..909a4e5 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -101,11 +96,6 @@ public sealed class WishlistController : AbstractController
+@@ -138,11 +133,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -192,7 +192,7 @@ index 526f722..909a4e5 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -162,11 +152,6 @@ public sealed class WishlistController : AbstractController
+@@ -197,11 +187,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -204,7 +204,7 @@ index 526f722..909a4e5 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -223,11 +208,6 @@ public sealed class WishlistController : AbstractController
+@@ -256,11 +241,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -216,7 +216,7 @@ index 526f722..909a4e5 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -284,11 +264,6 @@ public sealed class WishlistController : AbstractController
+@@ -315,11 +295,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -229,10 +229,10 @@ index 526f722..909a4e5 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 63902b4..ee70fd2 100644
+index 9f5b06f..85808c7 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -90,14 +90,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -89,14 +89,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              warnings.AppendLine(Static.Line);
          }
  
@@ -247,7 +247,7 @@ index 63902b4..ee70fd2 100644
          if (warnings.Length > 1)
          {
              ASFLogger.LogGenericWarning(warnings.ToString());
-@@ -114,12 +106,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -113,12 +105,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              Config.Address = null;
          }
  
@@ -260,7 +260,7 @@ index 63902b4..ee70fd2 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -313,12 +299,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -312,12 +298,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -275,7 +275,7 @@ index 63902b4..ee70fd2 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -336,7 +322,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -335,7 +321,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -284,7 +284,7 @@ index 63902b4..ee70fd2 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -409,19 +395,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -417,19 +403,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -304,7 +304,7 @@ index 63902b4..ee70fd2 100644
  
                  _ => null,
              },
-@@ -660,26 +633,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -668,26 +641,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -337,7 +337,7 @@ index 63902b4..ee70fd2 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -722,21 +695,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -730,21 +703,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -364,7 +364,7 @@ index 63902b4..ee70fd2 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -876,24 +849,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -909,24 +882,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -395,7 +395,7 @@ index 63902b4..ee70fd2 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1057,27 +1030,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1094,27 +1067,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -445,7 +445,7 @@ index b18a11f..8586c2e 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 8c73093..1d30c4b 100644
+index b886229..64f67d7 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -492,7 +492,7 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 diff --git a/ASFEnhance/Utils.cs b/ASFEnhance/Utils.cs
-index 92b7833..50c3931 100644
+index 3353913..cb9189c 100644
 --- a/ASFEnhance/Utils.cs
 +++ b/ASFEnhance/Utils.cs
 @@ -481,33 +481,6 @@ public static class Utils
