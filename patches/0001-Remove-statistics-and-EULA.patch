@@ -17,10 +17,10 @@ Subject: Remove statistics and EULA
  10 files changed, 20 insertions(+), 203 deletions(-)
 
 diff --git a/ASFEnhance.IPC/Controllers/CuratorController.cs b/ASFEnhance.IPC/Controllers/CuratorController.cs
-index 5723bf1..a666dac 100644
+index 6789bf6..a078f45 100644
 --- a/ASFEnhance.IPC/Controllers/CuratorController.cs
 +++ b/ASFEnhance.IPC/Controllers/CuratorController.cs
-@@ -39,11 +39,6 @@ public sealed class CuratorController : AbstractController
+@@ -36,11 +36,6 @@ public sealed class CuratorController : AbstractController
          }
          ArgumentNullException.ThrowIfNull(request);
  
@@ -32,7 +32,7 @@ index 5723bf1..a666dac 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -99,11 +94,6 @@ public sealed class CuratorController : AbstractController
+@@ -94,11 +89,6 @@ public sealed class CuratorController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -44,7 +44,7 @@ index 5723bf1..a666dac 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -159,11 +149,6 @@ public sealed class CuratorController : AbstractController
+@@ -152,11 +142,6 @@ public sealed class CuratorController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -57,10 +57,10 @@ index 5723bf1..a666dac 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance.IPC/Controllers/PurchaseController.cs b/ASFEnhance.IPC/Controllers/PurchaseController.cs
-index b7a60eb..c9c088b 100644
+index 3d16404..dae2ed0 100644
 --- a/ASFEnhance.IPC/Controllers/PurchaseController.cs
 +++ b/ASFEnhance.IPC/Controllers/PurchaseController.cs
-@@ -44,11 +44,6 @@ public sealed class PurchaseController : AbstractController
+@@ -42,11 +42,6 @@ public sealed class PurchaseController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -72,7 +72,7 @@ index b7a60eb..c9c088b 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -166,11 +161,6 @@ public sealed class PurchaseController : AbstractController
+@@ -162,11 +157,6 @@ public sealed class PurchaseController : AbstractController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -84,7 +84,7 @@ index b7a60eb..c9c088b 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -213,11 +203,6 @@ public sealed class PurchaseController : AbstractController
+@@ -207,11 +197,6 @@ public sealed class PurchaseController : AbstractController
              throw new ArgumentNullException(nameof(botNames));
          }
  
@@ -96,7 +96,7 @@ index b7a60eb..c9c088b 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -333,11 +318,6 @@ public sealed class PurchaseController : AbstractController
+@@ -325,11 +310,6 @@ public sealed class PurchaseController : AbstractController
          ArgumentNullException.ThrowIfNull(request);
          ArgumentNullException.ThrowIfNull(request.Items);
  
@@ -108,7 +108,7 @@ index b7a60eb..c9c088b 100644
          var bots = Bot.GetBots(botNames);
          if (bots == null || bots.Count == 0)
          {
-@@ -499,11 +479,6 @@ public sealed class PurchaseController : AbstractController
+@@ -489,11 +469,6 @@ public sealed class PurchaseController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -121,10 +121,10 @@ index b7a60eb..c9c088b 100644
          if (bots == null || bots.Count == 0)
          {
 diff --git a/ASFEnhance.IPC/Controllers/RecommendController.cs b/ASFEnhance.IPC/Controllers/RecommendController.cs
-index 501e415..8fe1adb 100644
+index c371a48..b672bdb 100644
 --- a/ASFEnhance.IPC/Controllers/RecommendController.cs
 +++ b/ASFEnhance.IPC/Controllers/RecommendController.cs
-@@ -39,11 +39,6 @@ public sealed class RecommendController : AbstractController
+@@ -36,11 +36,6 @@ public sealed class RecommendController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -136,9 +136,9 @@ index 501e415..8fe1adb 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -108,11 +103,6 @@ public sealed class RecommendController : AbstractController
+@@ -103,11 +98,6 @@ public sealed class RecommendController : AbstractController
  
-         ArgumentNullException.ThrowIfNull(request);
+         ArgumentNullException.ThrowIfNull(appIds);
  
 -        if (!Config.EULA)
 -        {
@@ -149,10 +149,10 @@ index 501e415..8fe1adb 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance.IPC/Controllers/WalletController.cs b/ASFEnhance.IPC/Controllers/WalletController.cs
-index 9c55ae2..eebe8ca 100644
+index 01b2ac1..e03b523 100644
 --- a/ASFEnhance.IPC/Controllers/WalletController.cs
 +++ b/ASFEnhance.IPC/Controllers/WalletController.cs
-@@ -43,11 +43,6 @@ public sealed class WalletController : AbstractController
+@@ -39,11 +39,6 @@ public sealed class WalletController : AbstractController
              return BadRequest(new GenericResponse(false, "参数错误, Code无效"));
          }
  
@@ -165,10 +165,10 @@ index 9c55ae2..eebe8ca 100644
          if (bot == null)
          {
 diff --git a/ASFEnhance.IPC/Controllers/WishlistController.cs b/ASFEnhance.IPC/Controllers/WishlistController.cs
-index 50ca995..b16f9f7 100644
+index f5433ca..1ac5d6a 100644
 --- a/ASFEnhance.IPC/Controllers/WishlistController.cs
 +++ b/ASFEnhance.IPC/Controllers/WishlistController.cs
-@@ -79,11 +79,6 @@ public sealed class WishlistController : AbstractController
+@@ -76,11 +76,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -180,7 +180,7 @@ index 50ca995..b16f9f7 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -138,11 +133,6 @@ public sealed class WishlistController : AbstractController
+@@ -135,11 +130,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -192,7 +192,7 @@ index 50ca995..b16f9f7 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -197,11 +187,6 @@ public sealed class WishlistController : AbstractController
+@@ -194,11 +184,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -204,7 +204,7 @@ index 50ca995..b16f9f7 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -256,11 +241,6 @@ public sealed class WishlistController : AbstractController
+@@ -253,11 +238,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -216,7 +216,7 @@ index 50ca995..b16f9f7 100644
          var bots = Bot.GetBots(botNames);
  
          if (bots == null || bots.Count == 0)
-@@ -315,11 +295,6 @@ public sealed class WishlistController : AbstractController
+@@ -312,11 +292,6 @@ public sealed class WishlistController : AbstractController
  
          ArgumentNullException.ThrowIfNull(request);
  
@@ -229,7 +229,7 @@ index 50ca995..b16f9f7 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 9f5b06f..85808c7 100644
+index 9669f1c..b012e37 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -89,14 +89,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
@@ -260,7 +260,7 @@ index 9f5b06f..85808c7 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -312,12 +298,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -317,12 +303,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -275,7 +275,7 @@ index 9f5b06f..85808c7 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -335,7 +321,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -340,7 +326,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -284,7 +284,7 @@ index 9f5b06f..85808c7 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -417,19 +403,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -426,19 +412,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -304,7 +304,7 @@ index 9f5b06f..85808c7 100644
  
                  _ => null,
              },
-@@ -668,26 +641,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -682,26 +655,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -337,7 +337,7 @@ index 9f5b06f..85808c7 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -730,21 +703,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -744,21 +717,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -364,7 +364,7 @@ index 9f5b06f..85808c7 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -909,24 +882,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -923,24 +896,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -395,7 +395,7 @@ index 9f5b06f..85808c7 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1094,27 +1067,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1112,27 +1085,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -445,7 +445,7 @@ index b18a11f..8586c2e 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index b886229..64f67d7 100644
+index ae1cb9e..31b66ce 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -492,7 +492,7 @@ index f83d3b8..4c7df80 100644
      /// 可用时显示命令提示
      /// </summary>
 diff --git a/ASFEnhance/Utils.cs b/ASFEnhance/Utils.cs
-index 3353913..cb9189c 100644
+index 92b7833..50c3931 100644
 --- a/ASFEnhance/Utils.cs
 +++ b/ASFEnhance/Utils.cs
 @@ -481,33 +481,6 @@ public static class Utils
