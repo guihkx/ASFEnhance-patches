@@ -229,7 +229,7 @@ index f5433ca..1ac5d6a 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 9669f1c..b012e37 100644
+index dc4cd4e..660096a 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -89,14 +89,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
@@ -260,7 +260,7 @@ index 9669f1c..b012e37 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -317,12 +303,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -331,12 +317,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -275,7 +275,7 @@ index 9669f1c..b012e37 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -340,7 +326,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -354,7 +340,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -284,7 +284,7 @@ index 9669f1c..b012e37 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -426,19 +412,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -440,19 +426,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -304,7 +304,7 @@ index 9669f1c..b012e37 100644
  
                  _ => null,
              },
-@@ -682,26 +655,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -701,26 +674,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -337,7 +337,7 @@ index 9669f1c..b012e37 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -744,21 +717,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -763,21 +736,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -364,7 +364,7 @@ index 9669f1c..b012e37 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -923,24 +896,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -942,24 +915,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -395,7 +395,7 @@ index 9669f1c..b012e37 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1112,27 +1085,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1131,27 +1104,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -445,7 +445,7 @@ index b18a11f..8586c2e 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index c06f53c..819dbc7 100644
+index c1a9541..3f6fc8a 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -472,7 +472,7 @@ index c06f53c..819dbc7 100644
      <value>Enable email notification</value>
    </data>
 diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
-index f83d3b8..4c7df80 100644
+index d1a7234..bb94a99 100644
 --- a/ASFEnhance/Other/Command.cs
 +++ b/ASFEnhance/Other/Command.cs
 @@ -156,15 +156,6 @@ internal static class Command
@@ -530,5 +530,5 @@ index 92b7833..50c3931 100644
      /// 领取物品
      /// </summary>
 -- 
-2.49.0
+2.50.0
 
