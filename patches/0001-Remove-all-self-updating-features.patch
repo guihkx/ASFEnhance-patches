@@ -106,7 +106,7 @@ index f8cabe1..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 949586c..c1a9541 100644
+index 31c9688..c4d262e 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -245,7 +245,7 @@ index 949586c..c1a9541 100644
      <value>Nominate at least 1 game</value>
    </data>
 diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index 75c60cb..ce3b7d4 100644
+index c6069c6..1eba4de 100644
 --- a/ASFEnhance/Localization/Langs.resx
 +++ b/ASFEnhance/Localization/Langs.resx
 @@ -1056,9 +1056,6 @@
