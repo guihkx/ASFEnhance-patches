@@ -4,19 +4,17 @@ Date: Thu, 26 Oct 2023 22:24:16 -0300
 Subject: Remove all self-updating features
 
 ---
- ASFEnhance/ASFEnhance.cs                 |  28 +-----
- ASFEnhance/Data/PluginUpdateResponse.cs  |  26 -----
- ASFEnhance/Localization/Langs.en-US.resx |  87 -----------------
- ASFEnhance/Localization/Langs.resx       |   3 -
- ASFEnhance/Other/CommandHelpData.cs      |   6 --
- ASFEnhance/Update/Command.cs             | 116 -----------------------
- ASFEnhance/Update/WebRequest.cs          |  50 ----------
- 7 files changed, 1 insertion(+), 315 deletions(-)
+ ASFEnhance/ASFEnhance.cs                 | 12 +---
+ ASFEnhance/Data/PluginUpdateResponse.cs  | 25 --------
+ ASFEnhance/Localization/Langs.en-US.resx | 80 +-----------------------
+ ASFEnhance/Other/CommandHelpData.cs      |  6 --
+ ASFEnhance/Update/WebRequest.cs          | 50 ---------------
+ 5 files changed, 2 insertions(+), 171 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 2692f69..7581c28 100644
+index 16bf621..41b876c 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -11,17 +11,12 @@ using System.Text.Json;
@@ -38,47 +36,24 @@ index 2692f69..7581c28 100644
      private Timer? ClaimItemTimer;
  
      /// <summary>
-@@ -198,16 +193,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
-                 "PL" when access >= EAccess.Operator =>
-                     Task.FromResult(Update.Command.ResponsePluginList()),
+@@ -193,11 +188,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+                 "ASFE" when access >= EAccess.FamilySharing =>
+                     Task.FromResult(PluginInfo),
  
--                "PLUGINSVERSION" or
--                "PLUGINVERSION" or
--                "PV" when access >= EAccess.Master =>
--                    Update.Command.ResponseGetPluginLatestVersion(null),
--
--                "PLUGINSUPDATE" or
--                "PLUGINUPDATE" or
--                "PU" when access >= EAccess.Master =>
--                    Update.Command.ResponsePluginUpdate(bot, access, null),
+-                //Update
+-                "PLUGINLIST" or
+-                "PL" when access >= EAccess.Operator =>
+-                    Task.FromResult(Update.Command.ResponsePluginList()),
 -
                  //Event
                  "DL2" when access >= EAccess.Operator =>
                      Event.Command.ResponseDL2(bot, null),
-@@ -477,17 +462,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
-             },
-             _ => cmd switch //带参数
-             {
--                //Update
--                "PLUGINSVERSION" or
--                "PLUGINVERSION" or
--                "PV" when access >= EAccess.Master =>
--                    Update.Command.ResponseGetPluginLatestVersion(Utilities.GetArgsAsText(args, 1, ",")),
--
--                "PLUGINSUPDATE" or
--                "PLUGINUPDATE" or
--                "PU" when access >= EAccess.Master =>
--                    Update.Command.ResponsePluginUpdate(bot, access, Utilities.GetArgsAsText(args, 1, ",")),
--
-                 //Event
-                 "DL2" when argLength > 2 && access >= EAccess.Operator =>
-                     Event.Command.ResponseDL2(SkipBotNames(args, 1, 1), args.Last()),
 diff --git a/ASFEnhance/Data/PluginUpdateResponse.cs b/ASFEnhance/Data/PluginUpdateResponse.cs
 deleted file mode 100644
-index f8cabe1..0000000
+index 355e98e..0000000
 --- a/ASFEnhance/Data/PluginUpdateResponse.cs
 +++ /dev/null
-@@ -1,26 +0,0 @@
+@@ -1,25 +0,0 @@
 -namespace ASFEnhance.Data;
 -
 -/// <summary>
@@ -99,14 +74,13 @@ index f8cabe1..0000000
 -    /// </summary>
 -    public bool IsLatest => OnlineVersion == CurrentVersion;
 -
--    public string Tips => CanUpdate ? Langs.CanUpdate : "";
 -    public Version? CurrentVersion { get; set; }
 -    public Version? OnlineVersion { get; set; }
 -    public string? UpdateLog { get; set; }
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index e31331e..7996aa9 100644
+index 35ea857..8490703 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -148,17 +122,7 @@ index e31331e..7996aa9 100644
    <data name="UsagePURCHASEHISTORY" xml:space="preserve">
      <value>Get bot's purchase history</value>
    </data>
-@@ -1056,9 +1038,6 @@
-   <data name="CommandDisabled" xml:space="preserve">
-     <value>Command {0} is disabled!</value>
-   </data>
--  <data name="CanUpdate" xml:space="preserve">
--    <value>updating</value>
--  </data>
-   <data name="SubModuleLoadedModules" xml:space="preserve">
-     <value>Loaded {0} external modules</value>
-   </data>
-@@ -1068,45 +1047,6 @@
+@@ -1062,39 +1044,6 @@
    <data name="SubModuleNoModule" xml:space="preserve">
      <value>Submodule not loaded</value>
    </data>
@@ -195,16 +159,10 @@ index e31331e..7996aa9 100644
 -  <data name="UpdatePluginListItemReleaseNote" xml:space="preserve">
 -    <value>Release note:</value>
 -  </data>
--  <data name="UpdatePluginVersionTips" xml:space="preserve">
--    <value>Use PLUGINUPDATE [plugin name] command to automatically update the specified plugin. If the plugin name is omitted, all supported plugins will be updated.</value>
--  </data>
--  <data name="UpdatePluginListItemUpdateTips" xml:space="preserve">
--    <value>更新插件完成, 重启 ASF 后生效, 如果不兼容请更新 ASF 版本</value>
--  </data>
    <data name="PluginListTips" xml:space="preserve">
      <value>已安装 {0} 个外部模块, 末尾带 [] 的为 ASFEnhance 和子模块</value>
    </data>
-@@ -1116,39 +1056,12 @@
+@@ -1104,39 +1053,12 @@
    <data name="PluginListItem2" xml:space="preserve">
      <value>{0}: {1,-20} {2}</value>
    </data>
@@ -244,20 +202,13 @@ index e31331e..7996aa9 100644
    <data name="VoteNominateAtLeastOne" xml:space="preserve">
      <value>Nominate at least 1 game</value>
    </data>
-diff --git a/ASFEnhance/Localization/Langs.resx b/ASFEnhance/Localization/Langs.resx
-index dd96cc8..04e5aac 100644
---- a/ASFEnhance/Localization/Langs.resx
-+++ b/ASFEnhance/Localization/Langs.resx
-@@ -1056,9 +1056,6 @@
-   <data name="CommandDisabled" xml:space="preserve">
-     <value>命令 {0} 被禁用!</value>
+@@ -1548,4 +1470,4 @@
+   <data name="OwnedProfileModifiers" xml:space="preserve">
+     <value>可用个人资料装饰器:</value>
    </data>
--  <data name="CanUpdate" xml:space="preserve">
--    <value>*可更新*</value>
--  </data>
-   <data name="SubModuleLoadedModules" xml:space="preserve">
-     <value>已加载 {0} 个外部模块</value>
-   </data>
+-</root>
+\ No newline at end of file
++</root>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
 index 036e5f9..054ccb8 100644
 --- a/ASFEnhance/Other/CommandHelpData.cs
@@ -289,131 +240,6 @@ index 036e5f9..054ccb8 100644
          
          // 账号
          { "PH", "PURCHASEHISTORY" },
-diff --git a/ASFEnhance/Update/Command.cs b/ASFEnhance/Update/Command.cs
-index 5071ba7..a3ac59e 100644
---- a/ASFEnhance/Update/Command.cs
-+++ b/ASFEnhance/Update/Command.cs
-@@ -67,120 +67,4 @@ internal static class Command
-             return FormatStaticResponse(Langs.SubModuleNoModule);
-         }
-     }
--
--    /// <summary>
--    /// 获取插件最新版本
--    /// </summary>
--    /// <param name="pluginNames"></param>
--    /// <returns></returns>
--    internal static async Task<string?> ResponseGetPluginLatestVersion(string? pluginNames = null)
--    {
--        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
--
--        var tasks = new List<Task<PluginUpdateResponse>>();
--
--        if (entries?.Length > 0)
--        {
--            foreach (var entry in entries)
--            {
--                if (entry == "ASFE" || entry == "ASFENHANCE")
--                {
--                    tasks.Add(WebRequest.GetPluginReleaseNote("ASFEnhance", MyVersion, "ASFEnhance"));
--                }
--                else if (_Adapter_.ExtensionCore.SubModules.TryGetValue(entry, out var subModule))
--                {
--                    tasks.Add(WebRequest.GetPluginReleaseNote(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
--                }
--            }
--        }
--        else
--        {
--            tasks.Add(WebRequest.GetPluginReleaseNote("ASFEnhance", MyVersion, "ASFEnhance"));
--            foreach (var subModule in _Adapter_.ExtensionCore.SubModules.Values)
--            {
--                tasks.Add(WebRequest.GetPluginReleaseNote(subModule.PluginName, subModule.PluginVersion, subModule.RepoName));
--            }
--        }
--
--        if (tasks.Count == 0)
--        {
--            return FormatStaticResponse(Langs.UpdateFailedPluginNotFound, pluginNames);
--        }
--
--        var results = await Utilities.InParallel(tasks).ConfigureAwait(false);
--
--        var sb = new StringBuilder();
--        sb.AppendLine(FormatStaticResponse(Langs.UpdatePluginUpdateInfo));
--
--        foreach (var info in results)
--        {
--            sb.AppendLine(Static.Line);
--            sb.AppendLineFormat(Langs.UpdatePluginListItemName, info.PluginName, info.Tips);
--            sb.AppendLineFormat(Langs.UpdatePluginListItemVersion, info.CurrentVersion, info.OnlineVersion?.ToString() ?? "-.-.-.-");
--            if (!string.IsNullOrEmpty(info.ReleaseNote))
--            {
--                sb.AppendLineFormat(Langs.UpdatePluginListItemReleaseNote, info.ReleaseNote);
--            }
--        }
--
--        sb.AppendLine(Static.Line);
--        sb.AppendLine(Langs.UpdatePluginVersionTips);
--
--        return sb.ToString();
--    }
--
--    /// <summary>
--    /// 更新插件版本
--    /// </summary>
--    /// <param name="bot"></param>
--    /// <param name="access"></param>
--    /// <param name="pluginNames"></param>
--    /// <returns></returns>
--    internal static async Task<string?> ResponsePluginUpdate(Bot bot, EAccess access, string? pluginNames = null)
--    {
--        var entries = pluginNames?.ToUpperInvariant().Split(',', StringSplitOptions.RemoveEmptyEntries);
--
--#if DEBUG
--        var channel = nameof(EUpdateChannel.PreRelease);
--#else
--        var channel = nameof(EUpdateChannel.Stable);
--#endif
--
--        List<string> plugins = [];
--
--        if (entries?.Length > 0)
--        {
--            foreach (var entry in entries)
--            {
--                if (entry == "ASFE" || entry == "ASFENHANCE")
--                {
--                    plugins.Add("ASFEnhance");
--                }
--
--                foreach (var (pluginId, subModule) in _Adapter_.ExtensionCore.SubModules)
--                {
--                    if (pluginId == entry || subModule.MatchCmdPrefix(entry))
--                    {
--                        plugins.Add(subModule.PluginName);
--                    }
--                }
--            }
--        }
--        else
--        {
--            plugins.Add("ASFEnhance");
--            foreach (var subModule in _Adapter_.ExtensionCore.SubModules.Values)
--            {
--                plugins.Add(subModule.PluginName);
--            }
--        }
--
--        if (plugins.Count == 0)
--        {
--            return FormatStaticResponse(Langs.UpdateFailedPluginNotFound, pluginNames);
--        }
--
--        var cmd = string.Format("UPDATEPLUGINS {0} {1}", channel, string.Join(',', plugins));
--        return await bot.Commands.Response(access, cmd, 0).ConfigureAwait(false);
--    }
- }
 diff --git a/ASFEnhance/Update/WebRequest.cs b/ASFEnhance/Update/WebRequest.cs
 deleted file mode 100644
 index 0870d60..0000000
@@ -471,5 +297,5 @@ index 0870d60..0000000
 -    }
 -}
 -- 
-2.51.0
+2.51.1
 
