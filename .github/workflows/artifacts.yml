@@ -79,7 +79,7 @@ jobs:
           dotnet publish ASFEnhance -o ../builds/ASFEnhance
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ASFEnhance_${{ steps.vars.outputs.version }}
           path: builds/ASFEnhance/ASFEnhance.dll
