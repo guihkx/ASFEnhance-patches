@@ -229,7 +229,7 @@ index f5433ca..1ac5d6a 100644
  
          if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index e7d507e..b6c2f0f 100644
+index 7ee0073..527b6b7 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
 @@ -89,14 +89,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
