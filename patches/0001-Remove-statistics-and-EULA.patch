@@ -445,7 +445,7 @@ index b18a11f..8586c2e 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 9d168c3..e31bc81 100644
+index 58386c6..a4fe449 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -453,23 +453,23 @@ index 9d168c3..e31bc81 100644
      <value>ASFEnhance's Group</value>
    </data>
 -  <data name="EulaFeatureUnavilable" xml:space="preserve">
--    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-    <value>ASFEnhance.EULA not agreed, this feature is unavailable</value>
 -  </data>
 -  <data name="EulaWarning" xml:space="preserve">
--    <value>{0}: ASFEnhance.EULA not agreed, some features is disabled</value>
+-    <value>{0}: ASFEnhance.EULA You have not agreed to the EULA, some features are disabled until you agree</value>
 -  </data>
    <data name="ErrorLogErrorMessage" xml:space="preserve">
      <value> - Exception Message: {0}</value>
    </data>
 @@ -771,9 +765,6 @@
    <data name="UsageCARTRESET" xml:space="preserve">
-     <value>Clear bot's cart</value>
+     <value>Clear bots cart</value>
    </data>
 -  <data name="EulaCmdUnavilable" xml:space="preserve">
--    <value>ASFEnhance.EULA not agreed, this feature is unavilable</value>
+-    <value>ASFEnhance.EULA has not been agreed to, this feature is unavailable</value>
 -  </data>
    <data name="EnableEmailNotification" xml:space="preserve">
-     <value>Enable email notification</value>
+     <value>Enable email notifications</value>
    </data>
 diff --git a/ASFEnhance/Other/Command.cs b/ASFEnhance/Other/Command.cs
 index ddc75e8..7ec685a 100644
@@ -492,7 +492,7 @@ index ddc75e8..7ec685a 100644
      /// 可用时显示命令提示
      /// </summary>
 diff --git a/ASFEnhance/Utils.cs b/ASFEnhance/Utils.cs
-index 92b7833..50c3931 100644
+index a66ebd3..86c024b 100644
 --- a/ASFEnhance/Utils.cs
 +++ b/ASFEnhance/Utils.cs
 @@ -481,33 +481,6 @@ public static class Utils

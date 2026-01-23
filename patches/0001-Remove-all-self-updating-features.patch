@@ -6,10 +6,10 @@ Subject: Remove all self-updating features
 ---
  ASFEnhance/ASFEnhance.cs                 | 12 +---
  ASFEnhance/Data/PluginUpdateResponse.cs  | 25 --------
- ASFEnhance/Localization/Langs.en-US.resx | 80 +-----------------------
+ ASFEnhance/Localization/Langs.en-US.resx | 78 ------------------------
  ASFEnhance/Other/CommandHelpData.cs      |  6 --
  ASFEnhance/Update/WebRequest.cs          | 50 ---------------
- 5 files changed, 2 insertions(+), 171 deletions(-)
+ 5 files changed, 1 insertion(+), 170 deletions(-)
  delete mode 100644 ASFEnhance/Data/PluginUpdateResponse.cs
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
@@ -80,7 +80,7 @@ index 355e98e..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 4417819..9d168c3 100644
+index 4228c4d..58386c6 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -98,7 +98,7 @@ index 4417819..9d168c3 100644
      <value>   - Link: {0}</value>
    </data>
 -  <data name="AlreadyLatest" xml:space="preserve">
--    <value>The plugin is up to date, no need to update</value>
+-    <value>The plugin is up-to-date, no need to update</value>
 -  </data>
 -  <data name="DownloadFailed" xml:space="preserve">
 -    <value>Download plugin failed!</value>
@@ -117,32 +117,32 @@ index 4417819..9d168c3 100644
 -    <value>Check ASFEnhance's latest version</value>
 -  </data>
 -  <data name="UsageASFEUPDATE" xml:space="preserve">
--    <value>Update ASFEnhance to the latest version (need restart ASF manually)</value>
+-    <value>Update ASFEnhance to the latest version (You will need to restart ASF manually)</value>
 -  </data>
    <data name="UsagePURCHASEHISTORY" xml:space="preserve">
-     <value>Get bot's purchase history</value>
+     <value>Get the bots purchase history</value>
    </data>
-@@ -1062,39 +1044,6 @@
+@@ -1065,39 +1047,6 @@
    <data name="SubModuleNoModule" xml:space="preserve">
      <value>Submodule not loaded</value>
    </data>
 -  <data name="SubModulePluginVersion" xml:space="preserve">
--    <value>Check for plugins to update using "PLUGINVERSION [插件名]/ "PV [插件名]</value>
+-    <value>Use “PLUGINVERSION [plugin name]” / “PV [plugin name]” to check for available updates for the plugin.</value>
 -  </data>
 -  <data name="SubModulePluginUpdate" xml:space="preserve">
--    <value>Automatically update the specified plugin with "PLUINUPDATE [插件名]" / "PUINUPDATE [插件名]</value>
+-    <value>Use “PLUGINUPDATE [plugin name]” / “PU [plugin name]” to automatically update the specified plugin.</value>
 -  </data>
 -  <data name="SubModuleCmdTips" xml:space="preserve">
--    <value>不指定插件名时, 可为所有支持的插件检查更新 / 安装更新</value>
+-    <value>Check for updates / install updates for all supported plugins when plugin names are not specified</value>
 -  </data>
 -  <data name="SubModuleDeleteOldPluginSuccess" xml:space="preserve">
 -    <value>Delete old plugin backup successfully {0}</value>
 -  </data>
 -  <data name="SubModuleDeleteOldPluginFailed" xml:space="preserve">
--    <value>删除旧版插件备份失败 {0}</value>
+-    <value>Failed to delete backup of old plugin version {0}</value>
 -  </data>
 -  <data name="UpdateFailedPluginNotFound" xml:space="preserve">
--    <value>获取版本信息失败, 未找到插件 {0}</value>
+-    <value>Failed to get version information, plugin {0} not found</value>
 -  </data>
 -  <data name="UpdatePluginUpdateInfo" xml:space="preserve">
 -    <value>plugin update information:</value>
@@ -154,61 +154,54 @@ index 4417819..9d168c3 100644
 -    <value>Current version: {0} New version: {1}</value>
 -  </data>
 -  <data name="UpdatePluginListItemStatus" xml:space="preserve">
--    <value>更新状态: {0}</value>
+-    <value>Update status: {0}</value>
 -  </data>
 -  <data name="UpdatePluginListItemReleaseNote" xml:space="preserve">
 -    <value>Release note:</value>
 -  </data>
    <data name="PluginListTips" xml:space="preserve">
-     <value>已安装 {0} 个外部模块, 末尾带 [] 的为 ASFEnhance 和子模块</value>
+     <value>{0} External modules are installed. Those ending with [] are ASFEnhance and its submodules</value>
    </data>
-@@ -1104,39 +1053,12 @@
+@@ -1107,39 +1056,12 @@
    <data name="PluginListItem2" xml:space="preserve">
      <value>{0}: {1,-20} {2}</value>
    </data>
 -  <data name="PluginUpdateNotSupport" xml:space="preserve">
--    <value>插件不支持在线更新</value>
+-    <value>The plugin does not support online updates</value>
 -  </data>
 -  <data name="GetReleaseInfoFailedNetworkError" xml:space="preserve">
--    <value>Netword error, can not load releases info</value>
+-    <value>Network error, unable to retrieve releases info</value>
 -  </data>
 -  <data name="VersionHigher" xml:space="preserve">
--    <value>当前版本号更高, 无需更新</value>
+-    <value>The current version number is higher; no update is required. You have a more up-to-date version</value>
 -  </data>
 -  <data name="NoAssetFoundInReleaseInfo" xml:space="preserve">
 -    <value>No asset found in the release</value>
 -  </data>
 -  <data name="DownloadPluginFailed" xml:space="preserve">
--    <value>下载插件失败</value>
+-    <value>Plugin download failed</value>
 -  </data>
 -  <data name="DownloadFailedFileConflict" xml:space="preserve">
--    <value>下载插件失败, 存在文件冲突, 请尝试重启 ASF 后再尝试更新</value>
+-    <value>Plugin download failed due to file conflicts. Please restart ASF and try updating again</value>
 -  </data>
 -  <data name="DownloadPluginSuccess" xml:space="preserve">
--    <value>更新插件成功</value>
+-    <value>Plugin updated successfully</value>
 -  </data>
 -  <data name="DownloadPluginFailedUnzipError" xml:space="preserve">
--    <value>更新插件失败, 解压缩遇到错误</value>
+-    <value>Failed to update plugin, there was an error extracting</value>
 -  </data>
    <data name="SubModuleRegisterFailedLog" xml:space="preserve">
-     <value>Sub-Module {0} failed to register, duplicate ID {1}</value>
+     <value>SubModule {0} failed to register, duplicate ID {1}</value>
    </data>
    <data name="SubModuleRegisterFailed" xml:space="preserve">
-     <value>Submodule registration failed, duplicate Id</value>
+     <value>Sub-module registration failed, duplicate ID</value>
    </data>
 -  <data name="ASFUpdateTips" xml:space="preserve">
--    <value>ASFEUPDATE 和 ASFEVERSION 已经被弃用, 请使用 PLUGINUPDATE 和 PLUGINVERSION, 使用方法参考文档</value>
+-    <value>ASFEUPDATE and ASFEVERTY are deprecated, please use PLUGINGUPDATE and PLUINGVERSION</value>
 -  </data>
    <data name="VoteNominateAtLeastOne" xml:space="preserve">
-     <value>Nominate at least 1 game</value>
+     <value>You have to  Nominate at least 1 game</value>
    </data>
-@@ -1548,4 +1470,4 @@
-   <data name="OwnedProfileModifiers" xml:space="preserve">
-     <value>可用个人资料装饰器:</value>
-   </data>
--</root>
-\ No newline at end of file
-+</root>
 diff --git a/ASFEnhance/Other/CommandHelpData.cs b/ASFEnhance/Other/CommandHelpData.cs
 index 036e5f9..054ccb8 100644
 --- a/ASFEnhance/Other/CommandHelpData.cs
