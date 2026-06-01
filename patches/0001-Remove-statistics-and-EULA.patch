@@ -445,7 +445,7 @@ index b18a11f..8586c2e 100644
      /// 是否启用开发者特性
      /// </summary>
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index b11de48..deee596 100644
+index 87428cf..7182759 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -530,5 +530,5 @@ index fc43809..620a0e6 100644
      /// 领取物品
      /// </summary>
 -- 
-2.53.0
+2.54.0
 
