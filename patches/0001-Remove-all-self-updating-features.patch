@@ -14,29 +14,37 @@ Subject: Remove all self-updating features
  delete mode 100644 ASFEnhance/Update/WebRequest.cs
 
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index b41ef0a..129a013 100644
+index fd1758e..b3db736 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -11,17 +11,12 @@ using System.Text.Json;
+@@ -12,7 +12,7 @@ using System.Text.Json;
  namespace ASFEnhance;
  
  [Export(typeof(IPlugin))]
 -internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotModules, IGitHubPluginUpdates
 +internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotModules
- {
-     public string Name => nameof(ASFEnhance);
+ #if IpcEnable
+     , IWebInterface
+ #endif
+@@ -21,17 +21,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
      public Version Version => MyVersion;
  
 -    public bool CanUpdate => true;
 -    public string RepositoryName => "chr233/ASFEnhance";
 -
+ #if IpcEnable
+     public string PhysicalPath => "ASFEnhance.IPC.www";
+ 
+     public string WebPath => "/ASFEnhance";
+ #endif
+ 
 -    private Timer? StatisticTimer;
 -
      private Timer? ClaimItemTimer;
  
      /// <summary>
-@@ -193,11 +188,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -209,11 +204,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  "ASFE" when access >= EAccess.FamilySharing =>
                      Task.FromResult(PluginInfo),
  
@@ -80,7 +88,7 @@ index 355e98e..0000000
 -    public string ReleaseNote { get; set; } = "";
 -}
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 0ff8b7e..87428cf 100644
+index 2619454..48cc064 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -513,9 +513,6 @@
@@ -290,5 +298,5 @@ index 0870d60..0000000
 -    }
 -}
 -- 
-2.54.0
+2.55.0
 

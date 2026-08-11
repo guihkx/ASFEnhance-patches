@@ -4,235 +4,25 @@ Date: Thu, 26 Oct 2023 22:37:19 -0300
 Subject: Remove statistics and EULA
 
 ---
- .../Controllers/CuratorController.cs          | 15 ----
- .../Controllers/PurchaseController.cs         | 25 ------
- .../Controllers/RecommendController.cs        | 10 ---
- .../Controllers/WalletController.cs           |  5 --
- .../Controllers/WishlistController.cs         | 25 ------
  ASFEnhance/ASFEnhance.cs                      | 88 +++++--------------
  ASFEnhance/Data/Plugin/PluginConfig.cs        | 10 ---
+ ASFEnhance/IPC/Controllers/CartController.cs  | 45 ----------
+ .../IPC/Controllers/CuratorController.cs      | 15 ----
+ .../IPC/Controllers/ProfileController.cs      |  5 --
+ .../IPC/Controllers/PurchaseController.cs     | 25 ------
+ .../IPC/Controllers/RecommendController.cs    | 10 ---
+ .../IPC/Controllers/WalletController.cs       |  5 --
+ .../IPC/Controllers/WishlistController.cs     | 30 -------
  ASFEnhance/Localization/Langs.en-US.resx      |  9 --
  ASFEnhance/Other/Command.cs                   |  9 --
  ASFEnhance/Utils.cs                           | 27 ------
- 10 files changed, 20 insertions(+), 203 deletions(-)
+ 12 files changed, 20 insertions(+), 258 deletions(-)
 
-diff --git a/ASFEnhance.IPC/Controllers/CuratorController.cs b/ASFEnhance.IPC/Controllers/CuratorController.cs
-index 6789bf6..a078f45 100644
---- a/ASFEnhance.IPC/Controllers/CuratorController.cs
-+++ b/ASFEnhance.IPC/Controllers/CuratorController.cs
-@@ -36,11 +36,6 @@ public sealed class CuratorController : AbstractController
-         }
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -94,11 +89,6 @@ public sealed class CuratorController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -152,11 +142,6 @@ public sealed class CuratorController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-diff --git a/ASFEnhance.IPC/Controllers/PurchaseController.cs b/ASFEnhance.IPC/Controllers/PurchaseController.cs
-index 82ad4ad..7f4b657 100644
---- a/ASFEnhance.IPC/Controllers/PurchaseController.cs
-+++ b/ASFEnhance.IPC/Controllers/PurchaseController.cs
-@@ -42,11 +42,6 @@ public sealed class PurchaseController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
-         if (bots == null || bots.Count == 0)
-         {
-@@ -162,11 +157,6 @@ public sealed class PurchaseController : AbstractController
-             throw new ArgumentNullException(nameof(botNames));
-         }
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -207,11 +197,6 @@ public sealed class PurchaseController : AbstractController
-             throw new ArgumentNullException(nameof(botNames));
-         }
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -325,11 +310,6 @@ public sealed class PurchaseController : AbstractController
-         ArgumentNullException.ThrowIfNull(request);
-         ArgumentNullException.ThrowIfNull(request.Items);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
-         if (bots == null || bots.Count == 0)
-         {
-@@ -489,11 +469,6 @@ public sealed class PurchaseController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
-         if (bots == null || bots.Count == 0)
-         {
-diff --git a/ASFEnhance.IPC/Controllers/RecommendController.cs b/ASFEnhance.IPC/Controllers/RecommendController.cs
-index c371a48..b672bdb 100644
---- a/ASFEnhance.IPC/Controllers/RecommendController.cs
-+++ b/ASFEnhance.IPC/Controllers/RecommendController.cs
-@@ -36,11 +36,6 @@ public sealed class RecommendController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -103,11 +98,6 @@ public sealed class RecommendController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(appIds);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-diff --git a/ASFEnhance.IPC/Controllers/WalletController.cs b/ASFEnhance.IPC/Controllers/WalletController.cs
-index 01b2ac1..e03b523 100644
---- a/ASFEnhance.IPC/Controllers/WalletController.cs
-+++ b/ASFEnhance.IPC/Controllers/WalletController.cs
-@@ -39,11 +39,6 @@ public sealed class WalletController : AbstractController
-             return BadRequest(new GenericResponse(false, "参数错误, Code无效"));
-         }
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bot = Bot.GetBot(botName);
-         if (bot == null)
-         {
-diff --git a/ASFEnhance.IPC/Controllers/WishlistController.cs b/ASFEnhance.IPC/Controllers/WishlistController.cs
-index f5433ca..1ac5d6a 100644
---- a/ASFEnhance.IPC/Controllers/WishlistController.cs
-+++ b/ASFEnhance.IPC/Controllers/WishlistController.cs
-@@ -76,11 +76,6 @@ public sealed class WishlistController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -135,11 +130,6 @@ public sealed class WishlistController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -194,11 +184,6 @@ public sealed class WishlistController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -253,11 +238,6 @@ public sealed class WishlistController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
-@@ -312,11 +292,6 @@ public sealed class WishlistController : AbstractController
- 
-         ArgumentNullException.ThrowIfNull(request);
- 
--        if (!Config.EULA)
--        {
--            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
--        }
--
-         var bots = Bot.GetBots(botNames);
- 
-         if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/ASFEnhance.cs b/ASFEnhance/ASFEnhance.cs
-index 129a013..8142973 100644
+index b3db736..affb859 100644
 --- a/ASFEnhance/ASFEnhance.cs
 +++ b/ASFEnhance/ASFEnhance.cs
-@@ -89,14 +89,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -99,14 +99,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              warnings.AppendLine(Static.Line);
          }
  
@@ -247,7 +37,7 @@ index 129a013..8142973 100644
          if (warnings.Length > 1)
          {
              ASFLogger.LogGenericWarning(warnings.ToString());
-@@ -113,12 +105,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -123,12 +115,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
              Config.Address = null;
          }
  
@@ -260,7 +50,7 @@ index 129a013..8142973 100644
          //禁用命令
          if (Config.DisabledCmds != null)
          {
-@@ -340,12 +326,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -359,12 +345,12 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -275,7 +65,7 @@ index 129a013..8142973 100644
                      Curator.Command.ResponseUnFollowAllCurators(bot),
  
                  //Explorer
-@@ -372,7 +358,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -391,7 +377,7 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -284,7 +74,7 @@ index 129a013..8142973 100644
                      Group.Command.ResponseGroupList(bot),
  
                  //Other
-@@ -466,19 +452,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -499,19 +485,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      Task.FromResult(DevFeature.Command.ResponseGetCookies(bot)),
@@ -304,7 +94,7 @@ index 129a013..8142973 100644
  
                  _ => null,
              },
-@@ -760,26 +733,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -804,26 +777,26 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Curator
                  "CURATORLIST" or
@@ -337,7 +127,7 @@ index 129a013..8142973 100644
                      Curator.Command.ResponseFollowCurator(bot, args[1], false),
  
                  //Explorer
-@@ -855,21 +828,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -899,21 +872,21 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
  
                  //Group
                  "GROUPLIST" or
@@ -364,7 +154,7 @@ index 129a013..8142973 100644
                      Group.Command.ResponseLeaveGroup(bot, args[1]),
  
                  //Other
-@@ -1035,24 +1008,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1094,24 +1067,24 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                      Store.Command.ResponseGetAppsDetail(bot, args[1]),
  
                  "RECOMMENT" or
@@ -395,7 +185,7 @@ index 129a013..8142973 100644
                      Store.Command.ResponsePublishReview(bot, args[1], args[2]),
  
                  "REQUESTACCESS" or
-@@ -1224,27 +1197,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
+@@ -1302,27 +1275,6 @@ internal sealed class ASFEnhance : IASF, IBotCommand2, IBotFriendRequest, IBotMo
                  //DevFuture
                  "COOKIES" when Config.DevFeature && access >= EAccess.Owner =>
                      DevFeature.Command.ResponseGetCookies(Utilities.GetArgsAsText(args, 1, ",")),
@@ -444,8 +234,360 @@ index b18a11f..8586c2e 100644
      /// <summary>
      /// 是否启用开发者特性
      /// </summary>
+diff --git a/ASFEnhance/IPC/Controllers/CartController.cs b/ASFEnhance/IPC/Controllers/CartController.cs
+index 7412aa9..e2ad363 100644
+--- a/ASFEnhance/IPC/Controllers/CartController.cs
++++ b/ASFEnhance/IPC/Controllers/CartController.cs
+@@ -46,11 +46,6 @@ public sealed class CartController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bot = Bot.GetBot(botName);
+         if (bot == null)
+         {
+@@ -160,11 +155,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -205,11 +195,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -324,11 +309,6 @@ public sealed class CartController : AbstractController
+         ArgumentNullException.ThrowIfNull(request);
+         ArgumentNullException.ThrowIfNull(request.Items);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -486,11 +466,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -647,11 +622,6 @@ public sealed class CartController : AbstractController
+     public async Task<ActionResult<GenericResponse>> CancelPayment(string botNames, string transId)
+     {
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         if (string.IsNullOrEmpty(transId))
+         {
+             return BadRequest(new GenericResponse(false, "TranId 不能为空"));
+@@ -701,11 +671,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botName));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         if (string.IsNullOrEmpty(payment))
+         {
+             return BadRequest(new GenericResponse(false, "Payment 不能为空"));
+@@ -794,11 +759,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botName));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         if (string.IsNullOrEmpty(payment))
+         {
+             return BadRequest(new GenericResponse(false, "Payment 不能为空"));
+@@ -884,11 +844,6 @@ public sealed class CartController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+diff --git a/ASFEnhance/IPC/Controllers/CuratorController.cs b/ASFEnhance/IPC/Controllers/CuratorController.cs
+index 1c10421..dfedc61 100644
+--- a/ASFEnhance/IPC/Controllers/CuratorController.cs
++++ b/ASFEnhance/IPC/Controllers/CuratorController.cs
+@@ -38,11 +38,6 @@ public sealed class CuratorController : AbstractController
+         }
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -96,11 +91,6 @@ public sealed class CuratorController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -154,11 +144,6 @@ public sealed class CuratorController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/IPC/Controllers/ProfileController.cs b/ASFEnhance/IPC/Controllers/ProfileController.cs
+index 38e5293..be86993 100644
+--- a/ASFEnhance/IPC/Controllers/ProfileController.cs
++++ b/ASFEnhance/IPC/Controllers/ProfileController.cs
+@@ -31,11 +31,6 @@ public sealed class ProfileController : AbstractController
+             throw new ArgumentNullException(nameof(nicknames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         Dictionary<string, string> response = [];
+ 
+         foreach (var (botName, nickname) in nicknames)
+diff --git a/ASFEnhance/IPC/Controllers/PurchaseController.cs b/ASFEnhance/IPC/Controllers/PurchaseController.cs
+index 1b37348..394a1b0 100644
+--- a/ASFEnhance/IPC/Controllers/PurchaseController.cs
++++ b/ASFEnhance/IPC/Controllers/PurchaseController.cs
+@@ -44,11 +44,6 @@ public sealed class PurchaseController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -164,11 +159,6 @@ public sealed class PurchaseController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -209,11 +199,6 @@ public sealed class PurchaseController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -327,11 +312,6 @@ public sealed class PurchaseController : AbstractController
+         ArgumentNullException.ThrowIfNull(request);
+         ArgumentNullException.ThrowIfNull(request.Items);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+@@ -491,11 +471,6 @@ public sealed class PurchaseController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+         if (bots == null || bots.Count == 0)
+         {
+diff --git a/ASFEnhance/IPC/Controllers/RecommendController.cs b/ASFEnhance/IPC/Controllers/RecommendController.cs
+index dd95694..9530272 100644
+--- a/ASFEnhance/IPC/Controllers/RecommendController.cs
++++ b/ASFEnhance/IPC/Controllers/RecommendController.cs
+@@ -38,11 +38,6 @@ public sealed class RecommendController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -105,11 +100,6 @@ public sealed class RecommendController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(appIds);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+diff --git a/ASFEnhance/IPC/Controllers/WalletController.cs b/ASFEnhance/IPC/Controllers/WalletController.cs
+index 8d156b3..63bae54 100644
+--- a/ASFEnhance/IPC/Controllers/WalletController.cs
++++ b/ASFEnhance/IPC/Controllers/WalletController.cs
+@@ -41,11 +41,6 @@ public sealed class WalletController : AbstractController
+             return BadRequest(new GenericResponse(false, "参数错误, Code无效"));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bot = Bot.GetBot(botName);
+         if (bot == null)
+         {
+diff --git a/ASFEnhance/IPC/Controllers/WishlistController.cs b/ASFEnhance/IPC/Controllers/WishlistController.cs
+index 4764788..2700564 100644
+--- a/ASFEnhance/IPC/Controllers/WishlistController.cs
++++ b/ASFEnhance/IPC/Controllers/WishlistController.cs
+@@ -35,11 +35,6 @@ public sealed class WishlistController : AbstractController
+             throw new ArgumentNullException(nameof(botNames));
+         }
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -78,11 +73,6 @@ public sealed class WishlistController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -137,11 +127,6 @@ public sealed class WishlistController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -196,11 +181,6 @@ public sealed class WishlistController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -255,11 +235,6 @@ public sealed class WishlistController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
+@@ -314,11 +289,6 @@ public sealed class WishlistController : AbstractController
+ 
+         ArgumentNullException.ThrowIfNull(request);
+ 
+-        if (!Config.EULA)
+-        {
+-            return BadRequest(new GenericResponse(false, Langs.EulaFeatureUnavilable));
+-        }
+-
+         var bots = Bot.GetBots(botNames);
+ 
+         if (bots == null || bots.Count == 0)
 diff --git a/ASFEnhance/Localization/Langs.en-US.resx b/ASFEnhance/Localization/Langs.en-US.resx
-index 87428cf..7182759 100644
+index 48cc064..0feb861 100644
 --- a/ASFEnhance/Localization/Langs.en-US.resx
 +++ b/ASFEnhance/Localization/Langs.en-US.resx
 @@ -648,12 +648,6 @@
@@ -492,7 +634,7 @@ index ddc75e8..7ec685a 100644
      /// 可用时显示命令提示
      /// </summary>
 diff --git a/ASFEnhance/Utils.cs b/ASFEnhance/Utils.cs
-index fc43809..620a0e6 100644
+index 20f43b1..19db37c 100644
 --- a/ASFEnhance/Utils.cs
 +++ b/ASFEnhance/Utils.cs
 @@ -482,33 +482,6 @@ public static class Utils
@@ -530,5 +672,5 @@ index fc43809..620a0e6 100644
      /// 领取物品
      /// </summary>
 -- 
-2.54.0
+2.55.0
 
